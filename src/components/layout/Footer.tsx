@@ -30,7 +30,7 @@ const groups = [
     ],
   },
   {
-    title: "More",
+    title: "Explore",
     links: [
       ["About the Show", "/about"],
       ["Why Odisha", "/why-odisha"],
@@ -42,60 +42,112 @@ const groups = [
 ] as const;
 
 const socials = [
-  ["Facebook", "https://www.facebook.com/odishaminingexpo/"],
-  ["LinkedIn", "https://www.linkedin.com/company/odishaminingexpo/"],
-  ["X", "https://x.com/odisaminingexpo"],
+  [
+    "Facebook",
+    "https://www.facebook.com/odishaminingexpo/",
+  ],
+  [
+    "LinkedIn",
+    "https://www.linkedin.com/company/odishaminingexpo/",
+  ],
+  [
+    "X",
+    "https://x.com/odisaminingexpo",
+  ],
 ] as const;
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-brand-black text-white">
+    <footer className="relative overflow-hidden bg-[#050505] text-white">
       <FooterGraphic />
 
-      <Container className="relative grid gap-12 py-14 lg:grid-cols-[1.25fr_1.35fr_1fr] lg:gap-14 lg:py-16">
+      {/* Top statement */}
+      <div className="border-b border-white/10">
+        <Container className="grid gap-6 py-8 lg:grid-cols-[1fr_auto] lg:items-end lg:py-10">
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="h-[2px] w-10 bg-brand" />
+
+              <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
+                Odisha Mining Expo 2027
+              </p>
+            </div>
+
+            <h2 className="mt-4 max-w-4xl text-[clamp(1.8rem,3vw,3.3rem)] font-black leading-[1.02] tracking-[-.045em]">
+              India&apos;s mining and infrastructure
+              <span className="text-brand"> industry meets in Odisha.</span>
+            </h2>
+          </div>
+
+          <div className="lg:text-right">
+            <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-white/35">
+              07–10 January 2027
+            </p>
+
+            <p className="mt-2 text-sm font-semibold text-white/75">
+              Bhubaneswar · Odisha · India
+            </p>
+          </div>
+        </Container>
+      </div>
+
+      <Container className="relative grid gap-12 py-12 lg:grid-cols-[1.15fr_1.45fr_1fr] lg:gap-14 lg:py-14">
         {/* Brand */}
         <div>
-          <Link href="/" className="inline-block">
+          <Link
+            href="/"
+            className="inline-block transition-opacity hover:opacity-85"
+          >
             <Image
               src="/image/5th-Odisha-Logo_White.png"
               alt="Odisha Mining & Infrastructure International Expo"
               width={250}
               height={105}
-              className="h-auto w-[210px] object-contain sm:w-[240px]"
+              className="h-auto w-[205px] object-contain sm:w-[230px]"
             />
           </Link>
 
-          <p className="mt-6 max-w-md text-sm leading-7 text-white/65">
-            India&apos;s premier platform for mining, infrastructure, heavy
-            equipment & industrial innovation. {site.dates}, {site.venue}.
+          <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">
+            A focused B2B platform bringing together mining,
+            infrastructure, heavy equipment, mineral processing,
+            logistics and industrial technology.
           </p>
 
-          <div className="mt-7 flex items-center gap-3">
-            <span className="h-[2px] w-10 bg-brand" />
-            <span className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
-              Mining · Infrastructure · Innovation
-            </span>
+          <div className="mt-7 border-t border-white/10 pt-5">
+            <p className="text-[9px] font-extrabold uppercase tracking-[.17em] text-white/30">
+              Event
+            </p>
+
+            <p className="mt-2 text-sm font-semibold leading-6 text-white/75">
+              {site.dates}
+              <br />
+              {site.venue}
+            </p>
           </div>
         </div>
 
         {/* Navigation */}
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
           {groups.map((group) => (
             <div key={group.title}>
-              <h3 className="text-xs font-extrabold uppercase tracking-[.15em] text-white">
-                {group.title}
-              </h3>
+              <div className="flex items-center gap-2">
+                <span className="size-1.5 bg-brand" />
 
-              <div className="mt-5 grid gap-3">
+                <h3 className="text-[10px] font-extrabold uppercase tracking-[.16em] text-white">
+                  {group.title}
+                </h3>
+              </div>
+
+              <div className="mt-5 grid">
                 {group.links.map(([label, href]) => (
                   <Link
-                    key={label}
+                    key={href}
                     href={href}
-                    className="group flex w-fit items-center gap-1.5 text-sm text-white/60 transition duration-300 hover:text-brand"
+                    className="group flex min-h-10 items-center justify-between border-b border-white/[.07] text-sm text-white/52 transition-colors duration-200 hover:text-white"
                   >
-                    {label}
+                    <span>{label}</span>
 
-                    <ArrowUpRight className="size-3 translate-y-1 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100" />
+                    <ArrowUpRight className="size-3.5 -translate-x-1 translate-y-1 text-brand opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
                   </Link>
                 ))}
               </div>
@@ -103,33 +155,40 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Futurex / Contact */}
+        {/* Organiser */}
         <div className="lg:border-l lg:border-white/10 lg:pl-10">
           <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
-            Head Office
+            Organised By
           </p>
 
-          <Image
-            src="/image/futurex.jpg"
-            alt="Futurex Trade Fair & Events Pvt. Ltd."
-            width={190}
-            height={80}
-            className="mt-4 max-h-16 w-auto object-contain"
-          />
+          <div className="mt-4 border-b border-white/10 pb-5">
+            <Image
+              src="/image/futurex.jpg"
+              alt="Futurex Trade Fair & Events Pvt. Ltd."
+              width={190}
+              height={80}
+              className="max-h-14 w-auto object-contain"
+            />
 
-          <h3 className="mt-5 text-base font-extrabold leading-6">
-            Futurex Trade Fair & Events Pvt. Ltd.
-          </h3>
+            <h3 className="mt-4 max-w-xs text-[15px] font-extrabold leading-6 text-white">
+              Futurex Trade Fair & Events Pvt. Ltd.
+            </h3>
+          </div>
 
-          <div className="mt-5 grid gap-3 text-sm text-white/65">
-            <p className="flex items-start gap-3 leading-6">
+          <div className="mt-5 grid gap-4">
+            <div className="flex items-start gap-3">
               <MapPin className="mt-1 size-4 shrink-0 text-brand" />
-              E-52, 1st Floor, Kalkaji, Delhi 110019, India
-            </p>
+
+              <p className="text-sm leading-6 text-white/55">
+                E-52, 1st Floor, Kalkaji,
+                <br />
+                Delhi 110019, India
+              </p>
+            </div>
 
             <Link
               href="tel:+919810855697"
-              className="flex w-fit items-center gap-3 transition hover:text-brand"
+              className="group flex w-fit items-center gap-3 text-sm font-semibold text-white/65 transition-colors hover:text-white"
             >
               <Phone className="size-4 text-brand" />
               +91 98108 55697
@@ -137,7 +196,7 @@ export function Footer() {
 
             <Link
               href="mailto:info@futurextrade.com"
-              className="flex w-fit items-center gap-3 transition hover:text-brand"
+              className="group flex w-fit items-center gap-3 text-sm font-semibold text-white/65 transition-colors hover:text-white"
             >
               <Mail className="size-4 text-brand" />
               info@futurextrade.com
@@ -147,29 +206,31 @@ export function Footer() {
               href="https://futurextrade.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex w-fit items-center gap-2 font-semibold text-white transition hover:text-brand"
+              className="group inline-flex w-fit items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-brand"
             >
-              www.futurextrade.com
-              <ArrowUpRight className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              futurextrade.com
+
+              <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>
 
           <div className="mt-7 border-t border-white/10 pt-5">
-            <p className="mb-3 text-[10px] font-extrabold uppercase tracking-[.18em] text-white/45">
+            <p className="text-[9px] font-extrabold uppercase tracking-[.17em] text-white/30">
               Follow the Expo
             </p>
 
-            <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3">
               {socials.map(([label, href]) => (
                 <Link
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.08em] text-white/65 transition hover:text-brand"
+                  className="group inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[.1em] text-white/55 transition-colors hover:text-brand"
                 >
                   {label}
-                  <ArrowUpRight className="size-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+
+                  <ArrowUpRight className="size-3 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </Link>
               ))}
             </div>
@@ -177,19 +238,32 @@ export function Footer() {
         </div>
       </Container>
 
-      <div className="border-t border-white/10">
-        <Container className="flex flex-col gap-3 py-5 text-[11px] leading-5 text-white/40 sm:flex-row sm:items-center sm:justify-between">
+      {/* Bottom strip */}
+      <div className="border-t border-white/10 bg-white/[.015]">
+        <Container className="flex flex-col gap-4 py-5 text-[10px] font-medium uppercase leading-5 tracking-[.08em] text-white/30 sm:flex-row sm:items-center sm:justify-between">
           <span>
-            © 2027 Odisha Mining & Infrastructure International Expo.
-            All rights reserved.
+            © 2027 Odisha Mining & Infrastructure International Expo
           </span>
 
-          <span>
-            Organised by{" "}
-            <strong className="font-semibold text-white/70">
-              Futurex Trade Fair & Events Pvt. Ltd.
-            </strong>
-          </span>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link
+              href="/privacy-policy"
+              className="transition hover:text-white"
+            >
+              Privacy
+            </Link>
+
+            <Link
+              href="/terms"
+              className="transition hover:text-white"
+            >
+              Terms
+            </Link>
+
+            <span>
+              Organised by Futurex Trade Fair & Events Pvt. Ltd.
+            </span>
+          </div>
         </Container>
       </div>
     </footer>
@@ -198,16 +272,40 @@ export function Footer() {
 
 function FooterGraphic() {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 0 700 500"
-      className="pointer-events-none absolute -left-24 bottom-0 hidden h-[75%] w-[35%] opacity-[.055] lg:block"
-      fill="none"
-    >
-      <path d="M40 480 390 130H700" stroke="#F9B900" />
-      <path d="M150 500 480 180H700" stroke="#fff" />
-      <path d="M290 500 600 190" stroke="#F9B900" />
-      <circle cx="390" cy="130" r="4" fill="#F9B900" />
-    </svg>
+    <>
+      <svg
+        aria-hidden
+        viewBox="0 0 760 600"
+        className="pointer-events-none absolute -left-32 bottom-0 hidden h-[72%] w-[38%] opacity-[.06] lg:block"
+        fill="none"
+      >
+        <path
+          d="M40 560 410 165H760"
+          stroke="#F9B900"
+        />
+
+        <path
+          d="M145 590 500 225H760"
+          stroke="#FFFFFF"
+        />
+
+        <path
+          d="M285 600 610 250"
+          stroke="#F9B900"
+        />
+
+        <circle
+          cx="410"
+          cy="165"
+          r="4"
+          fill="#F9B900"
+        />
+      </svg>
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-0 top-[18%] hidden h-[340px] w-px bg-gradient-to-b from-transparent via-brand/25 to-transparent lg:block"
+      />
+    </>
   );
 }

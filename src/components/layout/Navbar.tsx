@@ -2,191 +2,391 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  Menu,
+  X,
+} from "lucide-react";
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
+import {
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { Container } from "@/components/ui/Container";
 
-const menus = [
+const navItems = [
+  {
+    label: "About",
+    href: "/about",
+  },
+  {
+    label: "Why Odisha",
+    href: "/why-odisha",
+  },
   {
     label: "Exhibit",
+    href: "/exhibit",
     items: [
       ["Why Exhibit", "/exhibit"],
-      ["Exhibitor Registration", "/exhibitor-registration"],
+      [
+        "Exhibitor Registration",
+        "/exhibitor-registration",
+      ],
     ],
   },
   {
     label: "Visit",
+    href: "/visit",
     items: [
       ["Why Visit", "/visit"],
-      ["Visitor Registration", "/visitor-registration"],
+      [
+        "Visitor Registration",
+        "/visitor-registration",
+      ],
     ],
   },
   {
-    label: "Download",
-    items: [["Brochure", "/brochure"]],
+    label: "Venue",
+    href: "/venue",
   },
+   {
+    label: "Download",
+    href: "/brochure",
+    items: [
+      ["Brochure", "/brochure"],
+    ],
+  },
+  {
+    label: "Gallery",
+    href: "/gallery",
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+  },
+ 
 ] as const;
 
-const links = [
-  ["About", "/about"],
-  ["Why Odisha", "/why-odisha"],
-  ["Venue", "/venue"],
-  ["Gallery", "/gallery"],
-  ["Contact", "/contact"],
-] as const;
+const NAV_ITEM_CLASS =
+  "relative flex h-10 items-center gap-1.5 px-3 text-[11px] font-extrabold uppercase leading-none tracking-[.055em] text-white/65 transition-colors duration-200 hover:text-white focus-visible:outline-none";
 
 export function Navbar() {
+  const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState<string | null>(null);
+
+  const [mobileMenu, setMobileMenu] =
+    useState<string | null>(null);
+
+  useEffect(() => {
+    setOpen(false);
+    setMobileMenu(null);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow =
+      "hidden";
+
+    const onKeyDown = (
+      event: KeyboardEvent
+    ) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      onKeyDown
+    );
+
+    return () => {
+      document.body.style.overflow =
+        previousOverflow;
+
+      window.removeEventListener(
+        "keydown",
+        onKeyDown
+      );
+    };
+  }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-brand-black/95 text-white backdrop-blur-xl">
-      <Container className="flex h-18 items-center justify-between gap-6 lg:h-20">
-        <Link
-          href="/"
-          aria-label="Odisha Mining Expo home"
-          className="relative h-11 w-40 shrink-0 sm:w-44"
-        >
-          <Image
-            src="/image/5th-Odisha-Logo_White.png"
-            alt="Odisha Mining Expo 2027"
-            fill
-            priority
-            className="object-contain object-left"
-          />
-        </Link>
+    <>
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#050505]/96 text-white backdrop-blur-xl">
+        <div className="h-[2px] bg-brand" />
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
-          {links.slice(0, 2).map(([label, href]) => (
-            <NavLink key={href} href={href}>
-              {label}
-            </NavLink>
-          ))}
+        <Container className="flex h-[72px] items-center justify-between gap-6 lg:h-[78px]">
+          {/* Logo */}
+   <Link
+  href="/"
+  aria-label="Odisha Mining Expo home"
+  className="group relative block h-16 w-[245px] shrink-0 sm:h-[72px] sm:w-[275px]"
+>
+  <Image
+    src="/image/5th-Odisha-Logo_White.png"
+    alt="Odisha Mining Expo 2027"
+    fill
+    priority
+    sizes="275px"
+    className="object-contain object-left transition-opacity duration-300 group-hover:opacity-85"
+  />
+</Link>
 
-          {menus.slice(0, 2).map((menu) => (
-            <Dropdown key={menu.label} {...menu} />
-          ))}
-
-          {links.slice(2).map(([label, href]) => (
-            <NavLink key={href} href={href}>
-              {label}
-            </NavLink>
-          ))}
-
-          <Dropdown {...menus[2]} />
-
-          <Link
-            href="/exhibitor-registration"
-            className="ml-2 inline-flex min-h-11 items-center border border-brand bg-brand px-4 text-[11px] font-extrabold uppercase tracking-[.08em] text-brand-black transition duration-300 hover:bg-brand-light"
+          {/* Desktop navigation */}
+          <nav
+            className="hidden items-center lg:flex"
+            aria-label="Primary navigation"
           >
-            Book Your Stand
-          </Link>
-        </nav>
-
-        <button
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-label="Toggle navigation"
-          className="grid size-10 place-items-center border border-white/10 transition hover:border-brand hover:text-brand lg:hidden"
-        >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
-      </Container>
-
-      {open && (
-        <div className="border-t border-white/10 bg-brand-black lg:hidden">
-          <Container className="py-4">
-            <div className="grid">
-              {links.slice(0, 2).map(([label, href]) => (
-                <MobileLink key={href} href={href} onClick={() => setOpen(false)}>
-                  {label}
-                </MobileLink>
-              ))}
-
-              {menus.slice(0, 2).map((menu) => (
-                <MobileDropdown
-                  key={menu.label}
-                  {...menu}
-                  open={mobileMenu === menu.label}
-                  onToggle={() =>
-                    setMobileMenu(mobileMenu === menu.label ? null : menu.label)
-                  }
-                  onNavigate={() => setOpen(false)}
+            {navItems.map((item) =>
+              "items" in item ? (
+                <DropdownNavItem
+                  key={item.label}
+                  label={item.label}
+                  href={item.href}
+                  items={item.items}
+                  active={isDropdownActive(
+                    pathname,
+                    item.href,
+                    item.items
+                  )}
                 />
-              ))}
+              ) : (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  active={isActive(
+                    pathname,
+                    item.href
+                  )}
+                >
+                  {item.label}
+                </NavLink>
+              )
+            )}
 
-              {links.slice(2).map(([label, href]) => (
-                <MobileLink key={href} href={href} onClick={() => setOpen(false)}>
-                  {label}
-                </MobileLink>
-              ))}
+            <div
+              aria-hidden
+              className="mx-2 h-5 w-px bg-white/12"
+            />
 
-              <MobileDropdown
-                {...menus[2]}
-                open={mobileMenu === "Download"}
-                onToggle={() =>
-                  setMobileMenu(mobileMenu === "Download" ? null : "Download")
-                }
-                onNavigate={() => setOpen(false)}
-              />
+            <Link
+              href="/exhibitor-registration"
+              className="group ml-1 inline-flex h-11 items-center justify-center gap-2 border border-brand bg-brand px-5 text-[10px] font-black uppercase tracking-[.09em] text-brand-black transition-colors duration-300 hover:bg-brand-light"
+            >
+              <span>Book Your Stand</span>
 
-              <Link
-                href="/exhibitor-registration"
-                onClick={() => setOpen(false)}
-                className="mt-4 bg-brand px-4 py-3 text-center text-xs font-extrabold uppercase tracking-[.08em] text-brand-black"
-              >
-                Book Your Stand
-              </Link>
-            </div>
-          </Container>
-        </div>
-      )}
-    </header>
+              <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+          </nav>
+
+          {/* Mobile trigger */}
+          <button
+            type="button"
+            onClick={() =>
+              setOpen((value) => !value)
+            }
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            aria-label={
+              open
+                ? "Close navigation"
+                : "Open navigation"
+            }
+            className="relative grid size-11 place-items-center border border-white/15 text-white transition-colors duration-200 hover:border-brand hover:text-brand lg:hidden"
+          >
+            {open ? (
+              <X className="size-[18px]" />
+            ) : (
+              <Menu className="size-[19px]" />
+            )}
+          </button>
+        </Container>
+      </header>
+
+      {/* Mobile navigation */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-navigation"
+            initial={{
+              opacity: 0,
+              y: -8,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -8,
+            }}
+            transition={{
+              duration: 0.22,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="fixed inset-x-0 bottom-0 top-[74px] z-40 overflow-y-auto bg-[#050505] text-white lg:hidden"
+          >
+            <Container className="py-5">
+              <div className="border-t border-white/10">
+                {navItems.map((item) =>
+                  "items" in item ? (
+                    <MobileDropdown
+                      key={item.label}
+                      label={item.label}
+                      items={item.items}
+                      open={
+                        mobileMenu ===
+                        item.label
+                      }
+                      active={isDropdownActive(
+                        pathname,
+                        item.href,
+                        item.items
+                      )}
+                      onToggle={() =>
+                        setMobileMenu(
+                          mobileMenu ===
+                            item.label
+                            ? null
+                            : item.label
+                        )
+                      }
+                    />
+                  ) : (
+                    <MobileLink
+                      key={item.href}
+                      href={item.href}
+                      active={isActive(
+                        pathname,
+                        item.href
+                      )}
+                    >
+                      {item.label}
+                    </MobileLink>
+                  )
+                )}
+              </div>
+
+              <div className="mt-7 border-t border-white/10 pt-6">
+                <Link
+                  href="/exhibitor-registration"
+                  className="group flex min-h-12 w-full items-center justify-between bg-brand px-5 text-[11px] font-black uppercase tracking-[.09em] text-brand-black"
+                >
+                  <span>
+                    Book Your Stand
+                  </span>
+
+                  <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </Link>
+
+                <p className="mt-5 text-[9px] font-bold uppercase leading-5 tracking-[.14em] text-white/28">
+                  07–10 January 2027
+                  <br />
+                  Bhubaneswar · Odisha
+                </p>
+              </div>
+            </Container>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
 function NavLink({
   href,
+  active,
   children,
 }: {
   href: string;
-  children: React.ReactNode;
+  active: boolean;
+  children: ReactNode;
 }) {
   return (
     <Link
       href={href}
-      className="relative px-3 py-2 text-[12px] font-bold uppercase tracking-[.04em] text-white/75 transition hover:text-brand"
+      className={`${NAV_ITEM_CLASS} ${
+        active ? "text-white" : ""
+      }`}
     >
-      {children}
+      <span>{children}</span>
+
+      <span
+        className={`absolute inset-x-3 bottom-0 h-[2px] origin-left bg-brand transition-transform duration-300 ${
+          active
+            ? "scale-x-100"
+            : "scale-x-0 group-hover:scale-x-100"
+        }`}
+      />
     </Link>
   );
 }
 
-function Dropdown({
+function DropdownNavItem({
   label,
+  href,
   items,
+  active,
 }: {
   label: string;
-  items: readonly (readonly [string, string])[];
+  href: string;
+  items: readonly (
+    readonly [string, string]
+  )[];
+  active: boolean;
 }) {
   return (
     <div className="group relative">
-      <button className="flex items-center gap-1 px-3 py-2 text-[12px] font-bold uppercase tracking-[.04em] text-white/75 transition group-hover:text-brand">
-        {label}
-        <ChevronDown className="size-3.5 transition-transform duration-300 group-hover:rotate-180" />
-      </button>
+      <Link
+        href={href}
+        className={`${NAV_ITEM_CLASS} ${
+          active ? "text-white" : ""
+        }`}
+      >
+        <span>{label}</span>
 
-      <div className="pointer-events-none absolute left-0 top-full min-w-56 translate-y-2 border border-white/10 bg-brand-black opacity-0 shadow-2xl transition duration-300 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
-        {items.map(([name, href]) => (
-          <Link
-            key={href}
-            href={href}
-            className="block border-b border-white/10 px-4 py-3 text-sm text-white/70 transition last:border-b-0 hover:bg-white/[.04] hover:text-brand"
-          >
-            {name}
-          </Link>
-        ))}
+        <ChevronDown className="size-3.5 text-white/35 transition-transform duration-300 group-hover:rotate-180 group-hover:text-brand" />
+
+        <span
+          className={`absolute inset-x-3 bottom-0 h-[2px] origin-left bg-brand transition-transform duration-300 ${
+            active
+              ? "scale-x-100"
+              : "scale-x-0 group-hover:scale-x-100"
+          }`}
+        />
+      </Link>
+
+      {/* Hover bridge */}
+      <div className="absolute left-0 top-full h-3 w-full" />
+
+      {/* Dropdown */}
+      <div className="pointer-events-none absolute left-0 top-[calc(100%+10px)] w-[235px] translate-y-2 border border-white/10 bg-[#090909] opacity-0 shadow-[0_24px_60px_rgba(0,0,0,.45)] transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="h-[2px] bg-brand" />
+
+        {items.map(
+          ([name, itemHref]) => (
+            <Link
+              key={itemHref}
+              href={itemHref}
+              className="block border-b border-white/[.07] px-4 py-3.5 text-[12px] font-semibold text-white/65 transition-colors last:border-b-0 hover:bg-white/[.035] hover:text-white"
+            >
+              {name}
+            </Link>
+          )
+        )}
       </div>
     </div>
   );
@@ -194,20 +394,39 @@ function Dropdown({
 
 function MobileLink({
   href,
+  active,
   children,
-  onClick,
 }: {
   href: string;
-  children: React.ReactNode;
-  onClick: () => void;
+  active: boolean;
+  children: ReactNode;
 }) {
   return (
     <Link
       href={href}
-      onClick={onClick}
-      className="border-b border-white/10 py-3 text-sm font-semibold text-white/80 transition hover:text-brand"
+      className="group relative flex min-h-[54px] items-center justify-between border-b border-white/10"
     >
-      {children}
+      <span
+        className={`text-[13px] font-extrabold uppercase tracking-[.055em] transition-colors ${
+          active
+            ? "text-brand"
+            : "text-white/72 group-hover:text-white"
+        }`}
+      >
+        {children}
+      </span>
+
+      <ArrowUpRight
+        className={`size-3.5 ${
+          active
+            ? "text-brand"
+            : "text-white/20"
+        }`}
+      />
+
+      {active && (
+        <span className="absolute bottom-0 left-0 h-[2px] w-8 bg-brand" />
+      )}
     </Link>
   );
 }
@@ -216,41 +435,110 @@ function MobileDropdown({
   label,
   items,
   open,
+  active,
   onToggle,
-  onNavigate,
 }: {
   label: string;
-  items: readonly (readonly [string, string])[];
+  items: readonly (
+    readonly [string, string]
+  )[];
   open: boolean;
+  active: boolean;
   onToggle: () => void;
-  onNavigate: () => void;
 }) {
   return (
     <div className="border-b border-white/10">
       <button
+        type="button"
         onClick={onToggle}
-        className="flex w-full items-center justify-between py-3 text-sm font-semibold text-white/80"
+        aria-expanded={open}
+        className="flex min-h-[54px] w-full items-center justify-between"
       >
-        {label}
+        <span
+          className={`text-[13px] font-extrabold uppercase tracking-[.055em] ${
+            active
+              ? "text-brand"
+              : "text-white/72"
+          }`}
+        >
+          {label}
+        </span>
+
         <ChevronDown
-          className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`size-4 transition-transform duration-300 ${
+            open
+              ? "rotate-180 text-brand"
+              : "text-white/30"
+          }`}
         />
       </button>
 
-      {open && (
-        <div className="pb-2 pl-3">
-          {items.map(([name, href]) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={onNavigate}
-              className="block py-2 text-sm text-white/55 transition hover:text-brand"
-            >
-              {name}
-            </Link>
-          ))}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{
+              height: 0,
+              opacity: 0,
+            }}
+            animate={{
+              height: "auto",
+              opacity: 1,
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.25,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-white/[.07] bg-white/[.025] py-1">
+              {items.map(
+                ([name, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="flex min-h-12 items-center justify-between px-4 text-[12px] font-semibold text-white/52 transition-colors hover:text-white"
+                  >
+                    <span>{name}</span>
+
+                    <ArrowUpRight className="size-3.5 text-white/20" />
+                  </Link>
+                )
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+function isActive(
+  pathname: string,
+  href: string
+) {
+  return (
+    pathname === href ||
+    pathname.startsWith(
+      `${href}/`
+    )
+  );
+}
+
+function isDropdownActive(
+  pathname: string,
+  href: string,
+  items: readonly (
+    readonly [string, string]
+  )[]
+) {
+  return (
+    isActive(pathname, href) ||
+    items.some(([, itemHref]) =>
+      isActive(pathname, itemHref)
+    )
   );
 }
