@@ -95,23 +95,45 @@ export default function Contact() {
                     </span>
                   </div>
 
-                  <div className="mt-5 grid gap-3 text-sm">
-                    <a
-                      href={`tel:${person.tel}`}
-                      className="flex w-fit items-center gap-3 text-zinc-700 transition group-hover:text-white/70 hover:!text-brand"
-                    >
-                      <Phone className="size-4 text-brand" />
-                      {person.phone}
-                    </a>
+          <div className="mt-5 grid gap-3 text-sm">
+  <a
+    href={`tel:${person.tel}`}
+    className="
+      flex
+      w-fit
+      items-center
+      gap-3
+      !text-zinc-950
+      no-underline
+      transition-colors
+      duration-300
+      group-hover:!text-white
+      hover:!text-brand
+    "
+  >
+    <Phone className="size-4 shrink-0 !text-brand" />
+    <span>{person.phone}</span>
+  </a>
 
-                    <a
-                      href={`mailto:${person.email}`}
-                      className="flex w-fit items-center gap-3 text-zinc-700 transition group-hover:text-white/70 hover:!text-brand"
-                    >
-                      <Mail className="size-4 text-brand" />
-                      {person.email}
-                    </a>
-                  </div>
+  <a
+    href={`mailto:${person.email}`}
+    className="
+      flex
+      w-fit
+      items-center
+      gap-3
+      !text-zinc-950
+      no-underline
+      transition-colors
+      duration-300
+      group-hover:!text-white
+      hover:!text-brand
+    "
+  >
+    <Mail className="size-4 shrink-0 !text-brand" />
+    <span>{person.email}</span>
+  </a>
+</div>
 
                   <span className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />
                 </article>
@@ -162,16 +184,54 @@ export default function Contact() {
                 </ContactRow>
               </div>
 
-              <a
-                href="https://wa.me/919810855697"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-7 inline-flex min-h-12 items-center gap-3 border border-brand-black bg-brand-black px-5 text-[11px] font-extrabold uppercase tracking-[.08em] text-white transition duration-300 hover:-translate-y-0.5 hover:border-brand hover:bg-brand hover:text-brand-black"
-              >
-                <MessageCircle className="size-4" />
-                Message us on WhatsApp
-                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </a>
+         <a
+  href="https://wa.me/919810855697"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="
+    group
+    mt-7
+    inline-flex
+    min-h-12
+    items-center
+    gap-3
+    border
+    !border-[#171717]
+    !bg-[#171717]
+    px-5
+    text-[11px]
+    font-extrabold
+    uppercase
+    leading-none
+    tracking-[0.08em]
+    !text-white
+    no-underline
+    transition-all
+    duration-300
+    hover:-translate-y-0.5
+    hover:!border-[#d99d00]
+    hover:!bg-[#d99d00]
+    hover:!text-white
+  "
+>
+  <MessageCircle className="size-4 shrink-0 !text-white transition-transform duration-300 group-hover:scale-105" />
+
+  <span className="whitespace-nowrap">
+    Message us on WhatsApp
+  </span>
+
+  <ArrowUpRight
+    className="
+      size-4
+      shrink-0
+      !text-white
+      transition-transform
+      duration-300
+      group-hover:-translate-y-0.5
+      group-hover:translate-x-0.5
+    "
+  />
+</a>
             </div>
           </div>
 

@@ -120,15 +120,37 @@ export function VisitContent() {
             ))}
           </div>
 
-          <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href="/visitor-registration" variant="dark">
-              Register to Visit — Free
-            </ButtonLink>
+       <div className="mt-9 flex flex-wrap gap-3">
+  <ButtonLink
+    href="/visitor-registration"
+    variant="dark"
+    className="
+      !border-[#171717]
+      !bg-[#171717]
+      !text-white
+      hover:!border-white
+      hover:!bg-white
+      hover:!text-[#171717]
+    "
+  >
+    Register to Visit — Free
+  </ButtonLink>
 
-            <ButtonLink href="/gallery" variant="dark">
-              See Last Edition Glimpses
-            </ButtonLink>
-          </div>
+  <ButtonLink
+    href="/gallery"
+    variant="dark"
+    className="
+      !border-[#171717]
+      !bg-[#171717]
+      !text-white
+      hover:!border-white
+      hover:!bg-white
+      hover:!text-[#171717]
+    "
+  >
+    See Last Edition Glimpses
+  </ButtonLink>
+</div>
         </Container>
       </section>
     </>

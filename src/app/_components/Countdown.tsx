@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 
 const TARGET_DATE = new Date("2027-01-07T09:00:00+05:30").getTime();
 
@@ -16,9 +17,13 @@ function getTimeLeft() {
 }
 
 export function Countdown() {
-  const [time, setTime] = useState(getTimeLeft);
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    setTime(getTimeLeft());
+
     const timer = window.setInterval(() => {
       setTime(getTimeLeft());
     }, 1000);
@@ -28,45 +33,68 @@ export function Countdown() {
 
   const items = useMemo(
     () => [
-      ["Days", time.days],
-      ["Hours", time.hours],
-      ["Minutes", time.minutes],
-      ["Seconds", time.seconds],
+      { label: "Days", value: time.days },
+      { label: "Hours", value: time.hours },
+      { label: "Minutes", value: time.minutes },
+      { label: "Seconds", value: time.seconds },
     ],
     [time]
   );
 
   return (
-    <div className="mt-10 max-w-3xl">
-      <div className="mb-4 flex items-center gap-3">
-        <span className="h-px w-8 bg-yellow-300" />
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400">
-          Event starts in
+    // mt-12 hata diya, width compact kardi
+    <div className="w-full max-w-[550px]">
+      {/* Sleek Eyebrow */}
+      <div className="mb-3 flex items-center gap-2.5">
+        <motion.span
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="h-px w-6 origin-left bg-[#F9B900]"
+        />
+        <p className="text-[8.5px] font-bold uppercase tracking-[0.2em] text-white/40">
+          Event commences in
         </p>
       </div>
 
-      <div className="grid grid-cols-2 border-l border-t border-white/10 sm:grid-cols-4">
-        {items.map(([label, value]) => (
+      {/* 
+        Grid Container: 
+        Mobile me bhi 4 columns (grid-cols-4) taaki height bhot kam le.
+        Rounded corners lagaye hain soft premium feel ke liye.
+      */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="grid grid-cols-4 gap-px rounded-sm border border-white/10 bg-white/10 overflow-hidden"
+      >
+        {items.map((item) => (
           <div
-            key={label}
-            className="group relative overflow-hidden border-b border-r border-white/10 bg-white/[0.035] px-4 py-5 backdrop-blur-sm transition duration-500 hover:bg-white/[0.065] sm:px-5 sm:py-6"
+            key={item.label}
+            className="group relative flex flex-col items-center justify-center bg-[#050505] py-4 transition-colors duration-500 hover:bg-[#0a0a0a] sm:py-5"
           >
-            <span className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-yellow-300 transition-transform duration-500 group-hover:scale-x-100" />
+            {/* Top Hover Gradient Line */}
+            <span className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-[#FFD55A] via-[#F9B900] to-[#C98E00] transition-transform duration-500 ease-out group-hover:scale-x-100" />
 
-            <div className="flex items-end gap-1">
-              <span className="counter-number text-3xl font-bold leading-none tracking-[-0.06em] text-white sm:text-4xl lg:text-5xl">
-                {String(value).padStart(2, "0")}
+            <div className="flex items-baseline gap-0.5">
+              {/* Size text-4xl se chota karke text-2xl/text-3xl kar diya */}
+              <span className="tabular-nums text-2xl font-bold tracking-tighter text-white/90 transition-colors duration-300 group-hover:text-white sm:text-3xl lg:text-4xl">
+                {isMounted ? String(item.value).padStart(2, "0") : "00"}
               </span>
 
-              <span className="mb-1 size-1 rounded-full bg-yellow-300" />
+              {/* Minimal Dot */}
+              <span className="mb-1 size-[3px] rounded-full bg-[#F9B900] opacity-80" />
             </div>
 
-            <p className="mt-3 text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-500 sm:text-[10px]">
-              {label}
+            <p className="mt-1 text-[7.5px] font-bold uppercase tracking-[0.2em] text-white/30 transition-colors duration-300 group-hover:text-[#F9B900]/80 sm:text-[8.5px]">
+              {item.label}
             </p>
+
+            {/* Subtle background glow effect on hover */}
+            <div className="pointer-events-none absolute inset-0 bg-[#F9B900] opacity-0 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-[0.03]" />
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

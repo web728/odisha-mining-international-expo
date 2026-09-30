@@ -98,20 +98,69 @@ export default function Venue() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="mailto:info@futurextrade.com?subject=Floor%20Plan%20Request%20-%20OMIIE%202027"
-              className="group inline-flex min-h-12 items-center gap-3 border border-brand-black bg-brand-black px-5 text-[11px] font-extrabold uppercase tracking-[.08em] text-white transition duration-300 hover:border-brand hover:bg-brand hover:text-brand-black"
-            >
-              <Mail className="size-4" />
-              Request the Official Floor Plan
-              <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
+      <div className="mt-8 flex flex-wrap gap-3">
+  <a
+    href="mailto:info@futurextrade.com?subject=Floor%20Plan%20Request%20-%20OMIIE%202027"
+    className="
+      group
+      inline-flex
+      min-h-12
+      items-center
+      gap-3
+      border
+      !border-[#171717]
+      !bg-[#171717]
+      px-5
+      text-[11px]
+      font-extrabold
+      uppercase
+      leading-none
+      tracking-[0.08em]
+      !text-white
+      no-underline
+      transition-all
+      duration-300
+      hover:-translate-y-0.5
+      hover:!border-white
+      hover:!bg-white
+      hover:!text-[#171717]
+    "
+  >
+    <Mail className="size-4 shrink-0 !text-white transition-colors duration-300 group-hover:!text-[#171717]" />
 
-            <ButtonLink href="/exhibitor-registration" variant="dark">
-              Book Your Stand
-            </ButtonLink>
-          </div>
+    <span className="whitespace-nowrap">
+      Request the Official Floor Plan
+    </span>
+
+    <ArrowUpRight
+      className="
+        size-4
+        shrink-0
+        !text-white
+        transition-all
+        duration-300
+        group-hover:!text-[#171717]
+        group-hover:-translate-y-0.5
+        group-hover:translate-x-0.5
+      "
+    />
+  </a>
+
+  <ButtonLink
+    href="/exhibitor-registration"
+    variant="dark"
+    className="
+      !border-[#171717]
+      !bg-[#171717]
+      !text-white
+      hover:!border-white
+      hover:!bg-white
+      hover:!text-[#171717]
+    "
+  >
+    Book Your Stand
+  </ButtonLink>
+</div>
         </Container>
       </section>
 

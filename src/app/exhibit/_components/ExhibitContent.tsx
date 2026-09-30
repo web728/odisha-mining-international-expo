@@ -142,15 +142,37 @@ export function ExhibitContent() {
             ))}
           </div>
 
-          <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href="/exhibitor-registration" variant="dark">
-              Book Your Stand
-            </ButtonLink>
+      <div className="mt-9 flex flex-wrap gap-3">
+  <ButtonLink
+    href="/exhibitor-registration"
+    variant="dark"
+    className="
+      !border-[#171717]
+      !bg-[#171717]
+      !text-white
+      hover:!border-white
+      hover:!bg-white
+      hover:!text-[#171717]
+    "
+  >
+    Book Your Stand
+  </ButtonLink>
 
-            <ButtonLink href="/brochure" variant="dark">
-              Download Brochure
-            </ButtonLink>
-          </div>
+  <ButtonLink
+    href="/brochure"
+    variant="dark"
+    className="
+      !border-[#171717]
+      !bg-[#171717]
+      !text-white
+      hover:!border-white
+      hover:!bg-white
+      hover:!text-[#171717]
+    "
+  >
+    Download Brochure
+  </ButtonLink>
+</div>
         </Container>
       </section>
     </>
