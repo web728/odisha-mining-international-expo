@@ -68,7 +68,7 @@ export function AboutOrganiser() {
           className="image-premium relative aspect-[4/3] overflow-hidden"
         >
           <Image
-            src="/image/P1382702-1024x683.jpg"
+            src="/hero/about-new.png"
             alt="Crowds at the Odisha Mining and Infrastructure International Expo"
             fill
             sizes="(max-width:1024px) 100vw, 50vw"

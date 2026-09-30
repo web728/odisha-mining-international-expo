@@ -63,7 +63,7 @@ export function AboutIntro() {
 
             <div className="image-premium relative aspect-[4/3] overflow-hidden">
               <Image
-                src="/image/expo/DSC06793.JPG"
+                src="/image/about-hero-2.png"
                 alt="Business meetings at the Odisha Mining Expo"
                 fill
                 sizes="(max-width:1024px) 100vw, 50vw"

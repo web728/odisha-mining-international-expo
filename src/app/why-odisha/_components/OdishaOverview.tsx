@@ -93,7 +93,7 @@ export function OdishaOverview() {
 
             <div className="image-premium relative aspect-[4/3] overflow-hidden">
               <Image
-                src="/image/expo/odisha-mining-10.webp"
+                src="/image/why.jpg"
                 alt="Heavy machinery display at Odisha Mining Expo"
                 fill
                 sizes="(max-width:1024px) 100vw, 50vw"
