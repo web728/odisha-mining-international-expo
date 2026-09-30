@@ -12,13 +12,72 @@ import {
 import { Container } from "@/components/ui/Container";
 import { ExhibitorForm } from "./ExhibitorForm";
 
+const SITE_URL = "https://odishaminingexpo.com";
+
 export const metadata: Metadata = {
-  title: "Exhibitor Registration",
+  title: "Exhibitor Registration | Book Your Stand at OMIIE 2027",
   description:
-    "Book your stand at Odisha Mining & Infrastructure International Expo 2027.",
+    "Book your exhibition stand at the 5th Odisha Mining & Infrastructure International Expo 2027. Put your brand in front of 20,000+ industry buyers, mine owners, and government contractors in Bhubaneswar.",
+  keywords: [
+    "Exhibitor Registration Odisha Mining Expo",
+    "Book Exhibition Stand",
+    "OMIIE 2027 Exhibitor Form",
+    "Mining Expo Stand Booking",
+    "B2B Mining Exhibition Registration",
+    "Heavy Machinery Trade Show Stand",
+    "Bhubaneswar Expo Registration",
+  ],
   alternates: {
     canonical: "/exhibitor-registration",
   },
+  openGraph: {
+    title: "Exhibitor Registration | Book Your Stand at OMIIE 2027",
+    description:
+      "Secure your space at India's premier mining and infrastructure expo. Meet 20,000+ industry buyers face-to-face in Bhubaneswar, Odisha.",
+    url: `${SITE_URL}/exhibitor-registration`,
+    type: "website",
+    siteName: "Odisha Mining Expo 2027",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Exhibitor Registration | OMIIE 2027",
+    description:
+      "Book your stand today and connect with serious industry buyers at the Odisha Mining & Infrastructure International Expo 2027.",
+  },
+};
+
+// Breadcrumb aur WebPage schema for Google Sitelinks
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/exhibitor-registration/#webpage`,
+      url: `${SITE_URL}/exhibitor-registration`,
+      name: "Exhibitor Registration | Odisha Mining & Infrastructure Expo 2027",
+      description:
+        "Book your exhibition stand at the 5th Odisha Mining & Infrastructure International Expo 2027. Put your brand in front of 20,000+ industry buyers.",
+      inLanguage: "en-IN",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${SITE_URL}/exhibitor-registration/#breadcrumb`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: SITE_URL,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Exhibitor Registration",
+          item: `${SITE_URL}/exhibitor-registration`,
+        },
+      ],
+    },
+  ],
 };
 
 const highlights = [
@@ -45,6 +104,12 @@ const highlights = [
 export default function Page() {
   return (
     <>
+      {/* Schema injected for Google Search */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
       <section className="relative isolate overflow-hidden bg-brand-black text-white">
         <HeroGraphic />
 
