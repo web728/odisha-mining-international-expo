@@ -110,7 +110,7 @@ export function Footer() {
           </p>
 
           <Image
-            src="/image/futurextrade.png"
+            src="/image/futurex.jpg"
             alt="Futurex Trade Fair & Events Pvt. Ltd."
             width={190}
             height={80}

@@ -173,7 +173,7 @@ function Partners() {
         >
           <Partner title="Organiser">
             <Image
-              src="/image/futurextrade.png"
+              src="/image/futurex.jpg"
               alt="Futurex Trade Fair & Events Pvt. Ltd."
               width={210}
               height={90}
