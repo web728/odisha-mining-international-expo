@@ -21,13 +21,11 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-
   applicationName: "Odisha Mining Expo 2027",
-
+  
   title: {
-    default:
-      "5th Odisha Mining & Infrastructure International Expo 2027 | Bhubaneswar",
-    template: `%s | ${site.shortName}`,
+    default: "5th Odisha Mining & Infrastructure International Expo 2027",
+    template: `%s | Odisha Mining & Infrastructure International Expo 2027`,
   },
 
   description:
@@ -36,35 +34,17 @@ export const metadata: Metadata = {
   keywords: [
     "Odisha Mining Expo",
     "Odisha Mining Expo 2027",
-    "Mining Expo India",
-    "Mining Exhibition India",
-    "Mining Exhibition Odisha",
-    "Mining Expo Bhubaneswar",
-    "Mining Equipment Exhibition",
-    "Mining Machinery Expo",
-    "Infrastructure Expo India",
-    "Heavy Equipment Expo India",
-    "Mineral Processing Exhibition",
-    "Construction Equipment Expo",
-    "Odisha Mining Industry",
     "OMIIE 2027",
+    "Mining Expo India",
+    "Mining Exhibition Odisha",
+    "Heavy Equipment Expo India",
+    "Infrastructure Expo India",
   ],
 
-  authors: [
-    {
-      name: "Odisha Mining & Infrastructure International Expo",
-      url: SITE_URL,
-    },
-  ],
-
-  creator:
-    "Odisha Mining & Infrastructure International Expo",
-
-  publisher:
-    "Futurex Trade Fair & Events Pvt. Ltd.",
-
-  category:
-    "Mining & Infrastructure Exhibition",
+  authors: [{ name: "Odisha Mining & Infrastructure International Expo", url: SITE_URL }],
+  creator: "Odisha Mining & Infrastructure International Expo",
+  publisher: "Futurex Trade Fair & Events Pvt. Ltd.",
+  category: "Mining & Infrastructure Exhibition",
 
   alternates: {
     canonical: "/",
@@ -75,28 +55,20 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: SITE_URL,
     siteName: "Odisha Mining Expo 2027",
-
-    title:
-      "5th Odisha Mining & Infrastructure International Expo 2027",
-
+    title: "5th Odisha Mining & Infrastructure International Expo 2027",
     description:
       "India's premier platform for mining, infrastructure, heavy equipment & industrial innovation. 07–10 January 2027, Bhubaneswar, Odisha.",
   },
 
   twitter: {
     card: "summary_large_image",
-
-    title:
-      "5th Odisha Mining & Infrastructure International Expo 2027",
-
-    description:
-      "07–10 January 2027 · Baramunda Exhibition Ground · Bhubaneswar, Odisha",
+    title: "5th Odisha Mining & Infrastructure International Expo 2027",
+    description: "07–10 January 2027 · Baramunda Exhibition Ground · Bhubaneswar, Odisha",
   },
 
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
@@ -104,12 +76,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
-  },
-
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
   },
 };
 
@@ -125,77 +91,53 @@ const structuredData = [
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${SITE_URL}/#website`,
-
     url: SITE_URL,
-
-    name: "Odisha Mining Expo 2027",
-
-    alternateName:
-      "Odisha Mining & Infrastructure International Expo",
-
+    name: "5th Odisha Mining & Infrastructure International Expo 2027",
+    alternateName: ["Odisha Mining Expo", "OMIIE 2027"],
     inLanguage: "en-IN",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
   },
-
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
-
-    name:
-      "Odisha Mining & Infrastructure International Expo",
-
+    name: "Odisha Mining & Infrastructure International Expo",
     alternateName: "Odisha Mining Expo",
-
     url: SITE_URL,
+    logo: `${SITE_URL}/image/5th-Odisha-Logo_White.png`,
   },
-
   {
     "@context": "https://schema.org",
     "@type": "Event",
     "@id": `${SITE_URL}/#event`,
-
-    name:
-      "5th Odisha Mining & Infrastructure International Expo 2027",
-
+    name: "5th Odisha Mining & Infrastructure International Expo 2027",
     description:
       "India's premier platform for mining, infrastructure, heavy equipment and industrial innovation.",
-
-    startDate: "2027-01-07",
-    endDate: "2027-01-10",
-
-    eventStatus:
-      "https://schema.org/EventScheduled",
-
-    eventAttendanceMode:
-      "https://schema.org/OfflineEventAttendanceMode",
-
+    startDate: "2027-01-07T09:00:00+05:30",
+    endDate: "2027-01-10T18:00:00+05:30",
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
-
-      name:
-        "Baramunda Exhibition Ground",
-
+      name: "Baramunda Exhibition Ground",
       address: {
         "@type": "PostalAddress",
-
-        addressLocality:
-          "Bhubaneswar",
-
-        addressRegion:
-          "Odisha",
-
-        addressCountry:
-          "IN",
+        addressLocality: "Bhubaneswar",
+        addressRegion: "Odisha",
+        addressCountry: "IN",
       },
     },
-
     organizer: {
       "@type": "Organization",
-
-      name:
-        "Futurex Trade Fair & Events Pvt. Ltd.",
+      name: "Futurex Trade Fair & Events Pvt. Ltd.",
     },
-
     url: SITE_URL,
   },
 ];
@@ -206,36 +148,21 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html
-      lang="en-IN"
-      className={manrope.variable}
-    >
+    <html lang="en-IN" className={manrope.variable}>
       <body
         suppressHydrationWarning
         className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
       >
         <InitialLoader />
-
         <Navbar />
-
-        <main id="main-content">
-          {children}
-        </main>
-
+        <main id="main-content">{children}</main>
         <Footer />
-
         <CookieConsent />
 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html:
-              JSON.stringify(
-                structuredData
-              ).replace(
-                /</g,
-                "\\u003c"
-              ),
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
           }}
         />
       </body>
