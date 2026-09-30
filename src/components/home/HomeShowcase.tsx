@@ -183,7 +183,7 @@ function Partners() {
 
           <Partner title="LanYard Sponsor">
             <Image
-              src="/image/mr-crusher.png"
+              src="/image/crusher.png"
               alt="Mr Crusher"
               width={210}
               height={90}
