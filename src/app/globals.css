@@ -1,0 +1,404 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+
+  --brand: #f9b900;
+  --brand-light: #ffc928;
+  --brand-dark: #d99d00;
+
+  --black: #050505;
+  --black-2: #0b0b0b;
+
+  --text: #111111;
+  --muted: #686868;
+
+  --surface: #fff;
+  --surface-soft: #f4f4f1;
+
+  --border: rgba(17, 17, 17, 0.12);
+  --border-dark: rgba(255, 255, 255, 0.12);
+
+  --container: 1280px;
+  --section: clamp(4rem, 7vw, 7rem);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-light: var(--brand-light);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-black: var(--black);
+  --color-brand-black-soft: var(--black-2);
+}
+
+/* Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: clip;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font-family: var(--font-manrope), Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+h1 {
+  letter-spacing: -0.055em;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.15;
+}
+
+p {
+  line-height: 1.75;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img,
+video,
+svg,
+canvas,
+picture {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+::selection {
+  background: var(--brand);
+  color: var(--black);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 4px;
+}
+
+[id] {
+  scroll-margin-top: 100px;
+}
+
+/* Layout */
+.site-container {
+  width: min(calc(100% - clamp(1.5rem, 5vw, 5rem)), var(--container));
+  margin-inline: auto;
+}
+
+.section-space {
+  padding-block: var(--section);
+}
+
+.section-space-sm {
+  padding-block: clamp(3rem, 5vw, 5rem);
+}
+
+/* Theme sections */
+.section-light {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.section-soft {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.section-dark {
+  background: var(--black);
+  color: #fff;
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  color: #fff;
+}
+
+.section-dark p {
+  color: #a1a1aa;
+}
+
+/* Typography helpers */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  color: var(--brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 30px;
+  height: 6px;
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 38%,
+      var(--brand) 39% 61%,
+      transparent 62%
+    );
+  flex: 0 0 auto;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.counter-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.045em;
+}
+
+/* Industrial card */
+.premium-card {
+  position: relative;
+  border: 1px solid var(--border);
+  background: #fff;
+
+  transition:
+    transform 0.45s var(--ease),
+    border-color 0.45s var(--ease),
+    background-color 0.45s var(--ease);
+}
+
+.section-dark .premium-card {
+  border-color: var(--border-dark);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+@media (hover: hover) {
+  .premium-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(249, 185, 0, 0.55);
+  }
+}
+
+/* Buttons */
+.hero-btn,
+.premium-button {
+  display: inline-flex;
+  min-height: 3.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+
+  border: 1px solid var(--brand);
+  padding-inline: 1.8rem;
+
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+
+  transition:
+    transform 0.3s var(--ease),
+    color 0.3s,
+    background-color 0.3s;
+}
+
+.hero-btn-primary {
+  background: var(--brand);
+  color: var(--black);
+}
+
+.hero-btn-outline {
+  background: transparent;
+  color: #fff;
+}
+
+@media (hover: hover) {
+  .hero-btn:hover,
+  .premium-button:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-btn-primary:hover {
+    background: var(--brand-light);
+  }
+
+  .hero-btn-outline:hover {
+    background: var(--brand);
+    color: var(--black);
+  }
+}
+
+/* Images */
+.image-premium {
+  overflow: hidden;
+}
+
+.image-premium img {
+  transition: transform 0.9s var(--ease);
+}
+
+@media (hover: hover) {
+  .image-premium:hover img {
+    transform: scale(1.035);
+  }
+}
+
+/* Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Industrial decorative helpers */
+.brand-line {
+  width: 42px;
+  height: 2px;
+  background: var(--brand);
+}
+
+.tech-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.yellow-strip {
+  background: var(--brand);
+  color: var(--black);
+}
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #777 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :root {
+    --section: 4.5rem;
+  }
+
+  body {
+    line-height: 1.6;
+  }
+
+  h1 {
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  p {
+    line-height: 1.7;
+  }
+
+  .hero-btn {
+    width: 100%;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
