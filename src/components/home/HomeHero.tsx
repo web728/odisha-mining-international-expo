@@ -148,13 +148,14 @@ export function HomeHero() {
           </h1>
 
           {/* Description - Spacing tight ki */}
-          <motion.p
-            variants={fadeUpVariants}
-            className="mt-4 max-w-[500px] text-[12px] leading-relaxed text-white/60 sm:text-[14px]"
-          >
-            Odisha&apos;s focused business platform for mining machinery,
-            infrastructure, heavy equipment, and industrial technologies.
-          </motion.p>
+        <motion.p
+  variants={fadeUpVariants}
+  className="mt-4 max-w-[500px] text-[12px] leading-relaxed text-white/60 sm:text-[14px]"
+>
+Odisha's focused business across logistics, transportation, infrastructure,
+  construction, safety, sustainability, mining machinery, mineral processing,
+  and heavy engineering solutions.
+</motion.p>
 
           {/* Event information - Margins kam kiye */}
           <div className="mt-5 flex max-w-[700px] flex-wrap gap-x-5 gap-y-2.5">
@@ -174,7 +175,7 @@ export function HomeHero() {
           <motion.div variants={fadeUpVariants} className="mt-6 flex flex-wrap gap-2.5">
             <Link
               href="/exhibitor-registration"
-              className="group relative inline-flex min-h-11 items-center justify-center gap-2.5 overflow-hidden bg-[#F9B900] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-[#050505] transition-all duration-300 hover:bg-[#FFD65A]"
+              className="group relative inline-flex min-h-11 items-center justify-center gap-2.5 overflow-hidden bg-[#F9B900] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-[#050505]! transition-all duration-300 hover:bg-[#FFD65A]"
             >
               <span className="relative z-10 flex items-center gap-2.5">
                 Book Your Stand

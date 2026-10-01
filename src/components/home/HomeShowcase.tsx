@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { participantLogos } from "@/data/site";
 import { gallery } from "./home.data";
+import { Gallery } from "./gallery-video";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -22,77 +22,6 @@ export function HomeShowcase() {
   );
 }
 
-/* ---------------- Gallery ---------------- */
-
-function Gallery() {
-  return (
-    <section className="section-space bg-white">
-      <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.65, ease }}
-          className="grid gap-6 lg:grid-cols-[1fr_.7fr] lg:items-end"
-        >
-          <div>
-            <Eyebrow>Event Highlights</Eyebrow>
-
-            <h2 className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950">
-              Watch the expo
-              <span className="text-brand"> in action.</span>
-            </h2>
-          </div>
-
-          <p className="max-w-lg text-sm leading-7 text-zinc-700 lg:justify-self-end">
-            A glimpse of past editions — live machinery, business floor and
-            expo energy.
-          </p>
-        </motion.div>
-
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {gallery.map((img, i) => (
-            <motion.article
-              key={img}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: i * 0.06, ease }}
-              whileHover={{ y: -5 }}
-              className="group relative aspect-[4/5] overflow-hidden bg-zinc-200"
-            >
-              <Image
-                src={`/image/${img}`}
-                alt={`Day ${i + 1} Highlights`}
-                fill
-                sizes="(max-width:640px) 100vw, 25vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5">
-                <div>
-                  <span className="text-[9px] font-extrabold uppercase tracking-[.16em] text-brand">
-                    Previous Edition
-                  </span>
-
-                  <p className="mt-1 text-sm font-bold text-white">
-                    Day {i + 1} Highlights
-                  </p>
-                </div>
-
-                <ArrowUpRight className="size-4 text-brand transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
-              </div>
-
-              <span className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />
-            </motion.article>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
 
 /* ---------------- Participants ---------------- */
 
