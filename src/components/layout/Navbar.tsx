@@ -56,11 +56,13 @@ const navItems = [
     label: "Venue",
     href: "/venue",
   },
-   {
+  {
     label: "Download",
     href: "/brochure",
     items: [
       ["Brochure", "/brochure"],
+      // Yaha par PDF ka path update kiya gaya hai
+      ["Post Show Report", "/downloads/5th-Odisha-Mining-Expo-2027-Post-Show-Report.pdf"],
     ],
   },
   {
@@ -71,7 +73,6 @@ const navItems = [
     label: "Contact",
     href: "/contact",
   },
- 
 ] as const;
 
 const NAV_ITEM_CLASS =
@@ -130,20 +131,20 @@ export function Navbar() {
 
         <Container className="flex h-[72px] items-center justify-between gap-6 lg:h-[78px]">
           {/* Logo */}
-   <Link
-  href="/"
-  aria-label="Odisha Mining Expo home"
-  className="group relative block h-16 w-[245px] shrink-0 sm:h-[72px] sm:w-[275px]"
->
-  <Image
-    src="/image/5th-Odisha-Logo_White.png"
-    alt="Odisha Mining Expo 2027"
-    fill
-    priority
-    sizes="275px"
-    className="object-contain object-left transition-opacity duration-300 group-hover:opacity-85"
-  />
-</Link>
+          <Link
+            href="/"
+            aria-label="Odisha Mining Expo home"
+            className="group relative block h-16 w-[245px] shrink-0 sm:h-[72px] sm:w-[275px]"
+          >
+            <Image
+              src="/image/5th-Odisha-Logo_White.png"
+              alt="Odisha Mining Expo 2027"
+              fill
+              priority
+              sizes="275px"
+              className="object-contain object-left transition-opacity duration-300 group-hover:opacity-85"
+            />
+          </Link>
 
           {/* Desktop navigation */}
           <nav
@@ -376,17 +377,22 @@ function DropdownNavItem({
       <div className="pointer-events-none absolute left-0 top-[calc(100%+10px)] w-[235px] translate-y-2 border border-white/10 bg-[#090909] opacity-0 shadow-[0_24px_60px_rgba(0,0,0,.45)] transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
         <div className="h-[2px] bg-brand" />
 
-        {items.map(
-          ([name, itemHref]) => (
+        {items.map(([name, itemHref]) => {
+          // Check if link is a PDF to open in new tab
+          const isPdf = itemHref.endsWith(".pdf");
+          
+          return (
             <Link
               key={itemHref}
               href={itemHref}
+              target={isPdf ? "_blank" : undefined}
+              rel={isPdf ? "noopener noreferrer" : undefined}
               className="block border-b border-white/[.07] px-4 py-3.5 text-[12px] font-semibold text-white/65 transition-colors last:border-b-0 hover:bg-white/[.035] hover:text-white"
             >
               {name}
             </Link>
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );
@@ -495,19 +501,24 @@ function MobileDropdown({
             className="overflow-hidden"
           >
             <div className="border-t border-white/[.07] bg-white/[.025] py-1">
-              {items.map(
-                ([name, href]) => (
+              {items.map(([name, href]) => {
+                // Check if link is a PDF to open in new tab
+                const isPdf = href.endsWith(".pdf");
+                
+                return (
                   <Link
                     key={href}
                     href={href}
+                    target={isPdf ? "_blank" : undefined}
+                    rel={isPdf ? "noopener noreferrer" : undefined}
                     className="flex min-h-12 items-center justify-between px-4 text-[12px] font-semibold text-white/52 transition-colors hover:text-white"
                   >
                     <span>{name}</span>
 
                     <ArrowUpRight className="size-3.5 text-white/20" />
                   </Link>
-                )
-              )}
+                );
+              })}
             </div>
           </motion.div>
         )}
