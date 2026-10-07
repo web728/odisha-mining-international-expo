@@ -35,7 +35,7 @@ export function BrochureForm() {
     process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   async function onSubmit(
-    e: FormEvent<HTMLFormElement>
+    e: FormEvent<HTMLFormElement>,
   ) {
     e.preventDefault();
 
@@ -91,16 +91,15 @@ export function BrochureForm() {
 
           body:
             JSON.stringify(payload),
-        }
+        },
       );
 
-      const result =
-        await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
           result.message ||
-            "Submission failed."
+            "Submission failed.",
         );
       }
 
@@ -117,12 +116,12 @@ export function BrochureForm() {
       setCaptchaToken(null);
       captchaRef.current?.reset();
 
-      /*
-       * API se actual brochure URL aayega.
-       */
-      if (result.downloadUrl) {
+      if (
+        typeof result.downloadUrl === "string" &&
+        result.downloadUrl.length > 0
+      ) {
         window.location.assign(
-          result.downloadUrl
+          result.downloadUrl,
         );
       }
     } catch (error) {
@@ -143,8 +142,17 @@ export function BrochureForm() {
   return (
     <form
       onSubmit={onSubmit}
+      aria-labelledby="brochure-download-form-heading"
+      aria-describedby="brochure-form-status brochure-form-consent"
       className="grid gap-5"
     >
+      <h3
+        id="brochure-download-form-heading"
+        className="sr-only"
+      >
+        Download the OMIIE 2027 brochure
+      </h3>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <TextField
           label="Name"
@@ -189,7 +197,10 @@ export function BrochureForm() {
         />
       </div>
 
-      <p className="text-[11px] leading-5 text-zinc-500">
+      <p
+        id="brochure-form-consent"
+        className="text-[11px] leading-5 text-zinc-500"
+      >
         By submitting, you agree to be contacted by
         Futurex Trade Fair & Events Pvt. Ltd.
         regarding the Odisha Mining & Infrastructure
@@ -202,48 +213,60 @@ export function BrochureForm() {
           <ReCAPTCHA
             ref={captchaRef}
             sitekey={siteKey}
-            onChange={
-              setCaptchaToken
-            }
+            onChange={setCaptchaToken}
             onExpired={() =>
-              setCaptchaToken(
-                null
-              )
+              setCaptchaToken(null)
             }
             onErrored={() =>
-              setCaptchaToken(
-                null
-              )
+              setCaptchaToken(null)
             }
           />
         ) : (
-          <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div
+            role="alert"
+            className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
             reCAPTCHA configuration is missing.
           </div>
         )}
       </div>
 
-      <FormStatus
-        status={status}
-      />
+      <div
+        id="brochure-form-status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <FormStatus
+          status={status}
+        />
+      </div>
 
       <button
         type="submit"
         disabled={
-          status.type ===
-          "loading"
+          status.type === "loading"
+        }
+        aria-busy={
+          status.type === "loading"
         }
         className="group inline-flex min-h-12 w-full items-center justify-center gap-3 border border-brand-black bg-brand-black px-6 text-[11px] font-extrabold uppercase tracking-[.09em] text-white transition duration-300 hover:border-brand hover:bg-brand hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
       >
-        {status.type ===
-        "loading" ? (
+        {status.type === "loading" ? (
           <>
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2
+              aria-hidden="true"
+              className="size-4 animate-spin"
+            />
+
             Preparing Brochure...
           </>
         ) : (
           <>
-            <Download className="size-4" />
+            <Download
+              aria-hidden="true"
+              className="size-4"
+            />
+
             Download Brochure
           </>
         )}

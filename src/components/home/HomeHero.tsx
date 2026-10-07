@@ -13,22 +13,19 @@ import {
 import { Container } from "@/components/ui/Container";
 import { Countdown } from "@/app/_components/Countdown";
 
-const info = [
-  [CalendarDays, "07 – 10 January 2027"],
-  [MapPin, "Baramunda Exhibition Ground, Bhubaneswar"],
-  [Ticket, "Free entry for trade visitors"],
-] as const;
-
 const calendarUrl =
   "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Odisha+Mining+%26+Infrastructure+International+Expo+2027&dates=20270107/20270111&location=Baramunda+Exhibition+Ground%2C+Bhubaneswar%2C+Odisha";
 
-// Premium Easing Curve (Animations same rakhi hain)
 const PREMIUM_EASE = [0.16, 1, 0.3, 1] as const;
 
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: {
+    opacity: 0,
+  },
+
   visible: {
     opacity: 1,
+
     transition: {
       staggerChildren: 0.1,
       delayChildren: 0.1,
@@ -37,37 +34,54 @@ const containerVariants = {
 };
 
 const textRevealVariants = {
-  hidden: { opacity: 0, y: "100%" },
+  hidden: {
+    opacity: 0,
+    y: "100%",
+  },
+
   visible: {
     opacity: 1,
     y: "0%",
-    transition: { duration: 0.8, ease: PREMIUM_EASE },
+
+    transition: {
+      duration: 0.8,
+      ease: PREMIUM_EASE,
+    },
   },
 };
 
 const fadeUpVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: PREMIUM_EASE },
+
+    transition: {
+      duration: 0.7,
+      ease: PREMIUM_EASE,
+    },
   },
 };
 
 export function HomeHero() {
   return (
-    // min-h-[100dvh] aur lg:h-screen lg:max-h-[850px] lagaya taaki 1 screen me fit ho
-    <section className="relative isolate flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-[#030303] text-white lg:min-h-[650px]">
-      {/* =========================================
-         BACKGROUND ANIMATION (Premium & Subtle)
-      ========================================== */}
-      
-      {/* Moving technical grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
+    <section
+      aria-labelledby="home-hero-heading"
+      className="relative isolate flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-[#030303] text-white lg:min-h-[650px]"
+    >
+      {/* Decorative technical grid */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"
+      />
 
-      {/* Moving gold glow */}
+      {/* Decorative gold glow */}
       <motion.div
-        aria-hidden
+        aria-hidden="true"
         animate={{
           x: [0, -30, 0],
           y: [0, 20, 0],
@@ -81,9 +95,9 @@ export function HomeHero() {
         className="pointer-events-none absolute -right-20 top-[10%] h-[450px] w-[450px] rounded-full bg-[#F9B900]/[0.05] blur-[120px]"
       />
 
-      {/* Small ambient light */}
+      {/* Decorative ambient light */}
       <motion.div
-        aria-hidden
+        aria-hidden="true"
         animate={{
           opacity: [0.2, 0.8, 0.2],
           scale: [1, 2, 1],
@@ -96,12 +110,7 @@ export function HomeHero() {
         className="pointer-events-none absolute left-[40%] top-[20%] size-[2px] rounded-full bg-[#F9B900] shadow-[0_0_12px_#F9B900]"
       />
 
-      {/* Mining graphic */}
       <HeroGraphic />
-
-      {/* =========================================
-         CONTENT
-      ========================================== */}
 
       <Container className="relative z-10 w-full py-16 lg:py-0">
         <motion.div
@@ -111,32 +120,52 @@ export function HomeHero() {
           className="w-full max-w-[850px]"
         >
           {/* Eyebrow */}
-          <motion.div variants={fadeUpVariants} className="flex items-center gap-2.5">
+          <motion.div
+            variants={fadeUpVariants}
+            className="flex items-center gap-2.5"
+          >
             <motion.span
+              aria-hidden="true"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: PREMIUM_EASE }}
+              transition={{
+                duration: 0.8,
+                delay: 0.2,
+                ease: PREMIUM_EASE,
+              }}
               className="relative block h-[2px] w-7 origin-left bg-[#F9B900]"
             >
               <span className="absolute -right-1 top-1/2 size-1 -translate-y-1/2 rotate-45 bg-[#F9B900]" />
             </motion.span>
+
             <p className="text-[8.5px] font-extrabold uppercase tracking-[0.22em] text-[#F9B900] sm:text-[9.5px]">
               5th Edition · OMIIE 2027
             </p>
           </motion.div>
 
-          {/* Heading - Size aur line-height thoda sleek kiya */}
-          <h1 className="mt-3.5 max-w-[800px] text-[clamp(1.8rem,3.8vw,3.4rem)] font-black uppercase leading-[0.92] tracking-[-0.03em] text-white">
+          {/* Primary page heading */}
+          <h1
+            id="home-hero-heading"
+            className="mt-3.5 max-w-[800px] text-[clamp(1.8rem,3.8vw,3.4rem)] font-black uppercase leading-[0.92] tracking-[-0.03em] text-white"
+          >
             <span className="block overflow-hidden pb-1">
-              <motion.span variants={textRevealVariants} className="block">
+              <motion.span
+                variants={textRevealVariants}
+                className="block"
+              >
                 Mining, Infrastructure,
               </motion.span>
             </span>
+
             <span className="block overflow-hidden pb-1">
-              <motion.span variants={textRevealVariants} className="block">
+              <motion.span
+                variants={textRevealVariants}
+                className="block"
+              >
                 Heavy Equipment &amp;
               </motion.span>
             </span>
+
             <span className="block overflow-hidden pb-1.5">
               <motion.span
                 variants={textRevealVariants}
@@ -147,63 +176,120 @@ export function HomeHero() {
             </span>
           </h1>
 
-          {/* Description - Spacing tight ki */}
-        <motion.p
-  variants={fadeUpVariants}
-  className="mt-4 max-w-[500px] text-[12px] leading-relaxed text-white/60 sm:text-[14px]"
->
-Odisha's focused business across logistics, transportation, infrastructure,
-  construction, safety, sustainability, mining machinery, mineral processing,
-  and heavy engineering solutions.
-</motion.p>
+          {/* Description */}
+          <motion.p
+            variants={fadeUpVariants}
+            className="mt-4 max-w-[500px] text-[12px] leading-relaxed text-white/60 sm:text-[14px]"
+          >
+            Odisha&apos;s focused business across logistics, transportation,
+            infrastructure, construction, safety, sustainability, mining
+            machinery, mineral processing, and heavy engineering solutions.
+          </motion.p>
 
-          {/* Event information - Margins kam kiye */}
-          <div className="mt-5 flex max-w-[700px] flex-wrap gap-x-5 gap-y-2.5">
-            {info.map(([Icon, text], index) => (
-              <motion.div
-                key={text}
-                variants={fadeUpVariants}
-                className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+          {/* Event information */}
+          <div
+            aria-label="Event details"
+            className="mt-5 flex max-w-[700px] flex-wrap gap-x-5 gap-y-2.5"
+          >
+            <motion.div
+              variants={fadeUpVariants}
+              className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+            >
+              <CalendarDays
+                aria-hidden="true"
+                className="size-3.5 shrink-0 text-[#F9B900]"
+              />
+
+              <time
+                dateTime="2027-01-07"
+                title="7 January 2027 to 10 January 2027"
               >
-                <Icon className="size-3.5 shrink-0 text-[#F9B900]" />
-                <span>{text}</span>
-              </motion.div>
-            ))}
+                07 – 10 January 2027
+              </time>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUpVariants}
+              className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+            >
+              <MapPin
+                aria-hidden="true"
+                className="size-3.5 shrink-0 text-[#F9B900]"
+              />
+
+              <address className="not-italic">
+                Baramunda Exhibition Ground, Bhubaneswar
+              </address>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUpVariants}
+              className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+            >
+              <Ticket
+                aria-hidden="true"
+                className="size-3.5 shrink-0 text-[#F9B900]"
+              />
+
+              <span>Free entry for trade visitors</span>
+            </motion.div>
           </div>
 
-          {/* Buttons - Height thodi sleek (min-h-11) ki */}
-          <motion.div variants={fadeUpVariants} className="mt-6 flex flex-wrap gap-2.5">
+          {/* Calls to action */}
+          <motion.div
+            variants={fadeUpVariants}
+            className="mt-6 flex flex-wrap gap-2.5"
+          >
             <Link
               href="/exhibitor-registration"
+              aria-label="Book your stand for Odisha Mining Expo 2027"
               className="group relative inline-flex min-h-11 items-center justify-center gap-2.5 overflow-hidden bg-[#F9B900] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-[#050505]! transition-all duration-300 hover:bg-[#FFD65A]"
             >
               <span className="relative z-10 flex items-center gap-2.5">
                 Book Your Stand
-                <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+
+                <ArrowRight
+                  aria-hidden="true"
+                  className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                />
               </span>
-              <span className="absolute inset-0 z-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 z-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
             </Link>
 
             <Link
               href="/brochure"
+              aria-label="View Odisha Mining Expo 2027 brochure"
               className="group inline-flex min-h-11 items-center justify-center gap-2.5 border border-white/15 bg-white/[0.02] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition-all duration-300 hover:border-[#F9B900] hover:bg-[#F9B900]/10 hover:text-[#F9B900]"
             >
               Brochure
-              <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+
+              <ArrowUpRight
+                aria-hidden="true"
+                className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
             </Link>
 
             <Link
               href={calendarUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Add Odisha Mining Expo 2027 to Google Calendar"
               className="group hidden min-h-11 items-center justify-center gap-2.5 border border-white/15 bg-white/[0.02] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition-all duration-300 hover:border-[#F9B900] hover:bg-[#F9B900]/10 hover:text-[#F9B900] sm:inline-flex"
             >
               Add to Calendar
-              <CalendarDays className="size-3.5 transition-transform duration-300 group-hover:rotate-6" />
+
+              <CalendarDays
+                aria-hidden="true"
+                className="size-3.5 transition-transform duration-300 group-hover:rotate-6"
+              />
             </Link>
           </motion.div>
 
-          {/* Countdown - [&>div]:!mt-3 se old file ka mt-12 override kar diya */}
+          {/* Countdown */}
           <motion.div
             variants={fadeUpVariants}
             className="mt-6 max-w-[650px] border-t border-white/10 pt-4 [&>div]:!mt-1"
@@ -213,11 +299,16 @@ Odisha's focused business across logistics, transportation, infrastructure,
         </motion.div>
       </Container>
 
-      {/* Bottom Loading Line */}
+      {/* Decorative bottom line */}
       <motion.div
+        aria-hidden="true"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 0.5, ease: PREMIUM_EASE }}
+        transition={{
+          duration: 1.5,
+          delay: 0.5,
+          ease: PREMIUM_EASE,
+        }}
         className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-transparent via-[#F9B900] to-transparent opacity-60"
       />
     </section>

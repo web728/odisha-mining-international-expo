@@ -19,28 +19,47 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function OdishaMinerals() {
   return (
-    <section className="section-space relative isolate overflow-hidden bg-brand-black text-white">
+    <section
+      aria-labelledby="odisha-minerals-heading"
+      className="section-space relative isolate overflow-hidden bg-brand-black text-white"
+    >
       <ContourGraphic />
 
       <Container className="relative">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.65, ease }}
+          viewport={{
+            once: true,
+            amount: 0.3,
+          }}
+          transition={{
+            duration: 0.65,
+            ease,
+          }}
           className="grid gap-7 lg:grid-cols-[1.1fr_.9fr] lg:items-end"
         >
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-[2px] w-10 bg-brand" />
+              <span
+                aria-hidden="true"
+                className="h-[2px] w-10 bg-brand"
+              />
+
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
                 Mineral Reserves
               </p>
             </div>
 
-            <h2 className="max-w-3xl text-[clamp(2rem,3.3vw,3.6rem)] font-black leading-[1.02] tracking-[-.045em]">
+            <h2
+              id="odisha-minerals-heading"
+              className="max-w-3xl text-[clamp(2rem,3.3vw,3.6rem)] font-black leading-[1.02] tracking-[-.045em]"
+            >
               Odisha&apos;s share of India&apos;s
-              <span className="text-brand"> identified mineral resources.</span>
+              <span className="text-brand">
+                {" "}
+                identified mineral resources.
+              </span>
             </h2>
           </div>
 
@@ -55,14 +74,24 @@ export function OdishaMinerals() {
           {minerals.map(([name, percent], index) => (
             <motion.article
               key={name}
+              aria-label={`${name}: ${percent} share of India's identified mineral resources`}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.05, ease }}
-              whileHover={{ y: -4 }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.05,
+                ease,
+              }}
+              whileHover={{
+                y: -4,
+              }}
               className="group relative min-h-[145px] overflow-hidden border-b border-r border-white/10 bg-white/[.02] p-5 transition-colors duration-500 hover:bg-white/[.06]"
             >
-              <span className="absolute right-4 top-4 text-[9px] font-bold tracking-[.14em] text-white/20 group-hover:text-brand/70">
+              <span
+                aria-hidden="true"
+                className="absolute right-4 top-4 text-[9px] font-bold tracking-[.14em] text-white/20 group-hover:text-brand/70"
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
 
@@ -74,7 +103,10 @@ export function OdishaMinerals() {
                 {name}
               </p>
 
-              <span className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
+              />
             </motion.article>
           ))}
         </div>
@@ -83,7 +115,11 @@ export function OdishaMinerals() {
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.1, ease }}
+          transition={{
+            duration: 0.55,
+            delay: 0.1,
+            ease,
+          }}
           className="mt-7 max-w-3xl text-sm leading-7 text-white/60"
         >
           Odisha&apos;s mineral resource base creates significant opportunities
@@ -98,7 +134,8 @@ export function OdishaMinerals() {
 function ContourGraphic() {
   return (
     <svg
-      aria-hidden
+      aria-hidden="true"
+      focusable="false"
       viewBox="0 0 900 600"
       className="pointer-events-none absolute -right-[12%] top-1/2 -z-10 hidden w-[820px] -translate-y-1/2 opacity-[.11] lg:block"
       fill="none"
@@ -111,7 +148,13 @@ function ContourGraphic() {
           strokeOpacity={i === 2 ? ".8" : ".24"}
         />
       ))}
-      <circle cx="380" cy="150" r="4" fill="#F9B900" />
+
+      <circle
+        cx="380"
+        cy="150"
+        r="4"
+        fill="#F9B900"
+      />
     </svg>
   );
 }

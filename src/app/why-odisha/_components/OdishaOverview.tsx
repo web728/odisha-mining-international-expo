@@ -14,7 +14,13 @@ import {
 
 import { Container } from "@/components/ui/Container";
 
-const points: Array<[LucideIcon, string, string]> = [
+type OdishaPoint = readonly [
+  icon: LucideIcon,
+  title: string,
+  description: string,
+];
+
+const points: OdishaPoint[] = [
   [
     Pickaxe,
     "Iron Ore & Chromite Output",
@@ -51,18 +57,32 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function OdishaOverview() {
   return (
-    <section className="section-space bg-white">
+    <section
+      aria-labelledby="odisha-overview-heading"
+      className="section-space bg-white"
+    >
       <Container>
         <div className="grid gap-12 lg:grid-cols-[.95fr_1.05fr] lg:items-center lg:gap-16">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.65, ease }}
+            viewport={{
+              once: true,
+              amount: 0.3,
+            }}
+            transition={{
+              duration: 0.65,
+              ease,
+            }}
           >
-            <Eyebrow>At the Heart of India&apos;s Mining Economy</Eyebrow>
+            <Eyebrow>
+              At the Heart of India&apos;s Mining Economy
+            </Eyebrow>
 
-            <h2 className="mt-4 max-w-xl text-[clamp(2rem,3.4vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950">
+            <h2
+              id="odisha-overview-heading"
+              className="mt-4 max-w-xl text-[clamp(2rem,3.4vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
+            >
               A preferred hub for
               <span className="text-brand"> mining investment.</span>
             </h2>
@@ -85,27 +105,40 @@ export function OdishaOverview() {
           <motion.div
             initial={{ opacity: 0, x: 35 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.75, ease }}
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            transition={{
+              duration: 0.75,
+              ease,
+            }}
             className="relative"
           >
-            <span className="absolute -right-4 -top-4 hidden h-24 w-24 border-r border-t border-brand/50 lg:block" />
+            <span
+              aria-hidden="true"
+              className="absolute -right-4 -top-4 hidden h-24 w-24 border-r border-t border-brand/50 lg:block"
+            />
 
             <div className="image-premium relative aspect-[4/3] overflow-hidden">
               <Image
                 src="/image/why.jpg"
                 alt="Heavy machinery display at Odisha Mining Expo"
                 fill
-                sizes="(max-width:1024px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"
+              />
 
               <div className="absolute bottom-5 left-5">
                 <p className="text-[9px] font-extrabold uppercase tracking-[.16em] text-brand">
                   Odisha Advantage
                 </p>
+
                 <p className="mt-1 text-sm font-bold text-white">
                   Mining · Industry · Infrastructure
                 </p>
@@ -118,24 +151,43 @@ export function OdishaOverview() {
           {points.map(([Icon, title, text], index) => (
             <motion.article
               key={title}
+              aria-labelledby={`odisha-point-${index + 1}`}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.05, ease }}
-              whileHover={{ y: -4 }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.05,
+                ease,
+              }}
+              whileHover={{
+                y: -4,
+              }}
               className="group relative min-h-[220px] overflow-hidden border-b border-r border-zinc-200 bg-white p-6 transition-colors duration-500 hover:bg-brand-black"
             >
               <div className="flex items-start justify-between">
-                <span className="grid size-11 place-items-center border border-zinc-200 transition group-hover:border-brand/50 group-hover:bg-brand/10">
-                  <Icon className="size-5 text-zinc-950 transition group-hover:text-brand" />
+                <span
+                  aria-hidden="true"
+                  className="grid size-11 place-items-center border border-zinc-200 transition group-hover:border-brand/50 group-hover:bg-brand/10"
+                >
+                  <Icon
+                    aria-hidden="true"
+                    className="size-5 text-zinc-950 transition group-hover:text-brand"
+                  />
                 </span>
 
-                <span className="text-[10px] font-extrabold tracking-[.15em] text-zinc-400 group-hover:text-brand/70">
+                <span
+                  aria-hidden="true"
+                  className="text-[10px] font-extrabold tracking-[.15em] text-zinc-400 group-hover:text-brand/70"
+                >
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
 
-              <h3 className="mt-6 text-lg font-extrabold leading-[1.15] tracking-[-.02em] text-zinc-950 transition group-hover:text-white">
+              <h3
+                id={`odisha-point-${index + 1}`}
+                className="mt-6 text-lg font-extrabold leading-[1.15] tracking-[-.02em] text-zinc-950 transition group-hover:text-white"
+              >
                 {title}
               </h3>
 
@@ -143,7 +195,10 @@ export function OdishaOverview() {
                 {text}
               </p>
 
-              <span className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
+              />
             </motion.article>
           ))}
         </div>
@@ -152,10 +207,18 @@ export function OdishaOverview() {
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
+function Eyebrow({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex items-center gap-3">
-      <span className="h-[2px] w-10 bg-brand" />
+      <span
+        aria-hidden="true"
+        className="h-[2px] w-10 bg-brand"
+      />
+
       <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
         {children}
       </p>

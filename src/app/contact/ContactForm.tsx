@@ -6,7 +6,10 @@ import {
   useState,
 } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Loader2, Send } from "lucide-react";
+import {
+  Loader2,
+  Send,
+} from "lucide-react";
 
 import {
   SelectField,
@@ -26,7 +29,7 @@ const interests = [
   "Sponsorship / Partnership",
   "Media / Press",
   "General Enquiry",
-];
+] as const;
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>({
@@ -42,7 +45,7 @@ export function ContactForm() {
     process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   async function submit(
-    e: FormEvent<HTMLFormElement>
+    e: FormEvent<HTMLFormElement>,
   ) {
     e.preventDefault();
 
@@ -94,26 +97,28 @@ export function ContactForm() {
         "/api/contact",
         {
           method: "POST",
+
           headers: {
             "Content-Type":
               "application/json",
           },
+
           body: JSON.stringify(payload),
-        }
+        },
       );
 
-      const result =
-        await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
           result.message ||
-            "Submission failed."
+            "Submission failed.",
         );
       }
 
       setStatus({
         type: "success",
+
         message:
           result.message ||
           "Your enquiry has been submitted.",
@@ -122,11 +127,11 @@ export function ContactForm() {
       form.reset();
 
       setCaptchaToken(null);
-
       captchaRef.current?.reset();
     } catch (error) {
       setStatus({
         type: "error",
+
         message:
           error instanceof Error
             ? error.message
@@ -134,7 +139,6 @@ export function ContactForm() {
       });
 
       setCaptchaToken(null);
-
       captchaRef.current?.reset();
     }
   }
@@ -142,8 +146,17 @@ export function ContactForm() {
   return (
     <form
       onSubmit={submit}
+      aria-labelledby="contact-enquiry-form-heading"
+      aria-describedby="contact-form-consent contact-form-status"
       className="grid gap-6"
     >
+      <h3
+        id="contact-enquiry-form-heading"
+        className="sr-only"
+      >
+        Contact enquiry form
+      </h3>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <TextField
           label="Name"
@@ -231,7 +244,10 @@ export function ContactForm() {
         />
       </div>
 
-      <p className="max-w-2xl text-[11px] leading-5 text-zinc-500">
+      <p
+        id="contact-form-consent"
+        className="max-w-2xl text-[11px] leading-5 text-zinc-500"
+      >
         By submitting, you agree to be contacted by
         Futurex Trade Fair & Events Pvt. Ltd. about
         the 5th Odisha Mining & Infrastructure
@@ -244,50 +260,59 @@ export function ContactForm() {
           <ReCAPTCHA
             ref={captchaRef}
             sitekey={siteKey}
-            onChange={
-              setCaptchaToken
-            }
+            onChange={setCaptchaToken}
             onExpired={() =>
-              setCaptchaToken(
-                null
-              )
+              setCaptchaToken(null)
             }
             onErrored={() =>
-              setCaptchaToken(
-                null
-              )
+              setCaptchaToken(null)
             }
           />
         ) : (
-          <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div
+            role="alert"
+            className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
             reCAPTCHA configuration is missing.
           </div>
         )}
       </div>
 
-      <FormStatus
-        status={status}
-      />
+      <div
+        id="contact-form-status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <FormStatus status={status} />
+      </div>
 
       <button
         type="submit"
         disabled={
-          status.type ===
-          "loading"
+          status.type === "loading"
+        }
+        aria-busy={
+          status.type === "loading"
         }
         className="group inline-flex min-h-12 w-full items-center justify-center gap-3 border border-brand-black bg-brand-black px-6 text-[11px] font-extrabold uppercase tracking-[.09em] text-white transition duration-300 hover:border-brand hover:bg-brand hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit"
       >
-        {status.type ===
-        "loading" ? (
+        {status.type === "loading" ? (
           <>
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2
+              aria-hidden="true"
+              className="size-4 animate-spin"
+            />
+
             Sending...
           </>
         ) : (
           <>
             Send Message
 
-            <Send className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <Send
+              aria-hidden="true"
+              className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            />
           </>
         )}
       </button>

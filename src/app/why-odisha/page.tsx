@@ -6,11 +6,17 @@ import { OdishaOverview } from "./_components/OdishaOverview";
 import { OdishaMinerals } from "./_components/OdishaMinerals";
 
 const SITE_URL = "https://odishaminingexpo.com";
+const PAGE_URL = `${SITE_URL}/why-odisha`;
+
+const EVENT_NAME =
+  "5th Odisha Mining & Infrastructure International Expo 2027";
 
 export const metadata: Metadata = {
   title: "Why Odisha | India's Mineral Powerhouse & Investment Hub",
+
   description:
     "Discover why Odisha is the undisputed mineral powerhouse of India. Explore vast investment opportunities in mining, metals, and infrastructure at OMIIE 2027.",
+
   keywords: [
     "Why Odisha",
     "Odisha Mineral Resources",
@@ -21,53 +27,113 @@ export const metadata: Metadata = {
     "Bhubaneswar Mining Hub",
     "Infrastructure Investment India",
   ],
+
   alternates: {
     canonical: "/why-odisha",
   },
+
   openGraph: {
-    title: "Why Odisha | India's Mineral Powerhouse",
-    description:
-      "Explore vast investment opportunities in mining, metals, and infrastructure in Odisha, the mineral hub of India. Join us at OMIIE 2027.",
-    url: `${SITE_URL}/why-odisha`,
     type: "website",
-    siteName: "Odisha Mining Expo 2027",
+    locale: "en_IN",
+    url: PAGE_URL,
+
+    title:
+      "Why Odisha | India's Mineral Powerhouse & Investment Hub",
+
+    description:
+      "Explore vast investment opportunities in mining, metals, and infrastructure in Odisha, the mineral hub of India. Join the 5th Odisha Mining & Infrastructure International Expo 2027.",
+
+    siteName: EVENT_NAME,
+
+    images: [
+      {
+        url: "/image/about-hero-2.png",
+        alt: "Odisha mining and infrastructure industry landscape",
+      },
+    ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Why Odisha | India's Mineral Powerhouse",
+
+    title:
+      "Why Odisha | India's Mineral Powerhouse & Investment Hub",
+
     description:
-      "Discover why Odisha is the preferred destination for mining and infrastructure investments. Explore opportunities at OMIIE 2027.",
+      "Discover why Odisha is a preferred destination for mining, metals and infrastructure investment and explore opportunities at OMIIE 2027.",
+
+    images: ["/image/about-hero-2.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
-// Breadcrumb aur WebPage schema for Google Sitelinks
 const jsonLd = {
   "@context": "https://schema.org",
+
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": `${SITE_URL}/why-odisha/#webpage`,
-      url: `${SITE_URL}/why-odisha`,
-      name: "Why Odisha | Odisha Mining & Infrastructure Expo 2027",
+
+      "@id": `${PAGE_URL}#webpage`,
+
+      url: PAGE_URL,
+
+      name:
+        "Why Odisha | 5th Odisha Mining & Infrastructure International Expo 2027",
+
       description:
-        "Discover why Odisha is the undisputed mineral powerhouse of India and a preferred hub for mining investments.",
+        "Discover why Odisha is the undisputed mineral powerhouse of India and a preferred hub for mining, metals, infrastructure and industrial investment.",
+
       inLanguage: "en-IN",
+
+      isPartOf: {
+        "@id": `${SITE_URL}/#website`,
+      },
+
+      about: {
+        "@id": `${SITE_URL}/#event`,
+      },
+
+      breadcrumb: {
+        "@id": `${PAGE_URL}#breadcrumb`,
+      },
+
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/image/about-hero-2.png`,
+      },
     },
+
     {
       "@type": "BreadcrumbList",
-      "@id": `${SITE_URL}/why-odisha/#breadcrumb`,
+
+      "@id": `${PAGE_URL}#breadcrumb`,
+
       itemListElement: [
         {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: SITE_URL,
+          item: `${SITE_URL}/`,
         },
+
         {
           "@type": "ListItem",
           position: 2,
           name: "Why Odisha",
-          item: `${SITE_URL}/why-odisha`,
+          item: PAGE_URL,
         },
       ],
     },
@@ -77,14 +143,20 @@ const jsonLd = {
 export default function WhyOdisha() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <WhyOdishaHero />
       <OdishaOverview />
       <OdishaMinerals />
       <BottomCTA />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(
+            /</g,
+            "\\u003c",
+          ),
+        }}
+      />
     </>
   );
 }

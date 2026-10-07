@@ -1,4 +1,7 @@
-import type { Metadata, Viewport } from "next";
+import type {
+  Metadata,
+  Viewport,
+} from "next";
 import type { ReactNode } from "react";
 import { Manrope } from "next/font/google";
 
@@ -9,8 +12,23 @@ import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/shared/CookieConsent";
 import { InitialLoader } from "@/components/shared/InitialLoader";
 
-const SITE_URL = "https://odishaminingexpo.com";
-const ORGANIZER_URL = "https://futurextrade.com/";
+const SITE_URL =
+  "https://odishaminingexpo.com";
+
+const EVENT_NAME =
+  "5th Odisha Mining & Infrastructure International Expo 2027";
+
+const EVENT_SHORT_NAME =
+  "Odisha Mining & Infrastructure International Expo";
+
+const ORGANIZER_NAME =
+  "Futurex Trade Fair & Events Pvt. Ltd.";
+
+const ORGANIZER_URL =
+  "https://futurextrade.com/";
+
+const LOGO_URL =
+  `${SITE_URL}/image/5th-Odisha-Logo_White.png`;
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -22,12 +40,11 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
-  applicationName: "Odisha Mining Expo 2027",
+  applicationName: EVENT_NAME,
 
   title: {
-    default: "5th Odisha Mining & Infrastructure International Expo 2027",
-    template:
-      "%s | Odisha Mining & Infrastructure International Expo 2027",
+    default: EVENT_NAME,
+    template: `%s | ${EVENT_NAME}`,
   },
 
   description:
@@ -45,42 +62,82 @@ export const metadata: Metadata = {
 
   authors: [
     {
-      name: "Odisha Mining & Infrastructure International Expo",
+      name: EVENT_SHORT_NAME,
       url: SITE_URL,
     },
   ],
 
-  creator: "Odisha Mining & Infrastructure International Expo",
-  publisher: "Futurex Trade Fair & Events Pvt. Ltd.",
-  category: "Mining & Infrastructure Exhibition",
+  creator: EVENT_SHORT_NAME,
 
-  alternates: {
-    canonical: "/",
+  publisher: ORGANIZER_NAME,
+
+  category:
+    "Mining & Infrastructure Exhibition",
+
+  icons: {
+    icon: [
+      {
+        url: "/favicon.ico",
+      },
+      {
+        url: "/icon.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+
+    apple: [
+      {
+        url: "/apple-icon.png",
+        type: "image/png",
+        sizes: "180x180",
+      },
+    ],
+
+    shortcut: "/favicon.ico",
+  },
+
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
 
   openGraph: {
     type: "website",
+
     locale: "en_IN",
-    url: SITE_URL,
-    siteName: "Odisha Mining Expo 2027",
-    title: "5th Odisha Mining & Infrastructure International Expo 2027",
+
+    url: `${SITE_URL}/`,
+
+    siteName: EVENT_NAME,
+
+    title: EVENT_NAME,
+
     description:
       "India's premier platform for mining, infrastructure, heavy equipment & industrial innovation. 07–10 January 2027, Bhubaneswar, Odisha.",
 
     images: [
       {
-        url: "/image/5th-Odisha-Logo_White.png",
-        alt: "5th Odisha Mining & Infrastructure International Expo 2027",
+        url:
+          "/image/5th-Odisha-Logo_White.png",
+
+        alt: EVENT_NAME,
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "5th Odisha Mining & Infrastructure International Expo 2027",
+
+    title: EVENT_NAME,
+
     description:
       "07–10 January 2027 · Baramunda Exhibition Ground · Bhubaneswar, Odisha",
-    images: ["/image/5th-Odisha-Logo_White.png"],
+
+    images: [
+      "/image/5th-Odisha-Logo_White.png",
+    ],
   },
 
   robots: {
@@ -104,86 +161,240 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": `${SITE_URL}/#website`,
-    url: SITE_URL,
-    name: "5th Odisha Mining & Infrastructure International Expo 2027",
-    alternateName: ["Odisha Mining Expo", "OMIIE 2027"],
-    inLanguage: "en-IN",
-  },
+const structuredData = {
+  "@context": "https://schema.org",
 
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": `${SITE_URL}/#organization`,
-    name: "Odisha Mining & Infrastructure International Expo",
-    alternateName: "Odisha Mining Expo",
-    url: SITE_URL,
+  "@graph": [
+    {
+      "@type": "WebSite",
 
-    logo: {
-      "@type": "ImageObject",
-      url: `${SITE_URL}/image/5th-Odisha-Logo_White.png`,
-    },
+      "@id":
+        `${SITE_URL}/#website`,
 
-    sameAs: [
-      "https://www.facebook.com/odishaminingexpo/",
-      "https://www.linkedin.com/company/odishaminingexpo/",
-      "https://x.com/odisaminingexpo",
-    ],
-  },
+      url:
+        `${SITE_URL}/`,
 
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "@id": `${SITE_URL}/#event`,
+      name:
+        EVENT_NAME,
 
-    name: "5th Odisha Mining & Infrastructure International Expo 2027",
+      alternateName: [
+        "Odisha Mining Expo",
+        "Odisha Mining Expo 2027",
+        "OMIIE 2027",
+      ],
 
-    description:
-      "India's premier platform for mining, infrastructure, heavy equipment and industrial innovation.",
+      inLanguage:
+        "en-IN",
 
-    url: SITE_URL,
+      publisher: {
+        "@id":
+          `${SITE_URL}/#organizer`,
+      },
 
-    startDate: "2027-01-07T09:00:00+05:30",
-    endDate: "2027-01-10T18:00:00+05:30",
-
-    eventStatus: "https://schema.org/EventScheduled",
-
-    eventAttendanceMode:
-      "https://schema.org/OfflineEventAttendanceMode",
-
-    image: [
-      `${SITE_URL}/image/5th-Odisha-Logo_White.png`,
-    ],
-
-    location: {
-      "@type": "Place",
-      name: "Baramunda Exhibition Ground",
-
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Bhubaneswar",
-        addressRegion: "Odisha",
-        addressCountry: "IN",
+      about: {
+        "@id":
+          `${SITE_URL}/#event`,
       },
     },
 
-    organizer: {
+    {
       "@type": "Organization",
-      name: "Futurex Trade Fair & Events Pvt. Ltd.",
-      url: ORGANIZER_URL,
+
+      "@id":
+        `${SITE_URL}/#organizer`,
+
+      name:
+        ORGANIZER_NAME,
+
+      url:
+        ORGANIZER_URL,
+
+      telephone:
+        "+91 98108 55697",
+
+      email:
+        "info@futurextrade.com",
+
+      address: {
+        "@type":
+          "PostalAddress",
+
+        streetAddress:
+          "E-52, 1st Floor, Kalkaji",
+
+        addressLocality:
+          "Delhi",
+
+        postalCode:
+          "110019",
+
+        addressCountry:
+          "IN",
+      },
+
+      contactPoint: [
+        {
+          "@type":
+            "ContactPoint",
+
+          name:
+            "Mr. Namit Gupta",
+
+          telephone:
+            "+91 98108 55697",
+
+          email:
+            "namit@futurextrade.com",
+
+          contactType:
+            "exhibitor and event enquiries",
+
+          availableLanguage: [
+            "English",
+            "Hindi",
+          ],
+        },
+
+        {
+          "@type":
+            "ContactPoint",
+
+          name:
+            "Mr. Soumo Roy",
+
+          telephone:
+            "+91 80105 79828",
+
+          email:
+            "soumo@futurextrade.com",
+
+          contactType:
+            "exhibitor and event enquiries",
+
+          availableLanguage: [
+            "English",
+            "Hindi",
+          ],
+        },
+      ],
     },
 
-    offers: {
-      "@type": "Offer",
-      url: `${SITE_URL}/visitor-registration`,
-      availability: "https://schema.org/InStock",
+    {
+      "@type":
+        "ExhibitionEvent",
+
+      "@id":
+        `${SITE_URL}/#event`,
+
+      name:
+        EVENT_NAME,
+
+      alternateName: [
+        "Odisha Mining Expo",
+        "Odisha Mining Expo 2027",
+        "OMIIE 2027",
+      ],
+
+      description:
+        "India's premier platform for mining, infrastructure, heavy equipment and industrial innovation.",
+
+      url:
+        `${SITE_URL}/`,
+
+      startDate:
+        "2027-01-07",
+
+      endDate:
+        "2027-01-10",
+
+      eventStatus:
+        "https://schema.org/EventScheduled",
+
+      eventAttendanceMode:
+        "https://schema.org/OfflineEventAttendanceMode",
+
+      isAccessibleForFree:
+        true,
+
+      image: [
+        LOGO_URL,
+      ],
+
+      location: {
+        "@type":
+          "Place",
+
+        "@id":
+          `${SITE_URL}/venue#venue`,
+
+        name:
+          "Baramunda Exhibition Ground",
+
+        address: {
+          "@type":
+            "PostalAddress",
+
+          addressLocality:
+            "Bhubaneswar",
+
+          addressRegion:
+            "Odisha",
+
+          addressCountry:
+            "IN",
+        },
+      },
+
+      organizer: {
+        "@id":
+          `${SITE_URL}/#organizer`,
+      },
+
+      offers: {
+        "@type":
+          "Offer",
+
+        url:
+          `${SITE_URL}/visitor-registration`,
+
+        price:
+          "0",
+
+        priceCurrency:
+          "INR",
+
+        availability:
+          "https://schema.org/InStock",
+
+        category:
+          "Trade Visitor Registration",
+      },
+
+      sameAs: [
+        "https://www.facebook.com/odishaminingexpo/",
+        "https://www.linkedin.com/company/odishaminingexpo/",
+        "https://x.com/odisaminingexpo",
+      ],
     },
-  },
-];
+
+    {
+      "@type":
+        "ImageObject",
+
+      "@id":
+        `${SITE_URL}/#logo`,
+
+      url:
+        LOGO_URL,
+
+      contentUrl:
+        LOGO_URL,
+
+      caption:
+        EVENT_NAME,
+    },
+  ],
+};
 
 export default function RootLayout({
   children,
@@ -191,16 +402,31 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en-IN" className={manrope.variable}>
+    <html
+      lang="en-IN"
+      className={manrope.variable}
+    >
       <body
         suppressHydrationWarning
         className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
       >
+        <a
+          href="#main-content"
+          className="sr-only z-[9999] bg-white px-4 py-3 text-sm font-bold text-zinc-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Skip to main content
+        </a>
+
         <InitialLoader />
 
         <Navbar />
 
-        <main id="main-content">{children}</main>
+        <main
+          id="main-content"
+          tabIndex={-1}
+        >
+          {children}
+        </main>
 
         <Footer />
 
@@ -209,10 +435,13 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData).replace(
-              /</g,
-              "\\u003c",
-            ),
+            __html:
+              JSON.stringify(
+                structuredData,
+              ).replace(
+                /</g,
+                "\\u003c",
+              ),
           }}
         />
       </body>

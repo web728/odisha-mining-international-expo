@@ -7,24 +7,37 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function AboutHero() {
   return (
-    <section className="relative isolate overflow-hidden bg-brand-black text-white">
+    <section
+      aria-labelledby="about-hero-heading"
+      className="relative isolate overflow-hidden bg-brand-black text-white"
+    >
       <HeroShape />
 
       <Container className="relative z-10 flex min-h-[370px] items-end py-14 sm:min-h-[420px] lg:py-16">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease }}
+          transition={{
+            duration: 0.7,
+            ease,
+          }}
           className="max-w-4xl"
         >
           <div className="mb-4 flex items-center gap-3">
-            <span className="h-[2px] w-10 bg-brand" />
+            <span
+              aria-hidden="true"
+              className="h-[2px] w-10 bg-brand"
+            />
+
             <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
               The Show
             </p>
           </div>
 
-          <h1 className="text-[clamp(2.7rem,5vw,5rem)] font-black leading-[.96] tracking-[-.055em]">
+          <h1
+            id="about-hero-heading"
+            className="text-[clamp(2.7rem,5vw,5rem)] font-black leading-[.96] tracking-[-.055em]"
+          >
             About the
             <span className="text-brand"> Expo.</span>
           </h1>
@@ -43,17 +56,39 @@ export function AboutHero() {
 function HeroShape() {
   return (
     <motion.svg
-      aria-hidden
+      aria-hidden="true"
+      focusable="false"
       viewBox="0 0 700 400"
-      initial={{ opacity: 0, x: 70 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 1, ease }}
+      initial={{
+        opacity: 0,
+        x: 70,
+      }}
+      animate={{
+        opacity: 1,
+        x: 0,
+      }}
+      transition={{
+        duration: 1,
+        ease,
+      }}
       className="pointer-events-none absolute right-0 top-0 hidden h-full w-[42%] lg:block"
       preserveAspectRatio="xMaxYMin slice"
     >
-      <polygon points="170,0 700,0 700,125 470,250" fill="#F9B900" />
-      <polygon points="470,250 700,125 700,240 510,320" fill="#9A6B00" />
-      <path d="M470 250 700 125" stroke="#FFD94C" strokeOpacity=".35" />
+      <polygon
+        points="170,0 700,0 700,125 470,250"
+        fill="#F9B900"
+      />
+
+      <polygon
+        points="470,250 700,125 700,240 510,320"
+        fill="#9A6B00"
+      />
+
+      <path
+        d="M470 250 700 125"
+        stroke="#FFD94C"
+        strokeOpacity=".35"
+      />
     </motion.svg>
   );
 }

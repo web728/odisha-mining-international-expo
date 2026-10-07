@@ -34,7 +34,7 @@ const groups = [
     links: [
       ["About the Show", "/about"],
       ["Why Odisha", "/why-odisha"],
-      ["Venue & Floor Plan", "/venue"],
+      ["Venue", "/venue"],
       ["FAQ", "/faq"],
       ["Contact", "/contact"],
     ],

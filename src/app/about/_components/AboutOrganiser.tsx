@@ -7,9 +7,13 @@ import { Container } from "@/components/ui/Container";
 
 export function AboutOrganiser() {
   return (
-    <section className="section-space relative overflow-hidden bg-brand-black text-white">
+    <section
+      aria-labelledby="about-organiser-heading"
+      className="section-space relative overflow-hidden bg-brand-black text-white"
+    >
       <svg
-        aria-hidden
+        aria-hidden="true"
+        focusable="false"
         viewBox="0 0 700 420"
         className="pointer-events-none absolute -right-20 top-0 hidden h-full w-[45%] opacity-10 lg:block"
         fill="none"
@@ -27,13 +31,20 @@ export function AboutOrganiser() {
           transition={{ duration: 0.65 }}
         >
           <div className="mb-4 flex items-center gap-3">
-            <span className="h-[2px] w-10 bg-brand" />
+            <span
+              aria-hidden="true"
+              className="h-[2px] w-10 bg-brand"
+            />
+
             <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
               Organiser
             </p>
           </div>
 
-          <h2 className="max-w-xl text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em]">
+          <h2
+            id="about-organiser-heading"
+            className="max-w-xl text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em]"
+          >
             Futurex Trade Fair
             <span className="text-brand"> & Events Pvt. Ltd.</span>
           </h2>
@@ -53,11 +64,23 @@ export function AboutOrganiser() {
             the world.
           </p>
 
-          <p className="mt-6 border-l-2 border-brand pl-4 text-xs leading-6 text-white/60">
-            <strong className="text-white">India (Delhi):</strong> E-52, 1st
-            Floor, Kalkaji, Delhi 110019 · +91 98108 55697 ·
-            info@futurextrade.com
-          </p>
+          <address className="mt-6 not-italic border-l-2 border-brand pl-4 text-xs leading-6 text-white/60">
+            <strong className="text-white">India (Delhi):</strong>{" "}
+            E-52, 1st Floor, Kalkaji, Delhi 110019 ·{" "}
+            <a
+              href="tel:+919810855697"
+              className="transition-colors hover:text-brand"
+            >
+              +91 98108 55697
+            </a>{" "}
+            ·{" "}
+            <a
+              href="mailto:info@futurextrade.com"
+              className="transition-colors hover:text-brand"
+            >
+              info@futurextrade.com
+            </a>
+          </address>
         </motion.div>
 
         <motion.div
@@ -71,11 +94,14 @@ export function AboutOrganiser() {
             src="/hero/about-new.png"
             alt="Crowds at the Odisha Mining and Infrastructure International Expo"
             fill
-            sizes="(max-width:1024px) 100vw, 50vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"
+          />
 
           <div className="absolute bottom-5 left-5">
             <p className="text-[9px] font-extrabold uppercase tracking-[.16em] text-brand">

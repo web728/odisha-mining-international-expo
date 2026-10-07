@@ -7,31 +7,54 @@ import { Container } from "@/components/ui/Container";
 import { focusAreas } from "./home.data";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0 },
+  hidden: {
+    opacity: 0,
+    y: 28,
+  },
+
+  show: {
+    opacity: 1,
+    y: 0,
+  },
 };
 
 export function FocusAreas() {
   return (
-    <section className="section-space bg-white">
+    <section
+      aria-labelledby="focus-areas-heading"
+      className="section-space bg-white"
+    >
       <Container>
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{
+            once: true,
+            amount: 0.35,
+          }}
+          transition={{
+            duration: 0.65,
+            ease: [0.16, 1, 0.3, 1],
+          }}
           className="grid gap-6 lg:grid-cols-[1fr_.75fr] lg:items-end"
         >
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-[2px] w-10 bg-brand" />
+              <span
+                aria-hidden="true"
+                className="h-[2px] w-10 bg-brand"
+              />
+
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
                 Focus Areas
               </p>
             </div>
 
-            <h2 className="text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950">
+            <h2
+              id="focus-areas-heading"
+              className="text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
+            >
               Six sectors.
               <span className="text-brand"> One floor.</span>
             </h2>
@@ -46,28 +69,50 @@ export function FocusAreas() {
         <motion.div
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ staggerChildren: 0.08 }}
+          viewport={{
+            once: true,
+            amount: 0.15,
+          }}
+          transition={{
+            staggerChildren: 0.08,
+          }}
           className="mt-10 grid border-l border-t border-zinc-200 md:grid-cols-2 lg:grid-cols-3"
         >
           {focusAreas.map(([Icon, title, text], index) => (
             <motion.article
               key={title}
               variants={fadeUp}
-              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -5 }}
+              transition={{
+                duration: 0.55,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              whileHover={{
+                y: -5,
+              }}
               className="group relative min-h-[250px] overflow-hidden border-b border-r border-zinc-200 bg-white p-6 transition-colors duration-500 hover:bg-brand-black sm:p-7"
             >
               <div className="flex items-start justify-between">
                 <motion.span
-                  whileHover={{ rotate: 3, scale: 1.04 }}
-                  transition={{ duration: 0.3 }}
+                  aria-hidden="true"
+                  whileHover={{
+                    rotate: 3,
+                    scale: 1.04,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                  }}
                   className="grid size-11 place-items-center border border-zinc-200 transition duration-300 group-hover:border-brand/50 group-hover:bg-brand/10"
                 >
-                  <Icon className="size-5 text-zinc-950 transition duration-300 group-hover:text-brand" />
+                  <Icon
+                    aria-hidden="true"
+                    className="size-5 text-zinc-950 transition duration-300 group-hover:text-brand"
+                  />
                 </motion.span>
 
-                <span className="text-[10px] font-extrabold tracking-[.16em] text-zinc-400 transition group-hover:text-brand/70">
+                <span
+                  aria-hidden="true"
+                  className="text-[10px] font-extrabold tracking-[.16em] text-zinc-400 transition group-hover:text-brand/70"
+                >
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
@@ -81,12 +126,20 @@ export function FocusAreas() {
               </p>
 
               <motion.span
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
+                aria-hidden="true"
+                initial={{
+                  scaleX: 0,
+                }}
+                whileHover={{
+                  scaleX: 1,
+                }}
                 className="absolute inset-x-0 bottom-0 h-[3px] origin-left bg-brand"
               />
 
-              <ArrowUpRight className="absolute bottom-6 right-6 size-4 translate-y-2 text-brand opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100" />
+              <ArrowUpRight
+                aria-hidden="true"
+                className="absolute bottom-6 right-6 size-4 translate-y-2 text-brand opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+              />
             </motion.article>
           ))}
         </motion.div>

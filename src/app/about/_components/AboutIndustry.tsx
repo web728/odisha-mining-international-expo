@@ -16,11 +16,14 @@ const items = [
     "State Support",
     "Increased government backing for exploration, critical minerals processing, and heavy logistics machinery.",
   ],
-];
+] as const;
 
 export function AboutIndustry() {
   return (
-    <section className="section-space bg-white">
+    <section
+      aria-labelledby="mining-industry-heading"
+      className="section-space bg-white"
+    >
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 22 }}
@@ -31,13 +34,20 @@ export function AboutIndustry() {
         >
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-[2px] w-10 bg-brand" />
+              <span
+                aria-hidden="true"
+                className="h-[2px] w-10 bg-brand"
+              />
+
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em]">
                 About India&apos;s Mining Industry
               </p>
             </div>
 
-            <h2 className="text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em]">
+            <h2
+              id="mining-industry-heading"
+              className="text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em]"
+            >
               Powering
               <span className="text-brand"> industrial growth.</span>
             </h2>
@@ -66,14 +76,24 @@ export function AboutIndustry() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.07, duration: 0.5 }}
+              transition={{
+                delay: i * 0.07,
+                duration: 0.5,
+              }}
+              aria-labelledby={`industry-card-${i + 1}`}
               className="group min-h-52 border-b border-r border-zinc-200 p-6 transition duration-500 hover:bg-brand-black"
             >
-              <span className="text-xs font-black text-brand">
+              <span
+                aria-hidden="true"
+                className="text-xs font-black text-brand"
+              >
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              <h3 className="mt-6 text-xl font-extrabold tracking-[-.025em] group-hover:text-white">
+              <h3
+                id={`industry-card-${i + 1}`}
+                className="mt-6 text-xl font-extrabold tracking-[-.025em] group-hover:text-white"
+              >
                 {title}
               </h3>
 

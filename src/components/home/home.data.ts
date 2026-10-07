@@ -8,7 +8,23 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export const focusAreas: [LucideIcon, string, string][] = [
+type FocusArea = readonly [
+  icon: LucideIcon,
+  title: string,
+  description: string,
+];
+
+type EventStat = readonly [
+  value: string,
+  label: string,
+];
+
+type Mineral = readonly [
+  name: string,
+  share: string,
+];
+
+export const focusAreas: FocusArea[] = [
   [
     Pickaxe,
     "Mining Machinery & Equipment",
@@ -41,7 +57,7 @@ export const focusAreas: [LucideIcon, string, string][] = [
   ],
 ];
 
-export const eventStats = [
+export const eventStats: EventStat[] = [
   ["200+", "Exhibitors"],
   ["20,000+", "Trade Visitors"],
   ["10+", "Countries"],
@@ -60,9 +76,9 @@ export const highlights = [
   "3,000+ Products & Solutions",
   "B2B Meetings & Networking",
   "Live Machinery Demos",
-];
+] as const;
 
-export const minerals = [
+export const minerals: Mineral[] = [
   ["Chromite", "96%"],
   ["Nickel Ore", "93%"],
   ["Bauxite", "41%"],
@@ -77,4 +93,4 @@ export const gallery = [
   "expo-machinery-booth-1.jpg",
   "expo-show-floor-avenue.jpg",
   "expo-inaugural-lamp-lighting-2026.jpg",
-];
+] as const;

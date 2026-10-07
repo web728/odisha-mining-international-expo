@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import {
   Building2,
   Check,
@@ -9,11 +10,137 @@ import {
 import { Container } from "@/components/ui/Container";
 import { VisitorForm } from "./VisitorForm";
 
+const SITE_URL = "https://odishaminingexpo.com";
+const PAGE_URL = `${SITE_URL}/visitor-registration`;
+
+const EVENT_NAME =
+  "5th Odisha Mining & Infrastructure International Expo 2027";
+
 export const metadata: Metadata = {
-  title: "Visitor Registration",
+  title: "Visitor Registration | Free Trade Visitor Entry",
+
   description:
-    "Register free as a trade visitor for Odisha Mining Expo 2027.",
-  alternates: { canonical: "/visitor-registration" },
+    "Register free as a trade visitor for the 5th Odisha Mining & Infrastructure International Expo 2027, 07–10 January at Baramunda Exhibition Ground, Bhubaneswar.",
+
+  keywords: [
+    "Visitor Registration Odisha Mining Expo",
+    "OMIIE 2027 Visitor Registration",
+    "Free Mining Expo Registration",
+    "Trade Visitor Registration",
+    "Mining Exhibition Visitor Registration",
+    "Bhubaneswar Mining Expo Registration",
+    "Mining Trade Show India",
+  ],
+
+  alternates: {
+    canonical: "/visitor-registration",
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: PAGE_URL,
+
+    title:
+      "Visitor Registration | Free Trade Visitor Entry at OMIIE 2027",
+
+    description:
+      "Register free to visit the 5th Odisha Mining & Infrastructure International Expo 2027 in Bhubaneswar and meet mining, infrastructure and heavy equipment companies.",
+
+    siteName: EVENT_NAME,
+
+    images: [
+      {
+        url: "/image/about-hero-2.png",
+        alt: "Visitor registration for the 5th Odisha Mining & Infrastructure International Expo 2027",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "Visitor Registration | OMIIE 2027",
+
+    description:
+      "Register free as a trade visitor and explore mining machinery, infrastructure technologies and industry networking opportunities in Bhubaneswar.",
+
+    images: ["/image/about-hero-2.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+
+  "@graph": [
+    {
+      "@type": "WebPage",
+
+      "@id": `${PAGE_URL}#webpage`,
+
+      url: PAGE_URL,
+
+      name:
+        "Visitor Registration | 5th Odisha Mining & Infrastructure International Expo 2027",
+
+      description:
+        "Register free as a trade visitor for the 5th Odisha Mining & Infrastructure International Expo 2027 in Bhubaneswar, Odisha.",
+
+      inLanguage: "en-IN",
+
+      isPartOf: {
+        "@id": `${SITE_URL}/#website`,
+      },
+
+      about: {
+        "@id": `${SITE_URL}/#event`,
+      },
+
+      mainEntity: {
+        "@id": `${SITE_URL}/#event`,
+      },
+
+      breadcrumb: {
+        "@id": `${PAGE_URL}#breadcrumb`,
+      },
+    },
+
+    {
+      "@type": "BreadcrumbList",
+
+      "@id": `${PAGE_URL}#breadcrumb`,
+
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: `${SITE_URL}/`,
+        },
+
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Visitor Registration",
+          item: PAGE_URL,
+        },
+      ],
+    },
+  ],
 };
 
 const benefits = [
@@ -40,34 +167,63 @@ const benefits = [
 export default function Page() {
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-brand-black text-white">
+      <section
+        aria-labelledby="visitor-registration-heading"
+        className="relative isolate overflow-hidden bg-brand-black text-white"
+      >
         <HeroGraphic />
 
         <Container className="relative z-10 flex min-h-[380px] items-end py-14 sm:min-h-[420px] lg:py-16">
           <div className="max-w-4xl">
-            <Eyebrow dark>Visit · Free Registration</Eyebrow>
+            <Eyebrow dark>
+              Visit · Free Registration
+            </Eyebrow>
 
-            <h1 className="mt-4 text-[clamp(2.7rem,5vw,5rem)] font-black leading-[.96] tracking-[-.055em]">
+            <h1
+              id="visitor-registration-heading"
+              className="mt-4 text-[clamp(2.7rem,5vw,5rem)] font-black leading-[.96] tracking-[-.055em]"
+            >
               Visitor
-              <span className="text-brand"> Registration.</span>
+              <span className="text-brand">
+                {" "}
+                Registration.
+              </span>
             </h1>
 
             <p className="mt-5 max-w-3xl text-sm leading-7 text-white/70 sm:text-base">
-              Free entry for trade visitors — 07–10 January 2027, Baramunda
-              Exhibition Ground, Bhubaneswar.
+              Free entry for trade visitors —{" "}
+              <time dateTime="2027-01-07">
+                07
+              </time>
+              {"–"}
+              <time dateTime="2027-01-10">
+                10 January 2027
+              </time>
+              , Baramunda Exhibition Ground, Bhubaneswar.
             </p>
           </div>
         </Container>
       </section>
 
-      <section className="section-space bg-white">
+      <section
+        aria-labelledby="visitor-register-heading"
+        className="section-space bg-white"
+      >
         <Container className="grid gap-12 lg:grid-cols-[.72fr_1.28fr] lg:items-start lg:gap-16">
           <div className="lg:sticky lg:top-[110px]">
-            <Eyebrow>Register Free</Eyebrow>
+            <Eyebrow>
+              Register Free
+            </Eyebrow>
 
-            <h2 className="mt-4 max-w-xl text-[clamp(2rem,3vw,3.25rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950">
+            <h2
+              id="visitor-register-heading"
+              className="mt-4 max-w-xl text-[clamp(2rem,3vw,3.25rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
+            >
               Four days of sourcing,
-              <span className="text-brand"> networking & discovery.</span>
+              <span className="text-brand">
+                {" "}
+                networking & discovery.
+              </span>
             </h2>
 
             <p className="mt-5 max-w-lg text-sm leading-7 text-zinc-700">
@@ -77,65 +233,106 @@ export default function Page() {
             </p>
 
             <div className="mt-8 grid border-l border-t border-zinc-200">
-              {benefits.map(({ icon: Icon, value, label, text }) => (
-                <article
-                  key={label}
-                  className="group border-b border-r border-zinc-200 p-5 transition duration-300 hover:bg-brand-black"
-                >
-                  <div className="flex gap-4">
-                    <span className="grid size-11 shrink-0 place-items-center border border-zinc-200 transition group-hover:border-brand/40 group-hover:bg-brand/10">
-                      <Icon className="size-5 text-brand-dark group-hover:text-brand" />
-                    </span>
+              {benefits.map(
+                ({
+                  icon: Icon,
+                  value,
+                  label,
+                  text,
+                }) => (
+                  <article
+                    key={label}
+                    aria-labelledby={`visitor-benefit-${label
+                      .toLowerCase()
+                      .replaceAll(" ", "-")}`}
+                    className="group border-b border-r border-zinc-200 p-5 transition duration-300 hover:bg-brand-black"
+                  >
+                    <div className="flex gap-4">
+                      <span
+                        aria-hidden="true"
+                        className="grid size-11 shrink-0 place-items-center border border-zinc-200 transition group-hover:border-brand/40 group-hover:bg-brand/10"
+                      >
+                        <Icon
+                          aria-hidden="true"
+                          className="size-5 text-brand-dark group-hover:text-brand"
+                        />
+                      </span>
 
-                    <div>
-                      <p className="text-2xl font-black tracking-[-.04em] text-zinc-950 transition group-hover:text-brand">
-                        {value}
-                      </p>
+                      <div>
+                        <p className="text-2xl font-black tracking-[-.04em] text-zinc-950 transition group-hover:text-brand">
+                          {value}
+                        </p>
 
-                      <h3 className="mt-1 text-xs font-extrabold uppercase tracking-[.1em] text-zinc-950 transition group-hover:text-white">
-                        {label}
-                      </h3>
+                        <h3
+                          id={`visitor-benefit-${label
+                            .toLowerCase()
+                            .replaceAll(" ", "-")}`}
+                          className="mt-1 text-xs font-extrabold uppercase tracking-[.1em] text-zinc-950 transition group-hover:text-white"
+                        >
+                          {label}
+                        </h3>
 
-                      <p className="mt-2 text-sm leading-6 text-zinc-600 transition group-hover:text-white/65">
-                        {text}
-                      </p>
+                        <p className="mt-2 text-sm leading-6 text-zinc-600 transition group-hover:text-white/65">
+                          {text}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                ),
+              )}
             </div>
 
-            <div className="mt-8 border-t border-zinc-200 pt-6">
+            <ul className="mt-8 border-t border-zinc-200 pt-6">
               {[
                 "Free entry for registered trade visitors",
                 "Access to live machinery demonstrations",
                 "Networking & B2B opportunities",
               ].map((item) => (
-                <div
+                <li
                   key={item}
                   className="flex items-center gap-3 py-2 text-sm font-semibold text-zinc-800"
                 >
-                  <span className="grid size-6 place-items-center bg-brand">
-                    <Check className="size-3.5" strokeWidth={3} />
+                  <span
+                    aria-hidden="true"
+                    className="grid size-6 place-items-center bg-brand"
+                  >
+                    <Check
+                      aria-hidden="true"
+                      className="size-3.5"
+                      strokeWidth={3}
+                    />
                   </span>
+
                   {item}
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <div className="relative">
-            <span className="absolute -right-4 -top-4 hidden h-24 w-24 border-r border-t border-brand/60 lg:block" />
+            <span
+              aria-hidden="true"
+              className="absolute -right-4 -top-4 hidden h-24 w-24 border-r border-t border-brand/60 lg:block"
+            />
 
             <div className="relative border border-zinc-200 bg-[#f4f4f1] p-6 shadow-[0_20px_70px_rgba(0,0,0,.06)] sm:p-8 lg:p-10">
-              <span className="absolute left-0 top-0 h-[3px] w-28 bg-brand" />
+              <span
+                aria-hidden="true"
+                className="absolute left-0 top-0 h-[3px] w-28 bg-brand"
+              />
 
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
                 Trade Visitor
               </p>
 
-              <h2 className="mt-2 text-2xl font-black tracking-[-.04em] text-zinc-950 sm:text-3xl">
-                Registration <span className="text-brand">details.</span>
+              <h2
+                id="visitor-form-heading"
+                className="mt-2 text-2xl font-black tracking-[-.04em] text-zinc-950 sm:text-3xl"
+              >
+                Registration{" "}
+                <span className="text-brand">
+                  details.
+                </span>
               </h2>
 
               <p className="mt-4 text-sm leading-7 text-zinc-600">
@@ -143,13 +340,26 @@ export default function Page() {
                 Odisha Mining & Infrastructure International Expo.
               </p>
 
-              <div className="mt-8">
+              <div
+                aria-labelledby="visitor-form-heading"
+                className="mt-8"
+              >
                 <VisitorForm />
               </div>
             </div>
           </div>
         </Container>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(
+            /</g,
+            "\\u003c",
+          ),
+        }}
+      />
     </>
   );
 }
@@ -163,10 +373,16 @@ function Eyebrow({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="h-[2px] w-10 bg-brand" />
+      <span
+        aria-hidden="true"
+        className="h-[2px] w-10 bg-brand"
+      />
+
       <p
         className={`text-[10px] font-extrabold uppercase tracking-[.18em] ${
-          dark ? "text-brand" : "text-zinc-950"
+          dark
+            ? "text-brand"
+            : "text-zinc-950"
         }`}
       >
         {children}
@@ -178,14 +394,27 @@ function Eyebrow({
 function HeroGraphic() {
   return (
     <svg
-      aria-hidden
+      aria-hidden="true"
+      focusable="false"
       viewBox="0 0 760 420"
       className="pointer-events-none absolute right-0 top-0 hidden h-full w-[43%] lg:block"
       preserveAspectRatio="xMaxYMin slice"
     >
-      <polygon points="180,0 760,0 760,125 500,265" fill="#F9B900" />
-      <polygon points="500,265 760,125 760,245 540,340" fill="#8F6400" />
-      <path d="M500 265 760 125" stroke="#FFD84A" strokeOpacity=".3" />
+      <polygon
+        points="180,0 760,0 760,125 500,265"
+        fill="#F9B900"
+      />
+
+      <polygon
+        points="500,265 760,125 760,245 540,340"
+        fill="#8F6400"
+      />
+
+      <path
+        d="M500 265 760 125"
+        stroke="#FFD84A"
+        strokeOpacity=".3"
+      />
     </svg>
   );
 }

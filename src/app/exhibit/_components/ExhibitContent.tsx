@@ -10,27 +10,54 @@ import { exhibitorProfiles } from "@/data/profiles";
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const benefits = [
-  ["Connect", "With key mining & infrastructure buyers from across India and 10+ countries."],
-  ["Generate", "High-value B2B business opportunities across a 200+ exhibitor, 20,000+ visitor show floor."],
-  ["Showcase", "Innovations & live technologies with on-ground machinery demonstrations."],
-  ["Strengthen", "National industry visibility and leadership status through targeted branding."],
-  ["Launch", "Products to a focused industrial audience and gauge real-time market reaction."],
-  ["Build Strategic Partnerships", "Across sectors — mining, infrastructure, technology and government."],
-  ["Expand", "Dealer & distribution networks across India's mining & industrial markets."],
-  ["Access", "India's growing mining & industrial markets from one national platform."],
-];
+  [
+    "Connect",
+    "With key mining & infrastructure buyers from across India and 10+ countries.",
+  ],
+  [
+    "Generate",
+    "High-value B2B business opportunities across a 200+ exhibitor, 20,000+ visitor show floor.",
+  ],
+  [
+    "Showcase",
+    "Innovations & live technologies with on-ground machinery demonstrations.",
+  ],
+  [
+    "Strengthen",
+    "National industry visibility and leadership status through targeted branding.",
+  ],
+  [
+    "Launch",
+    "Products to a focused industrial audience and gauge real-time market reaction.",
+  ],
+  [
+    "Build Strategic Partnerships",
+    "Across sectors — mining, infrastructure, technology and government.",
+  ],
+  [
+    "Expand",
+    "Dealer & distribution networks across India's mining & industrial markets.",
+  ],
+  [
+    "Access",
+    "India's growing mining & industrial markets from one national platform.",
+  ],
+] as const;
 
 const stats = [
   ["200+", "Exhibitors"],
   ["20,000+", "Visitors"],
   ["10+", "Countries"],
   ["3,000+", "Products & Solutions"],
-];
+] as const;
 
 export function ExhibitContent() {
   return (
     <>
-      <section className="section-space bg-white">
+      <section
+        aria-labelledby="exhibit-benefits-heading"
+        className="section-space bg-white"
+      >
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 22 }}
@@ -42,7 +69,10 @@ export function ExhibitContent() {
             <div>
               <Eyebrow>Exhibit · Engage · Grow</Eyebrow>
 
-              <h2 className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950">
+              <h2
+                id="exhibit-benefits-heading"
+                className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
+              >
                 Unlock endless
                 <span className="text-brand"> business possibilities.</span>
               </h2>
@@ -50,7 +80,8 @@ export function ExhibitContent() {
 
             <p className="max-w-lg text-sm leading-7 text-zinc-700 lg:justify-self-end">
               Position your business in front of decision-makers, buyers and
-              industry leaders across mining, infrastructure and industrial markets.
+              industry leaders across mining, infrastructure and industrial
+              markets.
             </p>
           </motion.div>
 
@@ -58,18 +89,29 @@ export function ExhibitContent() {
             {benefits.map(([title, text], i) => (
               <motion.article
                 key={title}
+                aria-labelledby={`exhibit-benefit-${i + 1}`}
                 initial={{ opacity: 0, y: 22 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.04, ease }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.04,
+                  ease,
+                }}
                 whileHover={{ y: -4 }}
                 className="group relative min-h-[220px] overflow-hidden border-b border-r border-zinc-200 bg-white p-6 transition-colors duration-500 hover:bg-brand-black"
               >
-                <span className="text-[10px] font-extrabold tracking-[.15em] text-zinc-400 group-hover:text-brand">
+                <span
+                  aria-hidden="true"
+                  className="text-[10px] font-extrabold tracking-[.15em] text-zinc-400 group-hover:text-brand"
+                >
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
-                <h3 className="mt-7 text-lg font-extrabold leading-[1.15] tracking-[-.02em] text-zinc-950 transition group-hover:text-white">
+                <h3
+                  id={`exhibit-benefit-${i + 1}`}
+                  className="mt-7 text-lg font-extrabold leading-[1.15] tracking-[-.02em] text-zinc-950 transition group-hover:text-white"
+                >
                   {title}
                 </h3>
 
@@ -77,32 +119,47 @@ export function ExhibitContent() {
                   {text}
                 </p>
 
-                <ArrowUpRight className="absolute bottom-6 right-6 size-4 translate-y-2 text-brand opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100" />
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="absolute bottom-6 right-6 size-4 translate-y-2 text-brand opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100"
+                />
 
-                <span className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
+                />
               </motion.article>
             ))}
           </div>
 
-          <div className="mt-8 grid grid-cols-2 border-l border-t border-zinc-200 sm:grid-cols-4">
+          <div
+            aria-label="Expo statistics"
+            className="mt-8 grid grid-cols-2 border-l border-t border-zinc-200 sm:grid-cols-4"
+          >
             {stats.map(([value, label]) => (
-              <div
+              <article
                 key={label}
+                aria-label={`${value} ${label}`}
                 className="border-b border-r border-zinc-200 bg-brand-black p-5"
               >
                 <div className="text-2xl font-black tracking-[-.04em] text-brand sm:text-3xl">
                   {value}
                 </div>
+
                 <p className="mt-1 text-xs font-semibold uppercase tracking-[.06em] text-white/65">
                   {label}
                 </p>
-              </div>
+              </article>
             ))}
           </div>
         </Container>
       </section>
 
-      <section id="profiles" className="section-space bg-[#f4f4f1]">
+      <section
+        id="profiles"
+        aria-labelledby="exhibitor-profiles-heading"
+        className="section-space bg-[#f4f4f1]"
+      >
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 22 }}
@@ -114,7 +171,10 @@ export function ExhibitContent() {
             <div>
               <Eyebrow>Exhibitor Profiles</Eyebrow>
 
-              <h2 className="mt-4 text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950">
+              <h2
+                id="exhibitor-profiles-heading"
+                className="mt-4 text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
+              >
                 Who should
                 <span className="text-brand"> exhibit.</span>
               </h2>
@@ -126,63 +186,82 @@ export function ExhibitContent() {
             </p>
           </motion.div>
 
-          <div className="mt-9 columns-1 gap-8 sm:columns-2 lg:columns-3">
+          <ul className="mt-9 columns-1 gap-8 sm:columns-2 lg:columns-3">
             {exhibitorProfiles.map((item, i) => (
-              <motion.div
+              <motion.li
                 key={item}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: (i % 6) * 0.03 }}
+                transition={{
+                  duration: 0.4,
+                  delay: (i % 6) * 0.03,
+                }}
                 className="group mb-3 break-inside-avoid border-b border-zinc-300 pb-3 text-sm font-medium leading-6 text-zinc-800 transition hover:border-brand hover:text-zinc-950"
               >
-                <span className="mr-2 text-brand">—</span>
+                <span
+                  aria-hidden="true"
+                  className="mr-2 text-brand"
+                >
+                  —
+                </span>
+
                 {item}
-              </motion.div>
+              </motion.li>
             ))}
+          </ul>
+
+          <div className="mt-9 flex flex-wrap gap-3">
+            <ButtonLink
+              href="/exhibitor-registration"
+              variant="dark"
+              aria-label="Book your stand for the Odisha Mining Expo 2027"
+              className="
+                !border-[#171717]
+                !bg-[#171717]
+                !text-white
+                hover:!border-white
+                hover:!bg-white
+                hover:!text-[#171717]
+              "
+            >
+              Book Your Stand
+            </ButtonLink>
+
+            <ButtonLink
+              href="/brochure"
+              variant="dark"
+              aria-label="Download the Odisha Mining Expo 2027 brochure"
+              className="
+                !border-[#171717]
+                !bg-[#171717]
+                !text-white
+                hover:!border-white
+                hover:!bg-white
+                hover:!text-[#171717]
+              "
+            >
+              Download Brochure
+            </ButtonLink>
           </div>
-
-      <div className="mt-9 flex flex-wrap gap-3">
-  <ButtonLink
-    href="/exhibitor-registration"
-    variant="dark"
-    className="
-      !border-[#171717]
-      !bg-[#171717]
-      !text-white
-      hover:!border-white
-      hover:!bg-white
-      hover:!text-[#171717]
-    "
-  >
-    Book Your Stand
-  </ButtonLink>
-
-  <ButtonLink
-    href="/brochure"
-    variant="dark"
-    className="
-      !border-[#171717]
-      !bg-[#171717]
-      !text-white
-      hover:!border-white
-      hover:!bg-white
-      hover:!text-[#171717]
-    "
-  >
-    Download Brochure
-  </ButtonLink>
-</div>
         </Container>
       </section>
     </>
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
+function Eyebrow({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex items-center gap-3">
-      <span className="h-[2px] w-10 bg-brand" />
+      <span
+        aria-hidden="true"
+        className="h-[2px] w-10 bg-brand"
+      />
+
       <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
         {children}
       </p>

@@ -26,7 +26,7 @@ const categories = [
   "Safety & Sustainability",
   "Heavy Engineering & Industrial Solutions",
   "Other",
-];
+] as const;
 
 const standOptions = [
   "9 sqm shell scheme",
@@ -34,14 +34,14 @@ const standOptions = [
   "27+ sqm custom / bare",
   "Outdoor machinery display",
   "Not sure yet",
-];
+] as const;
 
 const participationOptions = [
   "Live Machinery / Product Demonstration",
   "Sponsorship / Branding Opportunities",
   "B2B Meetings",
   "Dealer / Distributor Networking",
-];
+] as const;
 
 type Status = {
   type:
@@ -53,28 +53,24 @@ type Status = {
 };
 
 export function ExhibitorForm() {
-  const [status, setStatus] =
-    useState<Status>({
-      type: "idle",
-    });
+  const [status, setStatus] = useState<Status>({
+    type: "idle",
+  });
 
-  const [accepted, setAccepted] =
-    useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   const [
     captchaToken,
     setCaptchaToken,
   ] = useState<string | null>(null);
 
-  const captchaRef =
-    useRef<ReCAPTCHA>(null);
+  const captchaRef = useRef<ReCAPTCHA>(null);
 
   const siteKey =
-    process.env
-      .NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   async function onSubmit(
-    e: FormEvent<HTMLFormElement>
+    e: FormEvent<HTMLFormElement>,
   ) {
     e.preventDefault();
 
@@ -108,77 +104,37 @@ export function ExhibitorForm() {
       return;
     }
 
-    const form =
-      e.currentTarget;
-
-    const formData =
-      new FormData(form);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
 
     const data = {
-      company:
-        formData.get("company"),
-
-      name:
-        formData.get("name"),
-
+      company: formData.get("company"),
+      name: formData.get("name"),
       designation:
-        formData.get(
-          "designation"
-        ),
-
-      email:
-        formData.get("email"),
-
-      phone:
-        formData.get("phone"),
-
-      country:
-        formData.get("country"),
-
-      website:
-        formData.get("website"),
-
-      address:
-        formData.get("address"),
-
+        formData.get("designation"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      country: formData.get("country"),
+      website: formData.get("website"),
+      address: formData.get("address"),
       cityState:
         formData.get("cityState"),
-
-      taxId:
-        formData.get("taxId"),
-
-      category:
-        formData.get("category"),
-
+      taxId: formData.get("taxId"),
+      category: formData.get("category"),
       exhibitDetails:
-        formData.get(
-          "exhibitDetails"
-        ),
-
-      brands:
-        formData.get("brands"),
-
+        formData.get("exhibitDetails"),
+      brands: formData.get("brands"),
       standSize:
-        formData.get(
-          "standSize"
-        ),
-
+        formData.get("standSize"),
       participationInterests:
         formData.getAll(
-          "participationInterests"
+          "participationInterests",
         ),
-
-      message:
-        formData.get("message"),
-
+      message: formData.get("message"),
       consent: true,
-
       captchaToken,
-
       company_website:
-        formData.get(
-          "company_website"
-        ),
+        formData.get("company_website"),
     };
 
     setStatus({
@@ -186,51 +142,41 @@ export function ExhibitorForm() {
     });
 
     try {
-      const response =
-        await fetch(
-          "/api/exhibitor",
-          {
-            method: "POST",
+      const response = await fetch(
+        "/api/exhibitor",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+      );
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            body:
-              JSON.stringify(data),
-          }
-        );
-
-      const result =
-        await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
         throw new Error(
           result.message ||
-            "Submission failed."
+            "Submission failed.",
         );
       }
 
       setStatus({
         type: "success",
-
         message:
           result.message ||
           "Thank you. Our exhibition team will contact you shortly.",
       });
 
       form.reset();
-
       setAccepted(false);
-
       setCaptchaToken(null);
-
       captchaRef.current?.reset();
     } catch (error) {
       setStatus({
         type: "error",
-
         message:
           error instanceof Error
             ? error.message
@@ -238,7 +184,6 @@ export function ExhibitorForm() {
       });
 
       setCaptchaToken(null);
-
       captchaRef.current?.reset();
     }
   }
@@ -246,8 +191,17 @@ export function ExhibitorForm() {
   return (
     <form
       onSubmit={onSubmit}
+      aria-labelledby="exhibitor-form-title"
+      aria-describedby="exhibitor-form-status"
       className="grid gap-9"
     >
+      <h2
+        id="exhibitor-form-title"
+        className="sr-only"
+      >
+        Exhibitor Stand Enquiry Form
+      </h2>
+
       <FormSection
         number="01"
         title="Company Details"
@@ -354,7 +308,7 @@ export function ExhibitorForm() {
                 >
                   {category}
                 </option>
-              )
+              ),
             )}
           </SelectField>
 
@@ -378,28 +332,34 @@ export function ExhibitorForm() {
         title="Stand Preference"
         text="Select the participation format closest to your current requirement."
       >
-        <div className="grid gap-3 sm:grid-cols-2">
-          {standOptions.map(
-            (option) => (
-              <label
-                key={option}
-                className="group flex cursor-pointer items-center gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
-              >
-                <input
-                  type="radio"
-                  name="standSize"
-                  value={option}
-                  required
-                  className="size-4 accent-[#f9b900]"
-                />
+        <fieldset>
+          <legend className="sr-only">
+            Stand Preference
+          </legend>
 
-                <span className="text-sm font-semibold text-zinc-800">
-                  {option}
-                </span>
-              </label>
-            )
-          )}
-        </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {standOptions.map(
+              (option) => (
+                <label
+                  key={option}
+                  className="group flex cursor-pointer items-center gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
+                >
+                  <input
+                    type="radio"
+                    name="standSize"
+                    value={option}
+                    required
+                    className="size-4 accent-[#f9b900]"
+                  />
+
+                  <span className="text-sm font-semibold text-zinc-800">
+                    {option}
+                  </span>
+                </label>
+              ),
+            )}
+          </div>
+        </fieldset>
       </FormSection>
 
       <FormSection
@@ -407,27 +367,33 @@ export function ExhibitorForm() {
         title="Additional Participation"
         text="Optional opportunities your company may be interested in."
       >
-        <div className="grid gap-3 sm:grid-cols-2">
-          {participationOptions.map(
-            (option) => (
-              <label
-                key={option}
-                className="group flex cursor-pointer items-start gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
-              >
-                <input
-                  type="checkbox"
-                  name="participationInterests"
-                  value={option}
-                  className="mt-0.5 size-4 accent-[#f9b900]"
-                />
+        <fieldset>
+          <legend className="sr-only">
+            Additional Participation
+          </legend>
 
-                <span className="text-sm font-semibold leading-5 text-zinc-800">
-                  {option}
-                </span>
-              </label>
-            )
-          )}
-        </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {participationOptions.map(
+              (option) => (
+                <label
+                  key={option}
+                  className="group flex cursor-pointer items-start gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
+                >
+                  <input
+                    type="checkbox"
+                    name="participationInterests"
+                    value={option}
+                    className="mt-0.5 size-4 accent-[#f9b900]"
+                  />
+
+                  <span className="text-sm font-semibold leading-5 text-zinc-800">
+                    {option}
+                  </span>
+                </label>
+              ),
+            )}
+          </div>
+        </fieldset>
       </FormSection>
 
       <FormSection
@@ -442,6 +408,7 @@ export function ExhibitorForm() {
         />
       </FormSection>
 
+      {/* Honeypot */}
       <div
         className="absolute -left-[9999px]"
         aria-hidden="true"
@@ -460,9 +427,11 @@ export function ExhibitorForm() {
           checked={accepted}
           onChange={(e) =>
             setAccepted(
-              e.target.checked
+              e.target.checked,
             )
           }
+          required
+          aria-required="true"
           className="mt-1 size-4 shrink-0 accent-[#f9b900]"
         />
 
@@ -479,57 +448,65 @@ export function ExhibitorForm() {
           <ReCAPTCHA
             ref={captchaRef}
             sitekey={siteKey}
-            onChange={
-              setCaptchaToken
-            }
+            onChange={setCaptchaToken}
             onExpired={() =>
-              setCaptchaToken(
-                null
-              )
+              setCaptchaToken(null)
             }
             onErrored={() =>
-              setCaptchaToken(
-                null
-              )
+              setCaptchaToken(null)
             }
           />
         ) : (
-          <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div
+            role="alert"
+            className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
             reCAPTCHA configuration is missing.
           </div>
         )}
       </div>
 
-      <FormStatus
-        status={status}
-      />
+      <div
+        id="exhibitor-form-status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <FormStatus status={status} />
+      </div>
 
       <button
         type="submit"
         disabled={
-          status.type ===
-          "loading"
+          status.type === "loading"
+        }
+        aria-busy={
+          status.type === "loading"
         }
         className="group inline-flex min-h-13 w-full items-center justify-center gap-3 bg-brand-black px-7 text-[11px] font-extrabold uppercase tracking-[.09em] text-white transition duration-300 hover:bg-brand hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
       >
-        {status.type ===
-        "loading" ? (
+        {status.type === "loading" ? (
           <>
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2
+              aria-hidden="true"
+              className="size-4 animate-spin"
+            />
+
             Sending Enquiry...
           </>
         ) : (
           <>
             Send Stand Enquiry
 
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight
+              aria-hidden="true"
+              className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+            />
           </>
         )}
       </button>
 
       <p className="text-xs leading-6 text-zinc-500">
-        Prefer to talk directly?
-        Call{" "}
+        Prefer to talk directly? Call{" "}
         <a
           href="tel:+919810855697"
           className="font-bold text-zinc-950 underline decoration-brand decoration-2 underline-offset-4"
@@ -560,18 +537,27 @@ function FormSection({
   number: string;
   title: string;
   text: string;
-  children:
-    React.ReactNode;
+  children: React.ReactNode;
 }) {
+  const headingId = `form-section-${number}`;
+
   return (
-    <section>
+    <section
+      aria-labelledby={headingId}
+    >
       <div className="mb-5 flex items-start gap-4 border-b border-zinc-300 pb-4">
-        <span className="text-[10px] font-black tracking-[.15em] text-brand-dark">
+        <span
+          aria-hidden="true"
+          className="text-[10px] font-black tracking-[.15em] text-brand-dark"
+        >
           {number}
         </span>
 
         <div>
-          <h3 className="text-lg font-black tracking-[-.025em] text-zinc-950">
+          <h3
+            id={headingId}
+            className="text-lg font-black tracking-[-.025em] text-zinc-950"
+          >
             {title}
           </h3>
 
