@@ -12,8 +12,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/shared/CookieConsent";
 import { InitialLoader } from "@/components/shared/InitialLoader";
 
-const SITE_URL =
-  "https://odishaminingexpo.com";
+const SITE_URL = "https://odishaminingexpo.com";
 
 const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
@@ -68,7 +67,6 @@ export const metadata: Metadata = {
   ],
 
   creator: EVENT_SHORT_NAME,
-
   publisher: ORGANIZER_NAME,
 
   category:
@@ -105,13 +103,9 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-
     locale: "en_IN",
-
     url: `${SITE_URL}/`,
-
     siteName: EVENT_NAME,
-
     title: EVENT_NAME,
 
     description:
@@ -119,9 +113,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url:
-          "/image/5th-Odisha-Logo_White.png",
-
+        url: "/image/5th-Odisha-Logo_White.png",
         alt: EVENT_NAME,
       },
     ],
@@ -129,7 +121,6 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-
     title: EVENT_NAME,
 
     description:
@@ -167,15 +158,9 @@ const structuredData = {
   "@graph": [
     {
       "@type": "WebSite",
-
-      "@id":
-        `${SITE_URL}/#website`,
-
-      url:
-        `${SITE_URL}/`,
-
-      name:
-        EVENT_NAME,
+      "@id": `${SITE_URL}/#website`,
+      url: `${SITE_URL}/`,
+      name: EVENT_NAME,
 
       alternateName: [
         "Odisha Mining Expo",
@@ -183,72 +168,43 @@ const structuredData = {
         "OMIIE 2027",
       ],
 
-      inLanguage:
-        "en-IN",
+      inLanguage: "en-IN",
 
       publisher: {
-        "@id":
-          `${SITE_URL}/#organizer`,
+        "@id": `${SITE_URL}/#organizer`,
       },
 
       about: {
-        "@id":
-          `${SITE_URL}/#event`,
+        "@id": `${SITE_URL}/#event`,
       },
     },
 
     {
       "@type": "Organization",
+      "@id": `${SITE_URL}/#organizer`,
+      name: ORGANIZER_NAME,
+      url: ORGANIZER_URL,
 
-      "@id":
-        `${SITE_URL}/#organizer`,
-
-      name:
-        ORGANIZER_NAME,
-
-      url:
-        ORGANIZER_URL,
-
-      telephone:
-        "+91 98108 55697",
-
-      email:
-        "info@futurextrade.com",
+      telephone: "+91 98108 55697",
+      email: "info@futurextrade.com",
 
       address: {
-        "@type":
-          "PostalAddress",
-
+        "@type": "PostalAddress",
         streetAddress:
           "E-52, 1st Floor, Kalkaji",
-
-        addressLocality:
-          "Delhi",
-
-        postalCode:
-          "110019",
-
-        addressCountry:
-          "IN",
+        addressLocality: "Delhi",
+        postalCode: "110019",
+        addressCountry: "IN",
       },
 
       contactPoint: [
         {
-          "@type":
-            "ContactPoint",
-
-          name:
-            "Mr. Namit Gupta",
-
-          telephone:
-            "+91 98108 55697",
-
-          email:
-            "namit@futurextrade.com",
-
+          "@type": "ContactPoint",
+          name: "Mr. Namit Gupta",
+          telephone: "+91 98108 55697",
+          email: "namit@futurextrade.com",
           contactType:
             "exhibitor and event enquiries",
-
           availableLanguage: [
             "English",
             "Hindi",
@@ -256,21 +212,12 @@ const structuredData = {
         },
 
         {
-          "@type":
-            "ContactPoint",
-
-          name:
-            "Mr. Soumo Roy",
-
-          telephone:
-            "+91 80105 79828",
-
-          email:
-            "soumo@futurextrade.com",
-
+          "@type": "ContactPoint",
+          name: "Mr. Soumo Roy",
+          telephone: "+91 80105 79828",
+          email: "soumo@futurextrade.com",
           contactType:
             "exhibitor and event enquiries",
-
           availableLanguage: [
             "English",
             "Hindi",
@@ -280,14 +227,9 @@ const structuredData = {
     },
 
     {
-      "@type":
-        "ExhibitionEvent",
-
-      "@id":
-        `${SITE_URL}/#event`,
-
-      name:
-        EVENT_NAME,
+      "@type": "ExhibitionEvent",
+      "@id": `${SITE_URL}/#event`,
+      name: EVENT_NAME,
 
       alternateName: [
         "Odisha Mining Expo",
@@ -298,14 +240,10 @@ const structuredData = {
       description:
         "India's premier platform for mining, infrastructure, heavy equipment and industrial innovation.",
 
-      url:
-        `${SITE_URL}/`,
+      url: `${SITE_URL}/`,
 
-      startDate:
-        "2027-01-07",
-
-      endDate:
-        "2027-01-10",
+      startDate: "2027-01-07",
+      endDate: "2027-01-10",
 
       eventStatus:
         "https://schema.org/EventScheduled",
@@ -313,55 +251,39 @@ const structuredData = {
       eventAttendanceMode:
         "https://schema.org/OfflineEventAttendanceMode",
 
-      isAccessibleForFree:
-        true,
+      isAccessibleForFree: true,
 
       image: [
         LOGO_URL,
       ],
 
       location: {
-        "@type":
-          "Place",
-
-        "@id":
-          `${SITE_URL}/venue#venue`,
-
+        "@type": "Place",
+        "@id": `${SITE_URL}/venue#venue`,
         name:
           "Baramunda Exhibition Ground",
 
         address: {
-          "@type":
-            "PostalAddress",
-
+          "@type": "PostalAddress",
           addressLocality:
             "Bhubaneswar",
-
-          addressRegion:
-            "Odisha",
-
-          addressCountry:
-            "IN",
+          addressRegion: "Odisha",
+          addressCountry: "IN",
         },
       },
 
       organizer: {
-        "@id":
-          `${SITE_URL}/#organizer`,
+        "@id": `${SITE_URL}/#organizer`,
       },
 
       offers: {
-        "@type":
-          "Offer",
+        "@type": "Offer",
 
         url:
           `${SITE_URL}/visitor-registration`,
 
-        price:
-          "0",
-
-        priceCurrency:
-          "INR",
+        price: "0",
+        priceCurrency: "INR",
 
         availability:
           "https://schema.org/InStock",
@@ -378,20 +300,11 @@ const structuredData = {
     },
 
     {
-      "@type":
-        "ImageObject",
-
-      "@id":
-        `${SITE_URL}/#logo`,
-
-      url:
-        LOGO_URL,
-
-      contentUrl:
-        LOGO_URL,
-
-      caption:
-        EVENT_NAME,
+      "@type": "ImageObject",
+      "@id": `${SITE_URL}/#logo`,
+      url: LOGO_URL,
+      contentUrl: LOGO_URL,
+      caption: EVENT_NAME,
     },
   ],
 };
@@ -435,13 +348,12 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html:
-              JSON.stringify(
-                structuredData,
-              ).replace(
-                /</g,
-                "\\u003c",
-              ),
+            __html: JSON.stringify(
+              structuredData,
+            ).replace(
+              /</g,
+              "\\u003c",
+            ),
           }}
         />
       </body>
