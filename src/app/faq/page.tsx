@@ -25,14 +25,12 @@ export const metadata: Metadata = {
 
   keywords: [
     "Odisha Mining Expo FAQ",
-    "Odisha Mining & Infrastructure
-International Expo 2027 FAQ",
+    "OMIIE 2027 FAQ",
     "Odisha Mining Expo Visitor Questions",
     "Mining Expo Exhibitor Questions",
     "Odisha Mining Expo Registration",
     "Mining Expo Bhubaneswar FAQ",
-    "Odisha Mining & Infrastructure
-International Expo Visitor Information",
+    "OMIIE Visitor Information",
   ],
 
   alternates: {
@@ -48,8 +46,7 @@ International Expo Visitor Information",
       "FAQ | 5th Odisha Mining & Infrastructure International Expo 2027",
 
     description:
-      "Get answers about visiting, exhibiting, registration, venue access and event information for Odisha Mining & Infrastructure
-International Expo 2027.",
+      "Get answers about visiting, exhibiting, registration, venue access and event information for OMIIE 2027.",
 
     siteName: EVENT_NAME,
 
@@ -64,8 +61,7 @@ International Expo 2027.",
   twitter: {
     card: "summary_large_image",
 
-    title: "FAQ | Odisha Mining & Infrastructure
-International Expo 2027",
+    title: "FAQ | OMIIE 2027",
 
     description:
       "Find answers about visiting, exhibiting, registration and venue access for the Odisha Mining & Infrastructure International Expo 2027.",

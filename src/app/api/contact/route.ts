@@ -146,8 +146,7 @@ export async function POST(req: Request) {
         message,
 
         source: "website",
-        event: "Odisha Mining & Infrastructure
-International Expo 2027",
+        event: "OMIIE 2027",
 
         submittedAt: createdAt,
       });
