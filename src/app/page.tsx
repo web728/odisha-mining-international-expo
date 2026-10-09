@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import { AboutExpo } from "@/components/home/AboutExpo";
@@ -10,11 +11,10 @@ import { OdishaAdvantage } from "@/components/home/OdishaAdvantage";
 const SITE_URL = "https://odishaminingexpo.com";
 
 export const metadata: Metadata = {
-  title:
-    "5th Odisha Mining & Infrastructure International Expo 2027",
+  title: "Mining Expo India 2027 | Odisha Mining & Infrastructure Expo",
 
   description:
-    "India's premier platform for mining, infrastructure, heavy equipment & industrial innovation. 07–10 January 2027, Baramunda Exhibition Ground, Bhubaneswar, Odisha.",
+    "Explore Odisha Mining Expo 2027, 7–10 January in Bhubaneswar. Discover mining machinery, mineral processing, heavy equipment and B2B opportunities. Register now.",
 
   alternates: {
     canonical: "/",
@@ -23,10 +23,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    title:
-      "5th Odisha Mining & Infrastructure International Expo 2027",
+    title: "Mining Expo India 2027 | Odisha Mining & Infrastructure Expo",
     description:
-      "India's premier platform for mining, infrastructure, heavy equipment & industrial innovation. 07–10 January 2027, Bhubaneswar, Odisha.",
+      "Explore Odisha Mining Expo 2027, 7–10 January in Bhubaneswar. Discover mining machinery, mineral processing, heavy equipment and B2B opportunities. Register now.",
     images: [
       {
         url: "/image/5th-Odisha-Logo_White.png",
@@ -37,10 +36,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title:
-      "5th Odisha Mining & Infrastructure International Expo 2027",
+    title: "Mining Expo India 2027 | Odisha Mining & Infrastructure Expo",
     description:
-      "07–10 January 2027 · Baramunda Exhibition Ground · Bhubaneswar, Odisha",
+      "Explore Odisha Mining Expo 2027, 7–10 January in Bhubaneswar. Discover mining machinery, mineral processing, heavy equipment and B2B opportunities. Register now.",
     images: ["/image/5th-Odisha-Logo_White.png"],
   },
 };
@@ -70,8 +68,7 @@ const homepageStructuredData = {
 
   primaryImageOfPage: {
     "@type": "ImageObject",
-    url:
-      `${SITE_URL}/image/5th-Odisha-Logo_White.png`,
+    url: `${SITE_URL}/image/5th-Odisha-Logo_White.png`,
   },
 };
 
@@ -89,7 +86,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
-            homepageStructuredData,
+            homepageStructuredData
           ).replace(/</g, "\\u003c"),
         }}
       />

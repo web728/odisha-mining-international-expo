@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import { BottomCTA } from "@/components/shared/BottomCTA";
@@ -11,11 +12,16 @@ const PAGE_URL = `${SITE_URL}/why-odisha`;
 const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
 
-export const metadata: Metadata = {
-  title: "Why Odisha | India's Mineral Powerhouse & Investment Hub",
+const SEO_TITLE =
+  "Mining Industry in Odisha | Minerals & Business Opportunities";
 
-  description:
-    "Discover why Odisha is the undisputed mineral powerhouse of India. Explore vast investment opportunities in mining, metals, and infrastructure at OMIIE 2027.",
+const SEO_DESCRIPTION =
+  "Discover Odisha's mining industry, iron ore, coal, bauxite and chromite resources, industrial infrastructure and opportunities for mining equipment businesses.";
+
+export const metadata: Metadata = {
+  title: SEO_TITLE,
+
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Why Odisha",
@@ -37,11 +43,9 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: PAGE_URL,
 
-    title:
-      "Why Odisha | India's Mineral Powerhouse & Investment Hub",
+    title: SEO_TITLE,
 
-    description:
-      "Explore vast investment opportunities in mining, metals, and infrastructure in Odisha, the mineral hub of India. Join the 5th Odisha Mining & Infrastructure International Expo 2027.",
+    description: SEO_DESCRIPTION,
 
     siteName: EVENT_NAME,
 
@@ -56,11 +60,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title:
-      "Why Odisha | India's Mineral Powerhouse & Investment Hub",
+    title: SEO_TITLE,
 
-    description:
-      "Discover why Odisha is a preferred destination for mining, metals and infrastructure investment and explore opportunities at OMIIE 2027.",
+    description: SEO_DESCRIPTION,
 
     images: ["/image/about-hero-2.png"],
   },
@@ -90,11 +92,9 @@ const jsonLd = {
 
       url: PAGE_URL,
 
-      name:
-        "Why Odisha | 5th Odisha Mining & Infrastructure International Expo 2027",
+      name: SEO_TITLE,
 
-      description:
-        "Discover why Odisha is the undisputed mineral powerhouse of India and a preferred hub for mining, metals, infrastructure and industrial investment.",
+      description: SEO_DESCRIPTION,
 
       inLanguage: "en-IN",
 

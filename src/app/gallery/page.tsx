@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
@@ -12,11 +13,16 @@ const PAGE_URL = `${SITE_URL}/gallery`;
 const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
 
-export const metadata: Metadata = {
-  title: "Gallery | Last Edition Glimpses",
+const SEO_TITLE =
+  "Odisha Mining Expo Gallery | Mining Exhibition Photos & Videos";
 
-  description:
-    "Explore last edition glimpses from the Odisha Mining & Infrastructure International Expo, including live machinery, exhibition activity, business networking and show-floor moments.",
+const SEO_DESCRIPTION =
+  "View photos and videos from previous Odisha Mining Expo editions, featuring mining machinery, equipment displays, exhibitors, live demonstrations and visitors.";
+
+export const metadata: Metadata = {
+  title: SEO_TITLE,
+
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Odisha Mining Expo Gallery",
@@ -37,11 +43,9 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: PAGE_URL,
 
-    title:
-      "Gallery | Last Edition Glimpses from Odisha Mining Expo",
+    title: SEO_TITLE,
 
-    description:
-      "View live machinery, exhibition activity, business networking and show-floor moments from previous editions of the Odisha Mining & Infrastructure International Expo.",
+    description: SEO_DESCRIPTION,
 
     siteName: EVENT_NAME,
 
@@ -56,10 +60,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "Gallery | Odisha Mining Expo",
+    title: SEO_TITLE,
 
-    description:
-      "See highlights from previous editions of the Odisha Mining & Infrastructure International Expo.",
+    description: SEO_DESCRIPTION,
 
     images: ["/image/expo/expo-show-floor-avenue.jpg"],
   },
@@ -113,11 +116,9 @@ const jsonLd = {
 
       url: PAGE_URL,
 
-      name:
-        "Gallery | 5th Odisha Mining & Infrastructure International Expo 2027",
+      name: SEO_TITLE,
 
-      description:
-        "Gallery featuring previous edition moments from the Odisha Mining & Infrastructure International Expo.",
+      description: SEO_DESCRIPTION,
 
       inLanguage: "en-IN",
 

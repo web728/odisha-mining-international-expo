@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import { BottomCTA } from "@/components/shared/BottomCTA";
@@ -10,11 +11,16 @@ const PAGE_URL = `${SITE_URL}/visit`;
 const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
 
-export const metadata: Metadata = {
-  title: "Why Visit | Free Entry for Trade Visitors",
+const SEO_TITLE =
+  "Why Visit Odisha Mining Expo 2027 | Mining Equipment Exhibition";
 
-  description:
-    "Discover why you should visit the 5th Odisha Mining & Infrastructure International Expo 2027. Explore cutting-edge heavy machinery, network with industry leaders, and find new B2B opportunities in Bhubaneswar.",
+const SEO_DESCRIPTION =
+  "Explore mining machinery, mineral processing, earthmoving equipment and industrial solutions at Odisha Mining Expo 2027. Discover products, suppliers and industry connections.";
+
+export const metadata: Metadata = {
+  title: SEO_TITLE,
+
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Visit Odisha Mining Expo",
@@ -35,11 +41,9 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: PAGE_URL,
 
-    title:
-      "Why Visit OMIIE 2027 | Free Trade Visitor Entry",
+    title: SEO_TITLE,
 
-    description:
-      "Join industry leaders and explore the latest in mining, infrastructure, and heavy equipment at OMIIE 2027 in Bhubaneswar, Odisha.",
+    description: SEO_DESCRIPTION,
 
     siteName: EVENT_NAME,
 
@@ -54,10 +58,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "Why Visit OMIIE 2027",
+    title: SEO_TITLE,
 
-    description:
-      "Explore cutting-edge heavy machinery and network with industry leaders. Free entry for trade visitors.",
+    description: SEO_DESCRIPTION,
 
     images: ["/image/about-hero-2.png"],
   },
@@ -87,11 +90,9 @@ const jsonLd = {
 
       url: PAGE_URL,
 
-      name:
-        "Why Visit | 5th Odisha Mining & Infrastructure International Expo 2027",
+      name: SEO_TITLE,
 
-      description:
-        "Discover why you should visit the 5th Odisha Mining & Infrastructure International Expo 2027. Free entry for trade visitors.",
+      description: SEO_DESCRIPTION,
 
       inLanguage: "en-IN",
 

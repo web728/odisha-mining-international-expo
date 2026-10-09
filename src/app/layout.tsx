@@ -1,7 +1,5 @@
-import type {
-  Metadata,
-  Viewport,
-} from "next";
+
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Manrope } from "next/font/google";
 
@@ -23,11 +21,16 @@ const EVENT_SHORT_NAME =
 const ORGANIZER_NAME =
   "Futurex Trade Fair & Events Pvt. Ltd.";
 
-const ORGANIZER_URL =
-  "https://futurextrade.com/";
+const ORGANIZER_URL = "https://futurextrade.com/";
 
 const LOGO_URL =
   `${SITE_URL}/image/5th-Odisha-Logo_White.png`;
+
+const SEO_TITLE =
+  "Mining Expo India 2027 | Odisha Mining & Infrastructure Expo";
+
+const SEO_DESCRIPTION =
+  "Explore Odisha Mining Expo 2027, 7–10 January in Bhubaneswar. Discover mining machinery, mineral processing, heavy equipment and B2B opportunities. Register now.";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -41,13 +44,10 @@ export const metadata: Metadata = {
 
   applicationName: EVENT_NAME,
 
-  title: {
-    default: EVENT_NAME,
-    template: `%s | ${EVENT_NAME}`,
-  },
+  // Default title; individual pages can override it.
+  title: SEO_TITLE,
 
-  description:
-    "India's premier platform for mining, infrastructure, heavy equipment & industrial innovation. 07–10 January 2027, Baramunda Exhibition Ground, Bhubaneswar, Odisha.",
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Odisha Mining Expo",
@@ -67,10 +67,10 @@ export const metadata: Metadata = {
   ],
 
   creator: EVENT_SHORT_NAME,
+
   publisher: ORGANIZER_NAME,
 
-  category:
-    "Mining & Infrastructure Exhibition",
+  category: "Mining & Infrastructure Exhibition",
 
   icons: {
     icon: [
@@ -104,12 +104,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: `${SITE_URL}/`,
-    siteName: EVENT_NAME,
-    title: EVENT_NAME,
 
-    description:
-      "India's premier platform for mining, infrastructure, heavy equipment & industrial innovation. 07–10 January 2027, Bhubaneswar, Odisha.",
+    url: `${SITE_URL}/`,
+
+    siteName: EVENT_NAME,
+
+    title: SEO_TITLE,
+
+    description: SEO_DESCRIPTION,
 
     images: [
       {
@@ -121,10 +123,10 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: EVENT_NAME,
 
-    description:
-      "07–10 January 2027 · Baramunda Exhibition Ground · Bhubaneswar, Odisha",
+    title: SEO_TITLE,
+
+    description: SEO_DESCRIPTION,
 
     images: [
       "/image/5th-Odisha-Logo_White.png",
@@ -198,8 +200,7 @@ const structuredData = {
       address: {
         "@type": "PostalAddress",
 
-        streetAddress:
-          "E-52, 1st Floor, Kalkaji",
+        streetAddress: "E-52, 1st Floor, Kalkaji",
 
         addressLocality: "Delhi",
 
@@ -214,14 +215,11 @@ const structuredData = {
 
           name: "Mr. Namit Gupta",
 
-          telephone:
-            "+91 98108 55697",
+          telephone: "+91 98108 55697",
 
-          email:
-            "namit@futurextrade.com",
+          email: "namit@futurextrade.com",
 
-          contactType:
-            "exhibitor and event enquiries",
+          contactType: "exhibitor and event enquiries",
 
           availableLanguage: [
             "English",
@@ -234,14 +232,11 @@ const structuredData = {
 
           name: "Mr. Soumo Roy",
 
-          telephone:
-            "+91 80105 79828",
+          telephone: "+91 80105 79828",
 
-          email:
-            "soumo@futurextrade.com",
+          email: "soumo@futurextrade.com",
 
-          contactType:
-            "exhibitor and event enquiries",
+          contactType: "exhibitor and event enquiries",
 
           availableLanguage: [
             "English",
@@ -281,42 +276,34 @@ const structuredData = {
 
       isAccessibleForFree: true,
 
-      image: [
-        LOGO_URL,
-      ],
+      image: [LOGO_URL],
 
       location: {
         "@type": "Place",
 
         "@id": `${SITE_URL}/venue#venue`,
 
-        name:
-          "Baramunda Exhibition Ground",
+        name: "Baramunda Exhibition Ground",
 
         address: {
           "@type": "PostalAddress",
 
-          addressLocality:
-            "Bhubaneswar",
+          addressLocality: "Bhubaneswar",
 
-          addressRegion:
-            "Odisha",
+          addressRegion: "Odisha",
 
-          addressCountry:
-            "IN",
+          addressCountry: "IN",
         },
       },
 
       organizer: {
-        "@id":
-          `${SITE_URL}/#organizer`,
+        "@id": `${SITE_URL}/#organizer`,
       },
 
       offers: {
         "@type": "Offer",
 
-        url:
-          `${SITE_URL}/visitor-registration`,
+        url: `${SITE_URL}/visitor-registration`,
 
         price: "0",
 
@@ -325,8 +312,7 @@ const structuredData = {
         availability:
           "https://schema.org/InStock",
 
-        category:
-          "Trade Visitor Registration",
+        category: "Trade Visitor Registration",
       },
 
       sameAs: [
@@ -364,13 +350,6 @@ export default function RootLayout({
         suppressHydrationWarning
         className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
       >
-        <a
-          href="#main-content"
-          className="sr-only z-[9999] bg-white px-4 py-3 text-sm font-bold text-zinc-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
-        >
-          Skip to main content
-        </a>
-
         <InitialLoader />
 
         <Navbar />
@@ -389,13 +368,9 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html:
-              JSON.stringify(
-                structuredData,
-              ).replace(
-                /</g,
-                "\\u003c",
-              ),
+            __html: JSON.stringify(
+              structuredData
+            ).replace(/</g, "\\u003c"),
           }}
         />
       </body>

@@ -16,11 +16,15 @@ const PAGE_URL = `${SITE_URL}/brochure`;
 const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
 
-export const metadata: Metadata = {
-  title: "Download Brochure | OMIIE 2027",
+const SEO_TITLE =
+  "Odisha Mining Expo 2027 Brochure PDF | Download Event Details";
 
-  description:
-    "Download the brochure for the 5th Odisha Mining & Infrastructure International Expo 2027. Explore exhibitor profiles, visitor profiles, industry sectors, opportunities and participation information.",
+const SEO_DESCRIPTION =
+  "Download the Odisha Mining Expo 2027 brochure for exhibition details, industry sectors, exhibitor information, participation opportunities and venue information.";
+
+export const metadata: Metadata = {
+  title: SEO_TITLE,
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Odisha Mining Expo Brochure",
@@ -40,15 +44,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: PAGE_URL,
-
-    title:
-      "Download Brochure | 5th Odisha Mining & Infrastructure International Expo 2027",
-
-    description:
-      "Access the OMIIE 2027 brochure with exhibition overview, exhibitor and visitor profiles, industry sectors and participation information.",
-
+    title: SEO_TITLE,
+    description: SEO_DESCRIPTION,
     siteName: EVENT_NAME,
-
     images: [
       {
         url: "/image/about-hero-2.png",
@@ -59,19 +57,14 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-
-    title: "Download Brochure | OMIIE 2027",
-
-    description:
-      "Get the official OMIIE 2027 brochure covering the exhibition, industry sectors, exhibitor profiles and participation information.",
-
+    title: SEO_TITLE,
+    description: SEO_DESCRIPTION,
     images: ["/image/about-hero-2.png"],
   },
 
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
@@ -91,45 +84,30 @@ const highlights = [
 
 const jsonLd = {
   "@context": "https://schema.org",
-
   "@graph": [
     {
       "@type": "WebPage",
-
       "@id": `${PAGE_URL}#webpage`,
-
       url: PAGE_URL,
-
-      name:
-        "Download Brochure | 5th Odisha Mining & Infrastructure International Expo 2027",
-
-      description:
-        "Download the brochure for the 5th Odisha Mining & Infrastructure International Expo 2027.",
-
+      name: SEO_TITLE,
+      description: SEO_DESCRIPTION,
       inLanguage: "en-IN",
-
       isPartOf: {
         "@id": `${SITE_URL}/#website`,
       },
-
       about: {
         "@id": `${SITE_URL}/#event`,
       },
-
       mainEntity: {
         "@id": `${SITE_URL}/#event`,
       },
-
       breadcrumb: {
         "@id": `${PAGE_URL}#breadcrumb`,
       },
     },
-
     {
       "@type": "BreadcrumbList",
-
       "@id": `${PAGE_URL}#breadcrumb`,
-
       itemListElement: [
         {
           "@type": "ListItem",
@@ -137,7 +115,6 @@ const jsonLd = {
           name: "Home",
           item: `${SITE_URL}/`,
         },
-
         {
           "@type": "ListItem",
           position: 2,
@@ -166,7 +143,6 @@ export default function Page() {
                 aria-hidden="true"
                 className="h-[2px] w-10 bg-brand"
               />
-
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
                 Brochure
               </p>
@@ -178,16 +154,13 @@ export default function Page() {
             >
               Download the
               <span className="text-brand">
-                {" "}
-                Show Brochure.
+                {" "}Show Brochure.
               </span>
             </h1>
 
             <p className="mt-5 max-w-3xl text-sm leading-7 text-white/70 sm:text-base">
               Odisha Mining & Infrastructure International Expo 2027 —{" "}
-              <time dateTime="2027-01-07">
-                07
-              </time>
+              <time dateTime="2027-01-07">07</time>
               {"–"}
               <time dateTime="2027-01-10">
                 10 January 2027
@@ -211,7 +184,6 @@ export default function Page() {
                 aria-hidden="true"
                 className="h-[2px] w-10 bg-brand"
               />
-
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
                 OMIIE 2027
               </p>
@@ -223,8 +195,7 @@ export default function Page() {
             >
               Everything you need to
               <span className="text-brand">
-                {" "}
-                plan your participation.
+                {" "}plan your participation.
               </span>
             </h2>
 
@@ -263,9 +234,7 @@ export default function Page() {
                 label="Event Dates"
                 value={
                   <>
-                    <time dateTime="2027-01-07">
-                      07
-                    </time>
+                    <time dateTime="2027-01-07">07</time>
                     {"–"}
                     <time dateTime="2027-01-10">
                       10 January 2027
@@ -343,7 +312,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(jsonLd).replace(
             /</g,
-            "\\u003c",
+            "\u003c",
           ),
         }}
       />
@@ -376,7 +345,6 @@ function Info({
         <p className="text-[9px] font-extrabold uppercase tracking-[.14em] text-zinc-500">
           {label}
         </p>
-
         <div className="mt-1 text-sm font-bold text-zinc-950">
           {value}
         </div>
@@ -398,12 +366,10 @@ function HeroGraphic() {
         points="180,0 760,0 760,120 500,255"
         fill="#F9B900"
       />
-
       <polygon
         points="500,255 760,120 760,235 535,330"
         fill="#8F6400"
       />
-
       <path
         d="M500 255 760 120"
         stroke="#FFD84A"

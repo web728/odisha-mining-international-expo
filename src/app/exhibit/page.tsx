@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import { BottomCTA } from "@/components/shared/BottomCTA";
@@ -10,11 +11,16 @@ const PAGE_URL = `${SITE_URL}/exhibit`;
 const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
 
-export const metadata: Metadata = {
-  title: "Why Exhibit | Showcase Your Mining & Infrastructure Solutions",
+const SEO_TITLE =
+  "Why Exhibit at Odisha Mining Expo 2027 | Mining Trade Show";
 
-  description:
-    "Showcase your heavy machinery, mining equipment, and infrastructure technologies at OMIIE 2027. Connect with key decision-makers, industry leaders, and expand your B2B network in Odisha.",
+const SEO_DESCRIPTION =
+  "Showcase mining machinery, heavy equipment and industrial technology at Odisha Mining Expo 2027. Connect with mine operators, contractors, distributors and buyers.";
+
+export const metadata: Metadata = {
+  title: SEO_TITLE,
+
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Exhibit at Odisha Mining Expo",
@@ -35,11 +41,9 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: PAGE_URL,
 
-    title:
-      "Why Exhibit at OMIIE 2027 | B2B Mining & Infrastructure Expo",
+    title: SEO_TITLE,
 
-    description:
-      "Position your brand in front of industry leaders. Showcase your latest mining machinery and infrastructure solutions at Odisha's premier B2B expo.",
+    description: SEO_DESCRIPTION,
 
     siteName: EVENT_NAME,
 
@@ -54,10 +58,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "Why Exhibit at OMIIE 2027",
+    title: SEO_TITLE,
 
-    description:
-      "Connect with key decision-makers and showcase your heavy machinery and mining technologies in Bhubaneswar, Odisha.",
+    description: SEO_DESCRIPTION,
 
     images: ["/image/about-hero-2.png"],
   },
@@ -87,11 +90,9 @@ const jsonLd = {
 
       url: PAGE_URL,
 
-      name:
-        "Why Exhibit | 5th Odisha Mining & Infrastructure International Expo 2027",
+      name: SEO_TITLE,
 
-      description:
-        "Showcase your heavy machinery and mining equipment at OMIIE 2027 and expand your B2B network in Odisha.",
+      description: SEO_DESCRIPTION,
 
       inLanguage: "en-IN",
 

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -80,7 +81,7 @@ export function AboutExpo() {
             </p>
           </motion.div>
 
-          {/* Section heading */}
+          {/* Section heading - H2 preserved */}
           <motion.h2
             id="about-expo-heading"
             variants={itemVariants}
@@ -97,7 +98,7 @@ export function AboutExpo() {
             variants={itemVariants}
             className="mt-6 max-w-xl text-[15px] leading-7 text-zinc-600"
           >
-            Odisha Mining & Infrastructure International Expo has emerged as
+            Odisha Mining &amp; Infrastructure International Expo has emerged as
             a leading B2B platform connecting mining leaders, technology
             providers, equipment manufacturers, policymakers, investors,
             infrastructure players and industrial stakeholders.

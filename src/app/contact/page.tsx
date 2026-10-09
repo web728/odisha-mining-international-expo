@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import {
@@ -22,11 +23,16 @@ const EVENT_NAME =
 const ORGANIZER_NAME =
   "Futurex Trade Fair & Events Pvt. Ltd.";
 
-export const metadata: Metadata = {
-  title: "Contact | Odisha Mining Expo 2027",
+const SEO_TITLE =
+  "Contact Odisha Mining Expo 2027 | Exhibitor & Visitor Enquiries";
 
-  description:
-    "Contact the team for the 5th Odisha Mining & Infrastructure International Expo 2027 for exhibitor bookings, visitor enquiries, partnerships, media and event information.",
+const SEO_DESCRIPTION =
+  "Contact the Odisha Mining Expo 2027 team for exhibitor enquiries, stand bookings, visitor registration, sponsorship and event information in Bhubaneswar.";
+
+export const metadata: Metadata = {
+  title: SEO_TITLE,
+
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "Odisha Mining Expo Contact",
@@ -47,11 +53,9 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: PAGE_URL,
 
-    title:
-      "Contact | 5th Odisha Mining & Infrastructure International Expo 2027",
+    title: SEO_TITLE,
 
-    description:
-      "Contact the exhibition team for stand bookings, visitor registration, partnerships, media and general enquiries.",
+    description: SEO_DESCRIPTION,
 
     siteName: EVENT_NAME,
 
@@ -66,10 +70,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "Contact | OMIIE 2027",
+    title: SEO_TITLE,
 
-    description:
-      "Contact the Odisha Mining Expo team for exhibitor, visitor, partnership and event enquiries.",
+    description: SEO_DESCRIPTION,
 
     images: ["/image/about-hero-2.png"],
   },
@@ -113,11 +116,9 @@ const jsonLd = {
 
       url: PAGE_URL,
 
-      name:
-        "Contact | 5th Odisha Mining & Infrastructure International Expo 2027",
+      name: SEO_TITLE,
 
-      description:
-        "Contact the exhibition team for exhibitor bookings, visitor enquiries, partnerships, media and general event information.",
+      description: SEO_DESCRIPTION,
 
       inLanguage: "en-IN",
 
@@ -140,6 +141,7 @@ const jsonLd = {
 
     {
       "@type": "Organization",
+
       "@id": `${PAGE_URL}#organizer`,
 
       name: ORGANIZER_NAME,
@@ -180,6 +182,7 @@ const jsonLd = {
 
     {
       "@type": "BreadcrumbList",
+
       "@id": `${PAGE_URL}#breadcrumb`,
 
       itemListElement: [

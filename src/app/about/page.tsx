@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import { BottomCTA } from "@/components/shared/BottomCTA";
@@ -13,10 +14,11 @@ const EVENT_NAME =
   "5th Odisha Mining & Infrastructure International Expo 2027";
 
 export const metadata: Metadata = {
-  title: "About the Expo",
+  title:
+    "About Odisha Mining Expo 2027 | International Mining Exhibition",
 
   description:
-    "About the 5th Odisha Mining & Infrastructure International Expo 2027 — connecting mining leaders, technology providers, manufacturers, policymakers and infrastructure players in Bhubaneswar, Odisha.",
+    "Learn about Odisha Mining & Infrastructure International Expo 2027, a B2B exhibition connecting mining equipment manufacturers, technology providers and industry buyers.",
 
   alternates: {
     canonical: "/about",
@@ -28,18 +30,17 @@ export const metadata: Metadata = {
     url: PAGE_URL,
 
     title:
-      "About the Expo | 5th Odisha Mining & Infrastructure International Expo 2027",
+      "About Odisha Mining Expo 2027 | International Mining Exhibition",
 
     description:
-      "Learn about the 5th Odisha Mining & Infrastructure International Expo 2027, a B2B platform connecting mining, infrastructure, equipment, technology and industrial stakeholders.",
+      "Learn about Odisha Mining & Infrastructure International Expo 2027, a B2B exhibition connecting mining equipment manufacturers, technology providers and industry buyers.",
 
-    siteName:
-      "5th Odisha Mining & Infrastructure International Expo 2027",
+    siteName: EVENT_NAME,
 
     images: [
       {
         url: "/image/about-hero-2.png",
-        alt: "5th Odisha Mining & Infrastructure International Expo 2027",
+        alt: EVENT_NAME,
       },
     ],
   },
@@ -48,10 +49,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
 
     title:
-      "About the Expo | 5th Odisha Mining & Infrastructure International Expo 2027",
+      "About Odisha Mining Expo 2027 | International Mining Exhibition",
 
     description:
-      "Learn about the Odisha Mining & Infrastructure International Expo 2027 and its role in connecting mining, equipment, infrastructure and industrial stakeholders.",
+      "Learn about Odisha Mining & Infrastructure International Expo 2027, a B2B exhibition connecting mining equipment manufacturers, technology providers and industry buyers.",
 
     images: ["/image/about-hero-2.png"],
   },
