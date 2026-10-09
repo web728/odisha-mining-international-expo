@@ -205,7 +205,8 @@ export async function POST(req: Request) {
         consent,
 
         source: "website",
-        event: "OMIIE 2027",
+        event: "Odisha Mining & Infrastructure
+International Expo 2027",
 
         sheetSynced: false,
         emailSent: false,

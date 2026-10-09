@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "India Mineral Powerhouse",
     "Mining Investment Odisha",
     "Odisha Mining Industry",
-    "OMIIE 2027 Location",
+    "Odisha Mining & Infrastructure International Expo 2027 Location",
     "Bhubaneswar Mining Hub",
     "Infrastructure Investment India",
   ],

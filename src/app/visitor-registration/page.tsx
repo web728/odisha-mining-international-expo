@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 
     "Visitor Registration Odisha Mining Expo",
 
-    "OMIIE 2027 Visitor Registration",
+    "Odisha Mining & Infrastructure International Expo 2027 Visitor Registration",
 
     "Free Mining Expo Registration",
 

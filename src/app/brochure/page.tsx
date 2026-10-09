@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
   keywords: [
     "Odisha Mining Expo Brochure",
-    "OMIIE 2027 Brochure",
+    "Odisha Mining & Infrastructure International Expo 2027 Brochure",
     "Mining Expo Brochure India",
     "Odisha Mining Exhibition Brochure",
     "Mining Infrastructure Expo Brochure",
@@ -185,7 +185,8 @@ export default function Page() {
                 className="h-[2px] w-10 bg-brand"
               />
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
-                OMIIE 2027
+                Odisha Mining & Infrastructure
+International Expo 2027
               </p>
             </div>
 

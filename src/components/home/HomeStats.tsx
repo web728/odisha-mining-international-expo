@@ -1,4 +1,6 @@
+"use client";
 
+import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/animations/Reveal";
 import { AnimatedNumber } from "./AnimatedNumber";
@@ -12,24 +14,39 @@ export function HomeStats() {
         aria-label="Expo highlights"
         className="overflow-hidden bg-brand text-brand-black"
       >
-        <div
-          aria-hidden="true"
-          className="flex min-w-max animate-[ticker_34s_linear_infinite] items-center py-3.5"
+        <motion.div
+          className="flex w-max items-center py-3.5"
+          animate={{ x: "-50%" }}
+          transition={{
+            duration: 25,
+            ease: "linear",
+            repeat: Infinity,
+            repeatType: "loop",
+          }}
+          style={{ willChange: "transform" }}
         >
-          {[...highlights, ...highlights].map((item, i) => (
+          {[0, 1].map((group) => (
             <div
-              key={`${item}-${i}`}
-              className="flex items-center whitespace-nowrap px-6 text-[10px] font-extrabold uppercase tracking-[.1em] sm:text-[11px]"
+              key={group}
+              aria-hidden={group === 1}
+              className="flex shrink-0 items-center"
             >
-              {item}
+              {highlights.map((item, i) => (
+                <div
+                  key={`${group}-${item}-${i}`}
+                  className="flex shrink-0 items-center whitespace-nowrap px-6 text-[10px] font-extrabold uppercase tracking-[.1em] sm:text-[11px]"
+                >
+                  {item}
 
-              <span
-                aria-hidden="true"
-                className="ml-6 h-3.5 w-px rotate-[22deg] bg-black/35"
-              />
+                  <span
+                    aria-hidden="true"
+                    className="ml-6 h-3.5 w-px rotate-[22deg] bg-black/35"
+                  />
+                </div>
+              ))}
             </div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Event scale / stats */}
@@ -44,10 +61,7 @@ export function HomeStats() {
             <div className="grid gap-7 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
               <div>
                 <div className="mb-4 flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className="h-[2px] w-10 bg-brand"
-                  />
+                  <span aria-hidden="true" className="h-[2px] w-10 bg-brand" />
 
                   <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
                     Event Scale
@@ -59,16 +73,15 @@ export function HomeStats() {
                   className="max-w-3xl text-[clamp(2rem,3.2vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
                 >
                   A platform built for scale,
-                  <span className="text-brand"> business </span>
-                  & innovation
+                  <span className="text-brand"> business </span>& innovation
                 </h2>
               </div>
 
               <div className="max-w-xl lg:justify-self-end">
                 <p className="text-sm leading-7 text-zinc-700">
-                  OMIIE 2027 brings together industry leaders, decision-makers,
-                  innovators and buyers from across India and global mining
-                  ecosystems.
+                  Odisha Mining & Infrastructure International Expo 2027 brings
+                  together industry leaders, decision-makers, innovators and
+                  buyers from across India and global mining ecosystems.
                 </p>
 
                 <div
@@ -128,11 +141,7 @@ function IndustrialLines() {
     >
       <path d="M80 250 290 40H600" stroke="#E5E5E5" />
       <path d="M150 300 360 90H600" stroke="#E5E5E5" />
-      <path
-        d="M220 300 430 90"
-        stroke="#F9B900"
-        strokeOpacity=".8"
-      />
+      <path d="M220 300 430 90" stroke="#F9B900" strokeOpacity=".8" />
       <circle cx="290" cy="40" r="4" fill="#F9B900" />
     </svg>
   );

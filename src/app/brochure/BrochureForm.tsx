@@ -1,15 +1,8 @@
 "use client";
 
-import {
-  FormEvent,
-  useRef,
-  useState,
-} from "react";
+import { FormEvent, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import {
-  Download,
-  Loader2,
-} from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 
 import { FormStatus } from "@/components/forms/FormStatus";
 import { TextField } from "@/components/forms/fields";
@@ -20,30 +13,23 @@ type Status = {
 };
 
 export function BrochureForm() {
-  const [status, setStatus] =
-    useState<Status>({
-      type: "idle",
-    });
+  const [status, setStatus] = useState<Status>({
+    type: "idle",
+  });
 
-  const [captchaToken, setCaptchaToken] =
-    useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const captchaRef =
-    useRef<ReCAPTCHA>(null);
+  const captchaRef = useRef<ReCAPTCHA>(null);
 
-  const siteKey =
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-  async function onSubmit(
-    e: FormEvent<HTMLFormElement>,
-  ) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!siteKey) {
       setStatus({
         type: "error",
-        message:
-          "reCAPTCHA configuration is missing.",
+        message: "reCAPTCHA configuration is missing.",
       });
 
       return;
@@ -52,8 +38,7 @@ export function BrochureForm() {
     if (!captchaToken) {
       setStatus({
         type: "error",
-        message:
-          "Please complete the reCAPTCHA verification.",
+        message: "Please complete the reCAPTCHA verification.",
       });
 
       return;
@@ -70,8 +55,7 @@ export function BrochureForm() {
 
       captchaToken,
 
-      company_website:
-        formData.get("company_website"),
+      company_website: formData.get("company_website"),
     };
 
     setStatus({
@@ -79,36 +63,26 @@ export function BrochureForm() {
     });
 
     try {
-      const response = await fetch(
-        "/api/brochure",
-        {
-          method: "POST",
+      const response = await fetch("/api/brochure", {
+        method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body:
-            JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+
+        body: JSON.stringify(payload),
+      });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          result.message ||
-            "Submission failed.",
-        );
+        throw new Error(result.message || "Submission failed.");
       }
 
       setStatus({
         type: "success",
 
-        message:
-          result.message ||
-          "Your brochure is ready.",
+        message: result.message || "Your brochure is ready.",
       });
 
       form.reset();
@@ -120,18 +94,13 @@ export function BrochureForm() {
         typeof result.downloadUrl === "string" &&
         result.downloadUrl.length > 0
       ) {
-        window.location.assign(
-          result.downloadUrl,
-        );
+        window.location.assign(result.downloadUrl);
       }
     } catch (error) {
       setStatus({
         type: "error",
 
-        message:
-          error instanceof Error
-            ? error.message
-            : "Submission failed.",
+        message: error instanceof Error ? error.message : "Submission failed.",
       });
 
       setCaptchaToken(null);
@@ -146,20 +115,13 @@ export function BrochureForm() {
       aria-describedby="brochure-form-status brochure-form-consent"
       className="grid gap-5"
     >
-      <h3
-        id="brochure-download-form-heading"
-        className="sr-only"
-      >
-        Download the OMIIE 2027 brochure
+      <h3 id="brochure-download-form-heading" className="sr-only">
+        Download the Odisha Mining & Infrastructure International Expo 2027
+        brochure
       </h3>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <TextField
-          label="Name"
-          name="name"
-          required
-          autoComplete="name"
-        />
+        <TextField label="Name" name="name" required autoComplete="name" />
 
         <TextField
           label="Email"
@@ -169,11 +131,7 @@ export function BrochureForm() {
           autoComplete="email"
         />
 
-        <TextField
-          label="Company"
-          name="company"
-          autoComplete="organization"
-        />
+        <TextField label="Company" name="company" autoComplete="organization" />
 
         <TextField
           label="Phone"
@@ -185,10 +143,7 @@ export function BrochureForm() {
       </div>
 
       {/* Honeypot */}
-      <div
-        className="absolute -left-[9999px]"
-        aria-hidden="true"
-      >
+      <div className="absolute -left-[9999px]" aria-hidden="true">
         <TextField
           label="Website"
           name="company_website"
@@ -201,10 +156,9 @@ export function BrochureForm() {
         id="brochure-form-consent"
         className="text-[11px] leading-5 text-zinc-500"
       >
-        By submitting, you agree to be contacted by
-        Futurex Trade Fair & Events Pvt. Ltd.
-        regarding the Odisha Mining & Infrastructure
-        International Expo.
+        By submitting, you agree to be contacted by Futurex Trade Fair & Events
+        Pvt. Ltd. regarding the Odisha Mining & Infrastructure International
+        Expo.
       </p>
 
       {/* reCAPTCHA */}
@@ -214,12 +168,8 @@ export function BrochureForm() {
             ref={captchaRef}
             sitekey={siteKey}
             onChange={setCaptchaToken}
-            onExpired={() =>
-              setCaptchaToken(null)
-            }
-            onErrored={() =>
-              setCaptchaToken(null)
-            }
+            onExpired={() => setCaptchaToken(null)}
+            onErrored={() => setCaptchaToken(null)}
           />
         ) : (
           <div
@@ -231,42 +181,24 @@ export function BrochureForm() {
         )}
       </div>
 
-      <div
-        id="brochure-form-status"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <FormStatus
-          status={status}
-        />
+      <div id="brochure-form-status" aria-live="polite" aria-atomic="true">
+        <FormStatus status={status} />
       </div>
 
       <button
         type="submit"
-        disabled={
-          status.type === "loading"
-        }
-        aria-busy={
-          status.type === "loading"
-        }
+        disabled={status.type === "loading"}
+        aria-busy={status.type === "loading"}
         className="group inline-flex min-h-12 w-full items-center justify-center gap-3 border border-brand-black bg-brand-black px-6 text-[11px] font-extrabold uppercase tracking-[.09em] text-white transition duration-300 hover:border-brand hover:bg-brand hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
       >
         {status.type === "loading" ? (
           <>
-            <Loader2
-              aria-hidden="true"
-              className="size-4 animate-spin"
-            />
-
+            <Loader2 aria-hidden="true" className="size-4 animate-spin" />
             Preparing Brochure...
           </>
         ) : (
           <>
-            <Download
-              aria-hidden="true"
-              className="size-4"
-            />
-
+            <Download aria-hidden="true" className="size-4" />
             Download Brochure
           </>
         )}

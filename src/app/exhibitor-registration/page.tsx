@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   keywords: [
     "Exhibitor Registration Odisha Mining Expo",
     "Book Exhibition Stand",
-    "OMIIE 2027 Exhibitor Form",
+    "Odisha Mining & Infrastructure International Expo 2027 Exhibitor Form",
     "Mining Expo Stand Booking",
     "B2B Mining Exhibition Registration",
     "Heavy Machinery Trade Show Stand",
@@ -143,7 +143,8 @@ export default function Page() {
         <HeroGraphic />
         <Container className="relative z-10 flex min-h-[380px] items-end py-14 sm:min-h-[420px] lg:py-16">
           <div className="max-w-4xl">
-            <Eyebrow dark>Exhibit · OMIIE 2027</Eyebrow>
+            <Eyebrow dark>Exhibit · Odisha Mining & Infrastructure
+International Expo 2027</Eyebrow>
             <h1
               id="exhibitor-registration-heading"
               className="mt-4 text-[clamp(2.7rem,5vw,5rem)] font-black leading-[.96] tracking-[-.055em]"

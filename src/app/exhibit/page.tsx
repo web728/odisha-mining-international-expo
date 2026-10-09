@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "B2B Mining Tradeshow",
     "Showcase Heavy Machinery",
     "Infrastructure Expo Exhibitors",
-    "OMIIE 2027 Exhibitor Profile",
+    "Odisha Mining & Infrastructure International Expo 2027 Exhibitor Profile",
     "Mining Business Opportunities Odisha",
   ],
 

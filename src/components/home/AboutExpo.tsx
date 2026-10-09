@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -88,9 +87,7 @@ export function AboutExpo() {
             className="max-w-xl text-[clamp(2rem,3.4vw,3.5rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
           >
             The industry platform driving{" "}
-            <span className="text-brand">
-              mining innovation
-            </span>
+            <span className="text-brand">mining innovation</span>
           </motion.h2>
 
           {/* Paragraph 1 */}
@@ -216,13 +213,10 @@ export function AboutExpo() {
               }}
               className="absolute left-5 top-5 flex items-center gap-2"
             >
-              <span
-                aria-hidden="true"
-                className="size-2 bg-brand"
-              />
+              <span aria-hidden="true" className="size-2 bg-brand" />
 
               <span className="text-[9px] font-extrabold uppercase tracking-[.16em] text-white">
-                OMIIE 2027
+                Odisha Mining & Infrastructure International Expo 2027
               </span>
             </motion.div>
 

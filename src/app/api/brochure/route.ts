@@ -148,7 +148,8 @@ export async function POST(
           "Brochure Download",
 
         event:
-          "OMIIE 2027",
+          "Odisha Mining & Infrastructure
+International Expo 2027",
 
         sheetSynced: false,
         emailSent: false,

@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -114,7 +113,7 @@ export function HomeHero() {
           animate="visible"
           className="w-full max-w-[850px]"
         >
-          {/* Eyebrow */}
+          {/* Small top label */}
           <motion.div
             variants={fadeUpVariants}
             className="flex items-center gap-2.5"
@@ -133,31 +132,26 @@ export function HomeHero() {
               <span className="absolute -right-1 top-1/2 size-1 -translate-y-1/2 rotate-45 bg-[#F9B900]" />
             </motion.span>
 
-            <p className="text-[8.5px] font-extrabold uppercase tracking-[0.22em] text-[#F9B900] sm:text-[9.5px]">
-              5th Edition · OMIIE 2027
+            <p className="text-[8.5px] font-semibold normal-case tracking-[0.08em] text-[#F9B900] sm:text-[9.5px]">
+              5th Edition · Odisha Mining & Infrastructure International Expo
+              2027
             </p>
           </motion.div>
 
-          {/* Primary SEO H1 - One H1 in HomeHero */}
+          {/* Main heading - Smooth sentence case */}
           <h1
             id="home-hero-heading"
-            className="mt-3.5 max-w-[800px] text-[clamp(1.8rem,3.8vw,3.4rem)] font-black uppercase leading-[0.98] tracking-[-0.03em] text-white"
+            className="mt-3.5 max-w-[800px] text-[clamp(1.8rem,3.8vw,3.4rem)] font-semibold normal-case leading-[1.12] tracking-[-0.025em] text-white"
           >
             <span className="block overflow-hidden pb-1">
-              <motion.span
-                variants={textRevealVariants}
-                className="block"
-              >
-                Odisha Mining &amp;
+              <motion.span variants={textRevealVariants} className="block">
+                Odisha mining &amp;
               </motion.span>
             </span>
 
             <span className="block overflow-hidden pb-1">
-              <motion.span
-                variants={textRevealVariants}
-                className="block"
-              >
-                Infrastructure
+              <motion.span variants={textRevealVariants} className="block">
+                infrastructure
               </motion.span>
             </span>
 
@@ -166,40 +160,38 @@ export function HomeHero() {
                 variants={textRevealVariants}
                 className="block bg-gradient-to-r from-[#FFD65A] via-[#F9B900] to-[#C98E00] bg-clip-text text-transparent"
               >
-                International Expo 2027
+                international expo 2027
               </motion.span>
             </span>
           </h1>
 
-          {/* SEO Supporting Text - Directly Below H1 */}
+          {/* Supporting heading */}
           <motion.p
             variants={fadeUpVariants}
-            className="mt-4 max-w-[750px] text-[13px] font-semibold leading-relaxed text-white/85 sm:text-[16px]"
+            className="mt-4 max-w-[750px] text-[13px] font-medium leading-relaxed text-white/85 sm:text-[16px]"
           >
-            Mining Machinery, Equipment &amp; Infrastructure
-            Exhibition in Bhubaneswar, India
+            Mining machinery, equipment &amp; infrastructure exhibition in
+            Bhubaneswar, India
           </motion.p>
 
-          {/* Existing Description */}
+          {/* Description */}
           <motion.p
             variants={fadeUpVariants}
             className="mt-3 max-w-[600px] text-[12px] leading-relaxed text-white/60 sm:text-[14px]"
           >
-            Odisha&apos;s focused business across logistics,
-            transportation, infrastructure, construction,
-            safety, sustainability, mining machinery,
-            mineral processing, and heavy engineering
-            solutions.
+            Odisha&apos;s focused business across logistics, transportation,
+            infrastructure, construction, safety, sustainability, mining
+            machinery, mineral processing, and heavy engineering solutions.
           </motion.p>
 
-          {/* Event Information */}
+          {/* Event information */}
           <div
             aria-label="Event details"
             className="mt-5 flex max-w-[750px] flex-wrap gap-x-5 gap-y-2.5"
           >
             <motion.div
               variants={fadeUpVariants}
-              className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+              className="flex items-center gap-2 text-[9px] font-medium normal-case tracking-[0.02em] text-white/70 sm:text-[10px]"
             >
               <CalendarDays
                 aria-hidden="true"
@@ -216,7 +208,7 @@ export function HomeHero() {
 
             <motion.div
               variants={fadeUpVariants}
-              className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+              className="flex items-center gap-2 text-[9px] font-medium normal-case tracking-[0.02em] text-white/70 sm:text-[10px]"
             >
               <MapPin
                 aria-hidden="true"
@@ -230,7 +222,7 @@ export function HomeHero() {
 
             <motion.div
               variants={fadeUpVariants}
-              className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.08em] text-white/70 sm:text-[10px]"
+              className="flex items-center gap-2 text-[9px] font-medium normal-case tracking-[0.02em] text-white/70 sm:text-[10px]"
             >
               <Ticket
                 aria-hidden="true"
@@ -241,7 +233,7 @@ export function HomeHero() {
             </motion.div>
           </div>
 
-          {/* Calls to Action */}
+          {/* Action buttons */}
           <motion.div
             variants={fadeUpVariants}
             className="mt-6 flex flex-wrap gap-2.5"
@@ -249,11 +241,10 @@ export function HomeHero() {
             <Link
               href="/exhibitor-registration"
               aria-label="Book your stand for Odisha Mining Expo 2027"
-              className="group relative inline-flex min-h-11 items-center justify-center gap-2.5 overflow-hidden bg-[#F9B900] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-[#050505]! transition-all duration-300 hover:bg-[#FFD65A]"
+              className="group relative inline-flex min-h-11 items-center justify-center gap-2.5 overflow-hidden bg-[#F9B900] px-6 text-[9.5px] font-semibold normal-case tracking-[0.02em] text-[#050505]! transition-all duration-300 hover:bg-[#FFD65A]"
             >
               <span className="relative z-10 flex items-center gap-2.5">
-                Book Your Stand
-
+                Book your stand
                 <ArrowRight
                   aria-hidden="true"
                   className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
@@ -269,10 +260,9 @@ export function HomeHero() {
             <Link
               href="/brochure"
               aria-label="View Odisha Mining Expo 2027 brochure"
-              className="group inline-flex min-h-11 items-center justify-center gap-2.5 border border-white/15 bg-white/[0.02] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition-all duration-300 hover:border-[#F9B900] hover:bg-[#F9B900]/10 hover:text-[#F9B900]"
+              className="group inline-flex min-h-11 items-center justify-center gap-2.5 border border-white/15 bg-white/[0.02] px-6 text-[9.5px] font-semibold normal-case tracking-[0.02em] text-white backdrop-blur-sm transition-all duration-300 hover:border-[#F9B900] hover:bg-[#F9B900]/10 hover:text-[#F9B900]"
             >
               Brochure
-
               <ArrowUpRight
                 aria-hidden="true"
                 className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -284,10 +274,9 @@ export function HomeHero() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Add Odisha Mining Expo 2027 to Google Calendar"
-              className="group hidden min-h-11 items-center justify-center gap-2.5 border border-white/15 bg-white/[0.02] px-6 text-[9.5px] font-extrabold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition-all duration-300 hover:border-[#F9B900] hover:bg-[#F9B900]/10 hover:text-[#F9B900] sm:inline-flex"
+              className="group hidden min-h-11 items-center justify-center gap-2.5 border border-white/15 bg-white/[0.02] px-6 text-[9.5px] font-semibold normal-case tracking-[0.02em] text-white backdrop-blur-sm transition-all duration-300 hover:border-[#F9B900] hover:bg-[#F9B900]/10 hover:text-[#F9B900] sm:inline-flex"
             >
-              Add to Calendar
-
+              Add to calendar
               <CalendarDays
                 aria-hidden="true"
                 className="size-3.5 transition-transform duration-300 group-hover:rotate-6"
@@ -350,51 +339,21 @@ function HeroGraphic() {
         }}
       >
         <defs>
-          <linearGradient
-            id="miningGold"
-            x1="0"
-            y1="0"
-            x2="1"
-            y2="1"
-          >
+          <linearGradient id="miningGold" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#FFD21A" />
             <stop offset="48%" stopColor="#F4B600" />
             <stop offset="100%" stopColor="#B97900" />
           </linearGradient>
 
-          <linearGradient
-            id="miningEarth"
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="1"
-          >
+          <linearGradient id="miningEarth" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#9B6B00" />
             <stop offset="100%" stopColor="#493100" />
           </linearGradient>
 
-          <linearGradient
-            id="miningFade"
-            x1="0"
-            y1="0"
-            x2="1"
-            y2="0"
-          >
-            <stop
-              offset="0%"
-              stopColor="#0B0B0B"
-              stopOpacity="0"
-            />
-            <stop
-              offset="70%"
-              stopColor="#0B0B0B"
-              stopOpacity="0.08"
-            />
-            <stop
-              offset="100%"
-              stopColor="#0B0B0B"
-              stopOpacity="0.75"
-            />
+          <linearGradient id="miningFade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0B0B0B" stopOpacity="0" />
+            <stop offset="70%" stopColor="#0B0B0B" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#0B0B0B" stopOpacity="0.75" />
           </linearGradient>
 
           <pattern
@@ -413,20 +372,14 @@ function HeroGraphic() {
           </pattern>
         </defs>
 
-        <polygon
-          points="220,0 650,0 650,155 430,275"
-          fill="url(#miningGold)"
-        />
+        <polygon points="220,0 650,0 650,155 430,275" fill="url(#miningGold)" />
 
         <polygon
           points="430,275 650,155 650,315 455,425"
           fill="url(#miningEarth)"
         />
 
-        <polygon
-          points="220,0 430,275 390,298 165,0"
-          fill="#E5A900"
-        />
+        <polygon points="220,0 430,275 390,298 165,0" fill="#E5A900" />
 
         <polygon
           points="220,0 430,275 414,284 195,0"
@@ -434,10 +387,7 @@ function HeroGraphic() {
           opacity="0.88"
         />
 
-        <polygon
-          points="455,425 650,315 650,620 540,620"
-          fill="#111111"
-        />
+        <polygon points="455,425 650,315 650,620 540,620" fill="#111111" />
 
         <path
           d="M455 425 L650 315"
@@ -487,19 +437,9 @@ function HeroGraphic() {
           strokeOpacity="0.2"
         />
 
-        <rect
-          x="400"
-          y="0"
-          width="250"
-          height="620"
-          fill="url(#miningGrid)"
-        />
+        <rect x="400" y="0" width="250" height="620" fill="url(#miningGrid)" />
 
-        <rect
-          width="650"
-          height="620"
-          fill="url(#miningFade)"
-        />
+        <rect width="650" height="620" fill="url(#miningFade)" />
       </motion.svg>
     </motion.div>
   );

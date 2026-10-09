@@ -15,7 +15,7 @@ export function InitialLoader() {
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     // Check if user has already seen the loader in this session
     const hasSeenLoader = sessionStorage.getItem("hasSeenLoader");
 
@@ -123,11 +123,30 @@ export function InitialLoader() {
                   <stop offset="100%" stopColor="#090909" />
                 </linearGradient>
               </defs>
-              <polygon points="210,0 620,0 620,270 380,405" fill="url(#goldPrimary)" />
-              <polygon points="380,405 620,270 620,545 450,640" fill="url(#goldDeep)" />
-              <polygon points="450,640 620,545 620,900 515,900" fill="url(#darkPanel)" />
-              <path d="M380 405 L620 270" stroke="#FFE69A" strokeWidth="1" strokeOpacity=".5" />
-              <path d="M450 640 L620 545" stroke="#F9B900" strokeWidth="1" strokeOpacity=".16" />
+              <polygon
+                points="210,0 620,0 620,270 380,405"
+                fill="url(#goldPrimary)"
+              />
+              <polygon
+                points="380,405 620,270 620,545 450,640"
+                fill="url(#goldDeep)"
+              />
+              <polygon
+                points="450,640 620,545 620,900 515,900"
+                fill="url(#darkPanel)"
+              />
+              <path
+                d="M380 405 L620 270"
+                stroke="#FFE69A"
+                strokeWidth="1"
+                strokeOpacity=".5"
+              />
+              <path
+                d="M450 640 L620 545"
+                stroke="#F9B900"
+                strokeWidth="1"
+                strokeOpacity=".16"
+              />
             </svg>
           </motion.div>
 
@@ -140,7 +159,10 @@ export function InitialLoader() {
                 className="max-w-[560px]"
               >
                 {/* Logo Reveal */}
-                <motion.div variants={textReveal} className="overflow-hidden pb-2">
+                <motion.div
+                  variants={textReveal}
+                  className="overflow-hidden pb-2"
+                >
                   <Image
                     src="/image/5th-Odisha-Logo_White.png"
                     alt="Odisha Mining Expo"
@@ -152,11 +174,18 @@ export function InitialLoader() {
                 </motion.div>
 
                 {/* Eyebrow */}
-                <motion.div variants={textReveal} className="mt-8 flex items-center gap-3 overflow-hidden">
+                <motion.div
+                  variants={textReveal}
+                  className="mt-8 flex items-center gap-3 overflow-hidden"
+                >
                   <motion.span
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.8, delay: 0.5, ease: PREMIUM_EASE }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.5,
+                      ease: PREMIUM_EASE,
+                    }}
                     className="h-px w-9 origin-left bg-[#F9B900]"
                   />
                   <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#F9B900] sm:text-[10px]">
@@ -168,10 +197,14 @@ export function InitialLoader() {
                 <div className="mt-5">
                   <h1 className="max-w-xl text-[clamp(2rem,4.4vw,3.7rem)] font-black leading-[1.05] tracking-[-0.055em]">
                     <span className="block overflow-hidden">
-                      <motion.span variants={textReveal} className="block">Mining.</motion.span>
+                      <motion.span variants={textReveal} className="block">
+                        Mining.
+                      </motion.span>
                     </span>
                     <span className="block overflow-hidden">
-                      <motion.span variants={textReveal} className="block">Infrastructure.</motion.span>
+                      <motion.span variants={textReveal} className="block">
+                        Infrastructure.
+                      </motion.span>
                     </span>
                     <span className="block overflow-hidden pb-2">
                       <motion.span
@@ -223,7 +256,7 @@ export function InitialLoader() {
                       transition={{ delay: 1.2, duration: 1 }}
                       className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#F9B900]"
                     >
-                      OMIIE 2027
+                      Odisha Mining & Infrastructure International Expo 2027
                     </motion.p>
                   </div>
                 </motion.div>

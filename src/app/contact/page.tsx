@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 
   keywords: [
     "Odisha Mining Expo Contact",
-    "OMIIE 2027 Contact",
+    "Odisha Mining & Infrastructure International Expo 2027 Contact",
     "Odisha Mining Expo Team",
     "Mining Expo Bhubaneswar Contact",
     "Mining Exhibition Exhibitor Enquiry",

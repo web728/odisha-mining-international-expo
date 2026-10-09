@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "Explore Odisha Mining Expo 2027, 7–10 January in Bhubaneswar. Discover mining machinery, mineral processing, heavy equipment and B2B opportunities. Register now.",
 
   alternates: {
-    canonical: "/",
+    canonical: "/", 
   },
 
   openGraph: {

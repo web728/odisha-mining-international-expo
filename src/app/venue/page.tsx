@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 
     "Mining Expo Bhubaneswar Venue",
 
-    "OMIIE 2027 Venue",
+    "Odisha Mining & Infrastructure International Expo 2027 Venue",
 
     "Odisha Mining Expo Floor Plan",
 
@@ -599,9 +599,11 @@ export default function Venue() {
 
             <a
 
-              href="mailto:info@futurextrade.com?subject=Floor%20Plan%20Request%20-%20OMIIE%202027"
+              href="mailto:info@futurextrade.com?subject=Floor%20Plan%20Request%20-%20Odisha Mining & Infrastructure
+International Expo%202027"
 
-              aria-label="Request the official OMIIE 2027 floor plan by email"
+              aria-label="Request the official Odisha Mining & Infrastructure
+International Expo 2027 floor plan by email"
 
               className="
 
