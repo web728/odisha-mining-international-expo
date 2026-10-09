@@ -13,8 +13,7 @@ export function CookieConsent() {
 
   useEffect(() => {
     const saved = localStorage.getItem(
-      "Odisha Mining & Infrastructure
-International Expo-cookie-consent"
+      "Odisha Mining & Infrastructure International Expo-cookie-consent"
     );
 
     if (
@@ -31,8 +30,7 @@ International Expo-cookie-consent"
     value: "accepted" | "rejected"
   ) {
     localStorage.setItem(
-      "Odisha Mining & Infrastructure
-International Expo-cookie-consent",
+      "Odisha Mining & Infrastructure International Expo-cookie-consent",
       value
     );
 
