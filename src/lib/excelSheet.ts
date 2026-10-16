@@ -106,22 +106,30 @@ export async function appendToExcel(
     sheetName
   );
 
-  const row = headers.map((header) => {
-    const key = header.trim();
+const row = headers.map((header) => {
+  const key = header.trim();
 
-    if (
-      key === "Corrections" ||
-      key === "STATUS 1" ||
-      key === "STATUS 2" ||
-      key === "STATUS 3 (Nashra)" ||
-      key === "Status 4" ||
-      key === "STATUS 5"
-    ) {
-      return "";
-    }
+  if (key === "Date & Time") {
+    return (
+      rowData["Date & Time"] ||
+      rowData["Date"] ||
+      ""
+    );
+  }
 
-    return rowData[key] ?? "";
-  });
+  if (
+    key === "Corrections" ||
+    key === "STATUS 1" ||
+    key === "STATUS 2" ||
+    key === "STATUS 3 (Nashra)" ||
+    key === "Status 4" ||
+    key === "STATUS 5"
+  ) {
+    return "";
+  }
+
+  return rowData[key] ?? "";
+});
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
