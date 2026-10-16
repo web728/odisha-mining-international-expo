@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 
 const MASTER_HEADERS = [
-  "Date",
+  "Date & Time",
   "Platform",
   "Register As",
   "Company Name",
