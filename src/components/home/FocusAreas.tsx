@@ -56,8 +56,8 @@ export function FocusAreas() {
               id="focus-areas-heading"
               className="text-[clamp(2rem,3.2vw,3.4rem)] font-black leading-[1.02] tracking-[-.045em] text-zinc-950"
             >
-              Six sectors.
-              <span className="text-brand"> One floor.</span>
+             The Industries 
+              <span className="text-brand"> Powering Global Progress.</span>
             </h2>
           </div>
 
