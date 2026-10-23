@@ -298,7 +298,17 @@ export async function POST(req: Request) {
 
     const collection = client.db("futurex").collection("exhibitors");
     // Ensure concurrent requests with the same submission ID cannot insert twice.
-    await collection.createIndex({ submissionId: 1 }, { unique: true });
+   
+await collection.createIndex(
+  { submissionId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      submissionId: { $type: "string" },
+    },
+  }
+);
+
     try {
       await collection.insertOne({
 
