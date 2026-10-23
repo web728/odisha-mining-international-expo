@@ -1,5 +1,6 @@
 
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import type { ReactNode } from "react";
 import { Manrope } from "next/font/google";
 
@@ -342,38 +343,58 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html
-      lang="en-IN"
-      className={manrope.variable}
+  
+<html
+  lang="en-IN"
+  className={manrope.variable}
+>
+  <body
+    suppressHydrationWarning
+    className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
+  >
+    <Script
+      src="https://www.googletagmanager.com/gtag/js?id=G-W4339DN2R4"
+      strategy="afterInteractive"
+    />
+
+    <Script
+      id="google-analytics"
+      strategy="afterInteractive"
     >
-      <body
-        suppressHydrationWarning
-        className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
-      >
-        <InitialLoader />
+      {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-W4339DN2R4');
+      `}
+    </Script>
 
-        <Navbar />
+    <InitialLoader />
 
-        <main
-          id="main-content"
-          tabIndex={-1}
-        >
-          {children}
-        </main>
+    <Navbar />
 
-        <Footer />
+    <main
+      id="main-content"
+      tabIndex={-1}
+    >
+      {children}
+    </main>
 
-        <CookieConsent />
+    <Footer />
 
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              structuredData
-            ).replace(/</g, "\\u003c"),
-          }}
-        />
-      </body>
-    </html>
+    <CookieConsent />
+
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(
+          structuredData
+        ).replace(/</g, "\\u003c"),
+      }}
+    />
+  </body>
+</html>
+
   );
 }
