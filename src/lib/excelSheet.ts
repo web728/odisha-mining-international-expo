@@ -1,3 +1,4 @@
+
 import { google } from "googleapis";
 
 const MASTER_HEADERS = [
@@ -22,7 +23,10 @@ const MASTER_HEADERS = [
   "STATUS 3 (Nashra)",
   "Status 4",
   "STATUS 5",
+  "Caller ID",
 ];
+
+const CALLER_HEADER = "Caller ID";
 
 function getCredentials() {
   const base64 = process.env.GOOGLE_CREDENTIALS_BASE64;
@@ -56,41 +60,78 @@ async function ensureHeaderRow(
   sheets: ReturnType<typeof google.sheets>,
   spreadsheetId: string,
   sheetName: string
-) {
-  const response =
-    await sheets.spreadsheets.values.get({
+): Promise<string[]> {
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `'${sheetName.replace(/'/g, "''")}'!A1:AZ1`,
+  });
+
+  const existing = (response.data.values?.[0] ?? []).map(
+    (header) => String(header ?? "").trim()
+  );
+
+  while (
+    existing.length &&
+    !existing[existing.length - 1]
+  ) {
+    existing.pop();
+  }
+
+  // New or empty sheet: create existing master headers.
+  if (!existing.length) {
+    await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `${sheetName}!A1:AZ1`,
+      range: `'${sheetName.replace(/'/g, "''")}'!A1`,
+      valueInputOption: "RAW",
+      requestBody: {
+        values: [MASTER_HEADERS],
+      },
     });
 
-  const existing =
-    response.data.values?.[0];
+    return [...MASTER_HEADERS];
+  }
 
-  if (existing?.length) {
-    while (
-      existing.length &&
-      !String(
-        existing[existing.length - 1] ?? ""
-      ).trim()
-    ) {
-      existing.pop();
-    }
+  // Preserve all existing headers and their column order.
+  if (existing.includes(CALLER_HEADER)) {
+    return existing;
+  }
 
-    return existing.map((header) =>
-      String(header ?? "").trim()
+  // Add Caller ID only after the existing final column.
+  if (existing.length >= 52) {
+    throw new Error(
+      "Unable to add Caller ID: sheet has reached the configured AZ column limit."
     );
   }
 
+  const columnIndex = existing.length + 1;
+
+  function toColumnLetter(index: number): string {
+    let value = index;
+    let result = "";
+
+    while (value > 0) {
+      value--;
+      result =
+        String.fromCharCode(65 + (value % 26)) +
+        result;
+      value = Math.floor(value / 26);
+    }
+
+    return result;
+  }
+
+  const column = toColumnLetter(columnIndex);
+
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `${sheetName}!A1`,
+    range: `'${sheetName.replace(/'/g, "''")}'!${column}1`,
     valueInputOption: "RAW",
     requestBody: {
-      values: [MASTER_HEADERS],
+      values: [[CALLER_HEADER]],
     },
   });
 
-  return MASTER_HEADERS;
+  return [...existing, CALLER_HEADER];
 }
 
 export async function appendToExcel(
@@ -106,34 +147,40 @@ export async function appendToExcel(
     sheetName
   );
 
-const row = headers.map((header) => {
-  const key = header.trim();
+  const row = headers.map((header) => {
+    const key = header.trim();
 
-  if (key === "Date & Time") {
-    return (
-      rowData["Date & Time"] ||
-      rowData["Date"] ||
-      ""
-    );
-  }
+    if (key === "Date & Time") {
+      return (
+        rowData["Date & Time"] ||
+        rowData["Date"] ||
+        ""
+      );
+    }
 
-  if (
-    key === "Corrections" ||
-    key === "STATUS 1" ||
-    key === "STATUS 2" ||
-    key === "STATUS 3 (Nashra)" ||
-    key === "Status 4" ||
-    key === "STATUS 5"
-  ) {
-    return "";
-  }
+    if (
+      key === "Corrections" ||
+      key === "STATUS 1" ||
+      key === "STATUS 2" ||
+      key === "STATUS 3 (Nashra)" ||
+      key === "Status 4" ||
+      key === "STATUS 5"
+    ) {
+      return "";
+    }
 
-  return rowData[key] ?? "";
-});
+    if (key === CALLER_HEADER) {
+      return rowData[CALLER_HEADER] || "Unassigned";
+    }
+
+    return rowData[key] ?? "";
+  });
+
+  const safeSheetName = sheetName.replace(/'/g, "''");
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: `${sheetName}!A:AZ`,
+    range: `'${safeSheetName}'!A:AZ`,
     valueInputOption: "USER_ENTERED",
     insertDataOption: "INSERT_ROWS",
     requestBody: {
