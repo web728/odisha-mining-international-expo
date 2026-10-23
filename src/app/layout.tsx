@@ -352,23 +352,21 @@ export default function RootLayout({
     suppressHydrationWarning
     className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
   >
-    <Script
-      src="https://www.googletagmanager.com/gtag/js?id=G-W4339DN2R4"
-      strategy="afterInteractive"
-    />
+   
+<Script
+  src="https://www.googletagmanager.com/gtag/js?id=G-WMD824NX80"
+  strategy="afterInteractive"
+/>
+<Script id="google-analytics" strategy="afterInteractive">
+  {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-WMD824NX80');
+  `}
+</Script>
 
-    <Script
-      id="google-analytics"
-      strategy="afterInteractive"
-    >
-      {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments);}
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', 'G-W4339DN2R4');
-      `}
-    </Script>
 
     <InitialLoader />
 
