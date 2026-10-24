@@ -40,7 +40,7 @@ export function PhoneField({ required = true }: { required?: boolean }) {
       </div>
       <input type="hidden" name="countryCode" value={`+${dial}`} />
       <input type="hidden" name="phone" value={nationalNumber} />
-      <p className="mt-1 text-xs text-zinc-500">Search a country or calling code. India (+91) is selected by default.</p>
+     
     </div>
   );
 }
