@@ -118,6 +118,7 @@ export function VisitorForm() {
       company: data.get("company"),
       email: data.get("email"),
       phone: data.get("phone"),
+      countryCode: data.get("countryCode"),
       website: data.get("website"),
       city: data.get("city"),
       country: data.get("country"),
