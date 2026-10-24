@@ -117,32 +117,33 @@ async function postRegistration(
   // Read response body only once.
   const responseText = await response.text();
 
-  if (!response.ok) {
-    // Safe basic diagnostics.
-    // Avoid logging entire response body: it could
-    // contain personal information or secrets.
-    console.error("WARPBAY request rejected:", {
-      endpoint: endpoint.pathname,
-      status: response.status,
-      statusText: response.statusText,
-      contentType:
-        response.headers.get("content-type"),
-      requestId:
-        response.headers.get("x-request-id"),
-    });
 
-    // For debugging, enable this only temporarily
-    // in a secure development environment:
-    //
-    // console.error(
-    //   "WARPBAY error body:",
-    //   responseText.slice(0, 1000)
-    // );
+if (!response.ok) {
+  let errorDetails = "No error details returned";
 
-    throw new Error(
-      `WARPBAY HTTP ${response.status}`
-    );
+  try {
+    const errorJson = JSON.parse(responseText);
+
+    // Log only diagnostic fields, not the complete
+    // response or user registration details.
+    errorDetails =
+      errorJson.message ??
+      errorJson.error ??
+      errorJson.reason ??
+      "No error message in JSON";
+  } catch {
+    errorDetails = "Non-JSON error response";
   }
+
+  console.error("WARPBAY API FAILED:", {
+    endpoint: endpoint.pathname,
+    status: response.status,
+    error: String(errorDetails).slice(0, 500),
+  });
+
+  throw new Error(`WARPBAY HTTP ${response.status}`);
+}
+
 
   let json: unknown;
 
