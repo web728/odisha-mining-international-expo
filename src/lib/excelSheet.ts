@@ -1,4 +1,5 @@
 
+import "server-only";
 import { google } from "googleapis";
 
 const MASTER_HEADERS = [
@@ -27,6 +28,39 @@ const MASTER_HEADERS = [
 ];
 
 const CALLER_HEADER = "Caller ID";
+const MAX_COLUMNS = 52; // A through AZ
+
+function normalizeHeader(value: unknown): string {
+  return String(value ?? "")
+    .replace(/\u00a0/g, " ")
+    .replace(/[\u200b-\u200d\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function isCallerHeader(value: unknown): boolean {
+  return normalizeHeader(value) === "caller id";
+}
+
+function toColumnLetter(index: number): string {
+  let value = index;
+  let result = "";
+
+  while (value > 0) {
+    value--;
+    result =
+      String.fromCharCode(65 + (value % 26)) +
+      result;
+    value = Math.floor(value / 26);
+  }
+
+  return result;
+}
+
+function quotedSheetName(name: string): string {
+  return `'${name.replace(/'/g, "''")}'`;
+}
 
 function getCredentials() {
   const base64 = process.env.GOOGLE_CREDENTIALS_BASE64;
@@ -56,32 +90,41 @@ async function getSheetsClient() {
   });
 }
 
+type SheetsClient = Awaited<
+  ReturnType<typeof getSheetsClient>
+>;
+
 async function ensureHeaderRow(
-  sheets: ReturnType<typeof google.sheets>,
+  sheets: SheetsClient,
   spreadsheetId: string,
   sheetName: string
 ): Promise<string[]> {
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `'${sheetName.replace(/'/g, "''")}'!A1:AZ1`,
-  });
+  const tab = quotedSheetName(sheetName);
 
-  const existing = (response.data.values?.[0] ?? []).map(
-    (header) => String(header ?? "").trim()
-  );
+  const response =
+    await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${tab}!A1:AZ1`,
+    });
 
+  const headers = (
+    response.data.values?.[0] ?? []
+  ).map((value) => String(value ?? ""));
+
+  // Remove only trailing empty header cells.
+  // Keep positions of all existing columns intact.
   while (
-    existing.length &&
-    !existing[existing.length - 1]
+    headers.length > 0 &&
+    !headers[headers.length - 1].trim()
   ) {
-    existing.pop();
+    headers.pop();
   }
 
-  // New or empty sheet: create existing master headers.
-  if (!existing.length) {
+  // Completely empty sheet.
+  if (headers.length === 0) {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `'${sheetName.replace(/'/g, "''")}'!A1`,
+      range: `${tab}!A1`,
       valueInputOption: "RAW",
       requestBody: {
         values: [MASTER_HEADERS],
@@ -91,54 +134,114 @@ async function ensureHeaderRow(
     return [...MASTER_HEADERS];
   }
 
-  // Preserve all existing headers and their column order.
-  if (existing.includes(CALLER_HEADER)) {
-    return existing;
+  // Match even when spaces/case differ.
+  const callerIndex = headers.findIndex(
+    isCallerHeader
+  );
+
+  if (callerIndex >= 0) {
+    return headers;
   }
 
-  // Add Caller ID only after the existing final column.
-  if (existing.length >= 52) {
+  if (headers.length >= MAX_COLUMNS) {
     throw new Error(
-      "Unable to add Caller ID: sheet has reached the configured AZ column limit."
+      "Caller ID header missing and no free column available."
     );
   }
 
-  const columnIndex = existing.length + 1;
-
-  function toColumnLetter(index: number): string {
-    let value = index;
-    let result = "";
-
-    while (value > 0) {
-      value--;
-      result =
-        String.fromCharCode(65 + (value % 26)) +
-        result;
-      value = Math.floor(value / 26);
-    }
-
-    return result;
-  }
-
-  const column = toColumnLetter(columnIndex);
+  // Append Caller ID AFTER existing headers.
+  // Never overwrite status or other columns.
+  const nextColumn = toColumnLetter(
+    headers.length + 1
+  );
 
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `'${sheetName.replace(/'/g, "''")}'!${column}1`,
+    range: `${tab}!${nextColumn}1`,
     valueInputOption: "RAW",
     requestBody: {
       values: [[CALLER_HEADER]],
     },
   });
 
-  return [...existing, CALLER_HEADER];
+  console.info(
+    "Google Sheets Caller ID header added:",
+    {
+      sheetName,
+      column: nextColumn,
+    }
+  );
+
+  return [...headers, CALLER_HEADER];
+}
+
+function getRowValue(
+  rowData: Record<string, string>,
+  header: string
+): string {
+  const normalized = normalizeHeader(header);
+
+  if (normalized === "date & time") {
+    return (
+      rowData["Date & Time"] ??
+      rowData.Date ??
+      ""
+    );
+  }
+
+  // Keep manual status columns empty for new leads.
+  const manualHeaders = new Set([
+    "corrections",
+    "status 1",
+    "status 2",
+    "status 3 (nashra)",
+    "status 4",
+    "status 5",
+  ]);
+
+  if (manualHeaders.has(normalized)) {
+    return "";
+  }
+
+  if (isCallerHeader(header)) {
+    const caller = String(
+      rowData[CALLER_HEADER] ?? ""
+    ).trim();
+
+    if (
+      caller === "caller_1" ||
+      caller === "caller_2"
+    ) {
+      return caller;
+    }
+
+    return "Unassigned";
+  }
+
+  // Prefer exact header match.
+  if (Object.prototype.hasOwnProperty.call(
+    rowData,
+    header
+  )) {
+    return rowData[header] ?? "";
+  }
+
+  // Support harmless header spacing/case differences.
+  const matchedKey = Object.keys(rowData).find(
+    (key) =>
+      normalizeHeader(key) === normalized
+  );
+
+  return matchedKey
+    ? rowData[matchedKey] ?? ""
+    : "";
 }
 
 export async function appendToExcel(
   spreadsheetId: string,
   sheetName: string,
   rowData: Record<string, string>
-) {
+): Promise<void> {
   const sheets = await getSheetsClient();
 
   const headers = await ensureHeaderRow(
@@ -147,44 +250,58 @@ export async function appendToExcel(
     sheetName
   );
 
-  const row = headers.map((header) => {
-    const key = header.trim();
+  const callerColumns = headers
+    .map((header, index) =>
+      isCallerHeader(header) ? index : -1
+    )
+    .filter((index) => index >= 0);
 
-    if (key === "Date & Time") {
-      return (
-        rowData["Date & Time"] ||
-        rowData["Date"] ||
-        ""
-      );
-    }
+  if (callerColumns.length !== 1) {
+    throw new Error(
+      `Expected one Caller ID column, found ${callerColumns.length}`
+    );
+  }
 
-    if (
-      key === "Corrections" ||
-      key === "STATUS 1" ||
-      key === "STATUS 2" ||
-      key === "STATUS 3 (Nashra)" ||
-      key === "Status 4" ||
-      key === "STATUS 5"
-    ) {
-      return "";
-    }
+  const row = headers.map((header) =>
+    getRowValue(rowData, header)
+  );
 
-    if (key === CALLER_HEADER) {
-      return rowData[CALLER_HEADER] || "Unassigned";
-    }
+  const callerIndex = callerColumns[0];
 
-    return rowData[key] ?? "";
-  });
+  // Prevent silent Caller ID mapping mismatch.
+  const expectedCaller =
+    rowData[CALLER_HEADER] === "caller_1" ||
+    rowData[CALLER_HEADER] === "caller_2"
+      ? rowData[CALLER_HEADER]
+      : "Unassigned";
 
-  const safeSheetName = sheetName.replace(/'/g, "''");
+  if (row[callerIndex] !== expectedCaller) {
+    throw new Error(
+      "Google Sheets Caller ID mapping mismatch"
+    );
+  }
+
+  const tab = quotedSheetName(sheetName);
+  const endColumn = toColumnLetter(
+    headers.length
+  );
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: `'${safeSheetName}'!A:AZ`,
+    range: `${tab}!A:${endColumn}`,
     valueInputOption: "USER_ENTERED",
     insertDataOption: "INSERT_ROWS",
     requestBody: {
       values: [row],
     },
+  });
+
+  // Log metadata only, never personal data.
+  console.info("Google Sheets row appended:", {
+    sheetName,
+    callerId: expectedCaller,
+    callerColumn: toColumnLetter(
+      callerIndex + 1
+    ),
   });
 }

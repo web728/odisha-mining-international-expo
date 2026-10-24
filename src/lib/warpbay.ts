@@ -63,7 +63,12 @@ function warnEmptyFields(kind: string, payload: Record<string, unknown>) {
   if (empty.length) console.warn(`WARPBAY ${kind} empty field names:`, empty);
 }
 
-async function postRegistration(path: string, body: unknown): Promise<string> {
+export type WarpbayResult =
+  | { status: "synced"; userId: string }
+  | { status: "already_registered" }
+  | { status: "accepted_unconfirmed" };
+
+async function postRegistration(path: string, body: unknown): Promise<WarpbayResult> {
   const apiKey = process.env.WARPBAY_API_KEY?.trim();
   if (!apiKey) throw new Error("WARPBAY_API_KEY is missing");
 
@@ -96,27 +101,38 @@ async function postRegistration(path: string, body: unknown): Promise<string> {
   let parsed: unknown;
   try { parsed = JSON.parse(responseText); } catch { parsed = null; }
 
+  const object = parsed && typeof parsed === "object"
+    ? parsed as Record<string, unknown> : {};
+  const detail = [object.message, object.error, object.reason]
+    .find((value) => typeof value === "string");
+  const message = typeof detail === "string" ? detail : "";
+
+  // Provider sometimes returns HTTP 500 for a business-level duplicate.
+  // Never count this as a new successful WARPBAY registration.
+  if (/already\s+registered\s+for\s+this\s+event/i.test(message)) {
+    console.info("WARPBAY existing registration detected:", { path, status: response.status });
+    return { status: "already_registered" };
+  }
+
   if (!response.ok) {
-    const object = parsed && typeof parsed === "object"
-      ? parsed as Record<string, unknown> : {};
-    const detail = [object.message, object.error, object.reason]
-      .find((value) => typeof value === "string");
     console.error("WARPBAY API FAILED:", {
-      path,
-      status: response.status,
-      error: typeof detail === "string" ? detail.slice(0, 160) : "No safe diagnostic message",
+      path, status: response.status,
+      error: message.slice(0, 160) || "No error detail",
     });
     throw new Error(`WARPBAY HTTP ${response.status}`);
   }
 
-  if (!parsed || typeof parsed !== "object" ||
-      !("userId" in parsed) || typeof parsed.userId !== "string" || !parsed.userId.trim()) {
-    throw new Error("WARPBAY response missing userId");
+  if (typeof object.userId === "string" && object.userId.trim()) {
+    return { status: "synced", userId: object.userId.trim() };
   }
-  return parsed.userId;
+
+  // A 2xx response without userId may indicate acceptance, but not confirmed sync.
+  // Do not submit again automatically; let staff reconcile with WARPBAY.
+  console.warn("WARPBAY 2xx without userId; manual reconciliation required:", { path });
+  return { status: "accepted_unconfirmed" };
 }
 
-export async function syncWarpbayVisitor(v: VisitorPayload): Promise<string> {
+export async function syncWarpbayVisitor(v: VisitorPayload): Promise<WarpbayResult> {
   const data = {
     fullName: v.name,
     organization: v.company,
@@ -140,7 +156,7 @@ export async function syncWarpbayVisitor(v: VisitorPayload): Promise<string> {
   return postRegistration("odisha-mining/registerAttendee", { data });
 }
 
-export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<string> {
+export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<WarpbayResult> {
   const location = cityStateParts(v.cityState);
   const city = optionalString(v.city) ?? location.city;
   const state = optionalString(v.state) ?? location.state;

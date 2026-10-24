@@ -283,7 +283,11 @@ export function ExhibitorForm() {
 
         throw new Error(
 
-          result.message ||
+          (result.warpbayStatus === "already_registered"
+            ? "Already registered for this event on WARPBAY. Your enquiry is saved; our team will verify your existing registration."
+            : result.warpbayStatus === "accepted_unconfirmed"
+            ? "Enquiry saved. WARPBAY did not provide a registration ID; our team will verify it."
+            : result.message) ||
 
             "Submission failed.",
 
@@ -327,7 +331,11 @@ export function ExhibitorForm() {
 
         message:
 
-          result.message ||
+          (result.warpbayStatus === "already_registered"
+            ? "Already registered for this event on WARPBAY. Your enquiry is saved; our team will verify your existing registration."
+            : result.warpbayStatus === "accepted_unconfirmed"
+            ? "Enquiry saved. WARPBAY did not provide a registration ID; our team will verify it."
+            : result.message) ||
 
           "Thank you. Our exhibition team will contact you shortly.",
 
