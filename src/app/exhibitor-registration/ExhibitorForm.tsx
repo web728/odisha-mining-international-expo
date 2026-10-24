@@ -199,6 +199,9 @@ export function ExhibitorForm() {
       phone: formData.get("phone"),
 
       country: formData.get("country"),
+      countryCode: formData.get("countryCode"),
+      city: formData.get("city"),
+      state: formData.get("state"),
 
       website: formData.get("website"),
 
