@@ -8,6 +8,7 @@ import { appendToExcel } from "@/lib/excelSheet";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { withRetry } from "@/lib/retry";
 import { validateCallerId } from "@/lib/callerAttribution";
+import { syncWarpbayVisitor } from "@/lib/warpbay";
 import { clean, cleanArray, cleanBoolean, emailPattern, submittedAt } from "@/lib/forms";
 
 const SHEET_NAME = "Website Enquries";
@@ -80,6 +81,7 @@ export async function POST(req: Request) {
         consent,
         sheetSynced: false,
         emailSent: false,
+        warpbaySynced: false,
         submittedAt: new Date(),
       });
       insertedId = insertion.insertedId;
@@ -156,7 +158,23 @@ export async function POST(req: Request) {
         })
       : Promise.resolve();
 
-    const results = await Promise.allSettled([sheetTask, mailTask]);
+    // External system is secondary: MongoDB remains the registration source of truth.
+    // No automatic retry here: WARPBAY has not documented idempotency semantics.
+    const warpbayTask = syncWarpbayVisitor({
+      submissionId, name, designation, company, email, phone,
+      country, website, city, profile, source, interest,
+    }).then(async (userId) => {
+      await collection.updateOne({ _id: insertedId }, {
+        $set: { warpbaySynced: true, warpbayUserId: userId, warpbaySyncedAt: new Date() },
+      });
+    }).catch(async (error: unknown) => {
+      console.error("Visitor WARPBAY sync failed:", error instanceof Error ? error.message : "unknown error");
+      // Keep failure visible for controlled reconciliation, with no PII in logs.
+      try { await collection.updateOne({ _id: insertedId }, { $set: { warpbaySynced: false, warpbayLastAttemptAt: new Date() } }); }
+      catch { /* preserve existing success semantics */ }
+    });
+
+    const results = await Promise.allSettled([sheetTask, mailTask, warpbayTask]);
     results.forEach((result, index) => {
       if (result.status === "rejected") {
         console.error(index === 0 ? "Visitor sheet failed:" : "Visitor mail failed:", result.reason);

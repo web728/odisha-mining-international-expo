@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { MongoServerError } from "mongodb";
 import { validateCallerId } from "@/lib/callerAttribution";
+import { syncWarpbayExhibitor } from "@/lib/warpbay";
 
 import { NextResponse } from "next/server";
 
@@ -297,18 +298,8 @@ export async function POST(req: Request) {
       await getMongoClient();
 
     const collection = client.db("futurex").collection("exhibitors");
-    // Ensure concurrent requests with the same submission ID cannot insert twice.
-   
-await collection.createIndex(
-  { submissionId: 1 },
-  {
-    unique: true,
-    partialFilterExpression: {
-      submissionId: { $type: "string" },
-    },
-  }
-);
-
+    // A partial unique index for submissionId must be provisioned in MongoDB,
+    // outside the request path (see README).
     try {
       await collection.insertOne({
 
@@ -356,6 +347,7 @@ await collection.createIndex(
         sheetSynced: false,
 
         emailSent: false,
+        warpbaySynced: false,
 
         submittedAt: createdAt,
 
@@ -831,13 +823,29 @@ await collection.createIndex(
 
      */
 
-    const [sheetResult, mailResult] =
+    // WARPBAY sync is independent of the saved registration and existing Sheets/mail tasks.
+      // Do not retry blindly: WARPBAY does not document idempotency.
+      const warpbayTask = syncWarpbayExhibitor({
+        submissionId, name, designation, company, email, phone, country,
+        website, cityState, address, taxId, category, exhibitDetails,
+        brands, standSize, participationInterests, message,
+      }).then(async (userId) => {
+        await collection.updateOne({ submissionId }, {
+          $set: { warpbaySynced: true, warpbayUserId: userId, warpbaySyncedAt: new Date() },
+        });
+      }).catch(async (error: unknown) => {
+        console.error("Exhibitor WARPBAY sync failed:", error instanceof Error ? error.message : "unknown error");
+        try { await collection.updateOne({ submissionId }, {
+          $set: { warpbaySynced: false, warpbayLastAttemptAt: new Date() },
+        }); } catch { /* preserve existing success semantics */ }
+      });
 
-      await Promise.allSettled([
+    const [sheetResult, mailResult] = await Promise.allSettled([
 
         sheetTask,
 
         mailTask,
+        warpbayTask,
 
       ]);
 
