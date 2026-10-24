@@ -130,6 +130,7 @@ export async function POST(req: Request) {
     const phone =
 
       clean(body.phone, 50);
+    const countryCode = clean(body.countryCode, 8);
 
     const country =
 
@@ -231,6 +232,10 @@ export async function POST(req: Request) {
 
       );
 
+    }
+
+    if (!/^\+[1-9]\d{0,3}$/.test(countryCode) || !/^\d{5,15}$/.test(phone)) {
+      return NextResponse.json({ success: false, message: "Please provide a valid country code and mobile number." }, { status: 400 });
     }
 
     if (!emailPattern.test(email)) {
@@ -422,6 +427,7 @@ export async function POST(req: Request) {
                 "Mobile No.":
 
                   phone,
+          countryCode,
 
                 Website:
 
@@ -842,7 +848,7 @@ export async function POST(req: Request) {
         website, cityState, address, taxId, category, exhibitDetails,
         brands, standSize, participationInterests, message,
         city: warpbayCity, state: warpbayState,
-        countryCode: clean(body.countryCode, 20),
+        countryCode,
       }).then(async (userId) => {
         await collection.updateOne({ submissionId }, {
           $set: { warpbaySynced: true, warpbayUserId: userId, warpbaySyncedAt: new Date() },

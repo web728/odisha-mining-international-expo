@@ -3,9 +3,11 @@ import {
   FormEvent,
   useRef,
   useState,
+  useEffect,
 } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { getCallerId } from "@/lib/callerAttribution";
+import { getCallerId, captureCallerAttribution } from "@/lib/callerAttribution";
+import { PhoneField } from "@/components/forms/PhoneField";
 import {
   ArrowRight,
   Loader2,
@@ -62,6 +64,8 @@ export function VisitorForm() {
   const captchaRef = useRef<ReCAPTCHA>(null);
   const submissionRef = useRef<string | null>(null);
   const submittingRef = useRef(false);
+  useEffect(() => { captureCallerAttribution(); }, []);
+
   const siteKey =
     process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   async function onSubmit(
@@ -242,13 +246,7 @@ export function VisitorForm() {
             required
             autoComplete="email"
           />
-          <TextField
-            label="Phone"
-            name="phone"
-            type="tel"
-            required
-            autoComplete="tel"
-          />
+          <PhoneField />
           <TextField
             label="City"
             name="city"

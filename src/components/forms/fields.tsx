@@ -1,4 +1,3 @@
-
 import type {
   InputHTMLAttributes,
   ReactNode,
@@ -25,10 +24,7 @@ function FieldLabel({
       <span className="text-[11px] font-extrabold uppercase tracking-[.08em] text-zinc-700">
         {label}
         {required && (
-          <span
-            className="ml-1 text-brand-dark"
-            aria-hidden="true"
-          >
+          <span className="ml-1 text-brand-dark" aria-hidden="true">
             *
           </span>
         )}
@@ -38,11 +34,10 @@ function FieldLabel({
   );
 }
 
-type TextFieldProps =
-  InputHTMLAttributes<HTMLInputElement> & {
-    label: string;
-    name: string;
-  };
+type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  name: string;
+};
 
 export function TextField({
   label,
@@ -63,12 +58,11 @@ export function TextField({
   );
 }
 
-type SelectFieldProps =
-  SelectHTMLAttributes<HTMLSelectElement> & {
-    label: string;
-    name: string;
-    children: ReactNode;
-  };
+type SelectFieldProps = SelectHTMLAttributes<HTMLSelectElement> & {
+  label: string;
+  name: string;
+  children: ReactNode;
+};
 
 export function SelectField({
   label,
@@ -92,11 +86,10 @@ export function SelectField({
   );
 }
 
-type TextAreaFieldProps =
-  TextareaHTMLAttributes<HTMLTextAreaElement> & {
-    label: string;
-    name: string;
-  };
+type TextAreaFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  label: string;
+  name: string;
+};
 
 export function TextAreaField({
   label,

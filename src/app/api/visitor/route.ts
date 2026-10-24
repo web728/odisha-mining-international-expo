@@ -41,6 +41,7 @@ export async function POST(req: Request) {
     const company = clean(body.company, 180);
     const email = clean(body.email, 200).toLowerCase();
     const phone = clean(body.phone, 50);
+    const countryCode = clean(body.countryCode, 8);
     const website = clean(body.website, 300);
     const city = clean(body.city, 120);
     const country = clean(body.country, 120);
@@ -51,6 +52,9 @@ export async function POST(req: Request) {
 
     if (!name || !designation || !company || !email || !phone || !city || !country || !profile || !source || !interest.length) {
       return NextResponse.json({ success: false, message: "Please complete all required fields." }, { status: 400 });
+    }
+    if (!/^\+[1-9]\d{0,3}$/.test(countryCode) || !/^\d{5,15}$/.test(phone)) {
+      return NextResponse.json({ success: false, message: "Please provide a valid country code and mobile number." }, { status: 400 });
     }
     if (!emailPattern.test(email)) {
       return NextResponse.json({ success: false, message: "Please enter a valid email address." }, { status: 400 });
@@ -72,6 +76,7 @@ export async function POST(req: Request) {
         company,
         email,
         phone,
+        countryCode,
         website,
         city,
         country,
@@ -162,7 +167,7 @@ export async function POST(req: Request) {
     // No automatic retry here: WARPBAY has not documented idempotency semantics.
     const warpbayTask = syncWarpbayVisitor({
       submissionId, name, designation, company, email, phone,
-      country, website, city, profile, source, interest,
+      country, website, city, profile, source, interest, countryCode,
       state: clean(body.state, 120), title: clean(body.title, 40),
       primaryCategory: clean(body.primaryCategory, 220),
       productsSolutions: clean(body.productsSolutions, 3000),

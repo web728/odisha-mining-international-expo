@@ -11,6 +11,7 @@ type Common = {
   company: string;
   email: string;
   phone: string;
+  countryCode: string;
   country: string;
   website: string;
 };
@@ -38,7 +39,6 @@ export type ExhibitorPayload = Common & {
   message: string;
   city?: string;
   state?: string;
-  countryCode?: string;
 };
 
 function optionalString(value: unknown): string | undefined {
@@ -123,6 +123,7 @@ export async function syncWarpbayVisitor(v: VisitorPayload): Promise<string> {
     jobTitle: v.designation,
     email: v.email,
     mobile: v.phone,
+    countryCode: v.countryCode,
     country: v.country,
     state: optionalString(v.state) ?? "",
     city: v.city,
@@ -149,7 +150,7 @@ export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<string>
     designation: v.designation,
     email: v.email,
     mobile: v.phone,
-    ...(optionalString(v.countryCode) ? { countryCode: optionalString(v.countryCode) } : {}),
+    countryCode: v.countryCode,
     country: v.country,
     city: city ?? "",
     state: state ?? "",

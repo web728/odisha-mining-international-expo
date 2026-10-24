@@ -12,7 +12,8 @@ import {
 } from "react";
 
 import ReCAPTCHA from "react-google-recaptcha";
-import { getCallerId } from "@/lib/callerAttribution";
+import { getCallerId, captureCallerAttribution } from "@/lib/callerAttribution";
+import { PhoneField } from "@/components/forms/PhoneField";
 
 import {
 
@@ -115,7 +116,7 @@ export function ExhibitorForm() {
   const captchaRef = useRef<ReCAPTCHA>(null);
   const busyRef = useRef(false);
   const submissionRef = useRef<string | null>(null);
-  useEffect(() => { getCallerId(); }, []);
+  useEffect(() => { captureCallerAttribution(); }, []);
 
   const siteKey =
 
@@ -452,19 +453,7 @@ export function ExhibitorForm() {
 
           />
 
-          <TextField
-
-            label="Phone"
-
-            name="phone"
-
-            type="tel"
-
-            required
-
-            autoComplete="tel"
-
-          />
+          <PhoneField />
 
           <TextField
 
@@ -524,15 +513,7 @@ export function ExhibitorForm() {
 
           />
 
-          <TextField
-
-            label="Country Code (optional)"
-
-            name="countryCode"
-
-            placeholder="e.g. +91"
-
-          />
+          
 
           <div className="sm:col-span-2">
 
