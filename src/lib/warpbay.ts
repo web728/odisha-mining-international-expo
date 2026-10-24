@@ -1,22 +1,8 @@
-
-/**
- * WARPBAY API Integration
- * Odisha Mining Expo 2027
- *
- * Server-side only.
- * Never import this file in a client component.
- */
-
+/** WARPBAY registration sync. Server-only; never expose API key to browsers. */
 import "server-only";
 
-const BASE_URL =
-  "https://app-server-63238821306.asia-south1.run.app/api/v1";
-
-const WEBSITE_ORIGIN =
-  "https://odishaminingexpo.com";
-
-// eventId is hardcoded on the WARPBAY backend.
-// We do not send eventId in query, headers, or body.
+const BASE = "https://app-server-63238821306.asia-south1.run.app/api/v1";
+const ORIGIN = "https://odishaminingexpo.com";
 
 type Common = {
   submissionId: string;
@@ -34,6 +20,10 @@ export type VisitorPayload = Common & {
   profile: string;
   source: string;
   interest: string[];
+  state?: string;
+  title?: string;
+  primaryCategory?: string;
+  productsSolutions?: string;
 };
 
 export type ExhibitorPayload = Common & {
@@ -46,269 +36,143 @@ export type ExhibitorPayload = Common & {
   standSize: string;
   participationInterests: string[];
   message: string;
-};
-
-// Return undefined for optional empty values.
-function nonEmpty(
-  value: string | null | undefined
-): string | undefined {
-  return value?.trim() || undefined;
-}
-
-// Split "Bhubaneswar, Odisha" into city and state.
-function cityStateParts(
-  value: string
-): {
   city?: string;
   state?: string;
-} {
-  const parts = value
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean);
+  countryCode?: string;
+};
 
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function cityStateParts(value: string) {
+  const parts = value.split(",").map((part) => part.trim()).filter(Boolean);
   return {
-    city: parts[0],
-    state:
-      parts.length > 1
-        ? parts.slice(1).join(", ")
-        : undefined,
+    city: parts[0] || undefined,
+    state: parts.length > 1 ? parts.slice(1).join(", ") : undefined,
   };
 }
 
-type WarpbaySuccessResponse = {
-  message?: string;
-  userId?: string;
-};
+/** Log field *names* only; never email, phone, API key, or submitted PII. */
+function warnEmptyFields(kind: string, payload: Record<string, unknown>) {
+  const empty = Object.entries(payload)
+    .filter(([, val]) => val === undefined || val === null ||
+      (typeof val === "string" && !val.trim()) ||
+      (Array.isArray(val) && !val.length))
+    .map(([key]) => key);
+  if (empty.length) console.warn(`WARPBAY ${kind} empty field names:`, empty);
+}
 
-// Common function for both API endpoints.
-async function postRegistration(
-  path: string,
-  body: unknown
-): Promise<string> {
-  const apiKey =
-    process.env.WARPBAY_API_KEY?.trim();
+async function postRegistration(path: string, body: unknown): Promise<string> {
+  const apiKey = process.env.WARPBAY_API_KEY?.trim();
+  if (!apiKey) throw new Error("WARPBAY_API_KEY is missing");
 
-  if (!apiKey) {
-    throw new Error(
-      "WARPBAY_API_KEY is missing in server environment"
-    );
-  }
-
-  // No eventId query parameter.
-  const endpoint = new URL(
-    `${BASE_URL}/${path}`
-  );
-
+  // Provider reported eventId is configured on their backend.
+  // Do not append eventId to the URL unless they specifically instruct it.
+  const url = `${BASE}/${path}`;
   let response: Response;
-
   try {
-    response = await fetch(
-      endpoint.toString(),
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-
-          "x-api-key": apiKey,
-
-          Origin: WEBSITE_ORIGIN,
-        },
-
-        body: JSON.stringify(body),
-
-        cache: "no-store",
-
-        signal: AbortSignal.timeout(10000),
-      }
-    );
+    response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "x-api-key": apiKey,
+        Origin: ORIGIN,
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+      signal: AbortSignal.timeout(10000),
+    });
   } catch (error) {
-    console.error(
-      "WARPBAY network request failed:",
-      {
-        endpoint: endpoint.pathname,
-        message:
-          error instanceof Error
-            ? error.message
-            : "Unknown network error",
-      }
-    );
-
-    throw new Error(
-      "WARPBAY API network request failed"
-    );
+    console.error("WARPBAY network failure:", {
+      path,
+      error: error instanceof Error ? error.name : "unknown",
+    });
+    throw new Error("WARPBAY request failed before response");
   }
 
-  // Read the body once for success/error handling.
   const responseText = await response.text();
+  let parsed: unknown;
+  try { parsed = JSON.parse(responseText); } catch { parsed = null; }
 
   if (!response.ok) {
-    let errorMessage = "Request rejected";
-
-    try {
-      const parsed: unknown =
-        JSON.parse(responseText);
-
-      if (
-        parsed &&
-        typeof parsed === "object"
-      ) {
-        const errorObject = parsed as {
-          message?: unknown;
-          error?: unknown;
-          reason?: unknown;
-        };
-
-        const detail =
-          errorObject.message ??
-          errorObject.error ??
-          errorObject.reason;
-
-        if (typeof detail === "string") {
-          errorMessage = detail;
-        }
-      }
-    } catch {
-      errorMessage =
-        "Non-JSON error response";
-    }
-
+    const object = parsed && typeof parsed === "object"
+      ? parsed as Record<string, unknown> : {};
+    const detail = [object.message, object.error, object.reason]
+      .find((value) => typeof value === "string");
     console.error("WARPBAY API FAILED:", {
-      endpoint: endpoint.pathname,
+      path,
       status: response.status,
-      error: errorMessage.slice(0, 300),
+      error: typeof detail === "string" ? detail.slice(0, 160) : "No safe diagnostic message",
     });
-
-    throw new Error(
-      `WARPBAY HTTP ${response.status}`
-    );
+    throw new Error(`WARPBAY HTTP ${response.status}`);
   }
 
-  let result: WarpbaySuccessResponse;
-
-  try {
-    result = JSON.parse(
-      responseText
-    ) as WarpbaySuccessResponse;
-  } catch {
-    throw new Error(
-      "WARPBAY returned invalid JSON"
-    );
+  if (!parsed || typeof parsed !== "object" ||
+      !("userId" in parsed) || typeof parsed.userId !== "string" || !parsed.userId.trim()) {
+    throw new Error("WARPBAY response missing userId");
   }
-
-  if (
-    !result ||
-    typeof result.userId !== "string" ||
-    !result.userId.trim()
-  ) {
-    throw new Error(
-      "WARPBAY response missing userId"
-    );
-  }
-
-  return result.userId;
+  return parsed.userId;
 }
 
-/**
- * VISITOR REGISTRATION
- */
-export async function syncWarpbayVisitor(
-  visitor: VisitorPayload
-): Promise<string> {
-  return postRegistration(
-    "odisha-mining/registerAttendee",
-    {
-      data: {
-        fullName: visitor.name,
-
-        organization: visitor.company,
-
-        jobTitle: visitor.designation,
-
-        email: visitor.email,
-
-        mobile: visitor.phone,
-
-        country: visitor.country,
-
-        city: visitor.city,
-
-        label: "Visitor",
-
-        companyWebsite: nonEmpty(
-          visitor.website
-        ),
-
-        howDidYouHearAboutUs:
-          visitor.source,
-
-        areasOfInterest:
-          visitor.interest,
-
-        // Use existing unique submission ID.
-        uid: visitor.submissionId,
-      },
-    }
-  );
+export async function syncWarpbayVisitor(v: VisitorPayload): Promise<string> {
+  const data = {
+    fullName: v.name,
+    organization: v.company,
+    jobTitle: v.designation,
+    email: v.email,
+    mobile: v.phone,
+    country: v.country,
+    ...(optionalString(v.state) ? { state: optionalString(v.state) } : {}),
+    city: v.city,
+    label: "Visitor",
+    ...(optionalString(v.website) ? { companyWebsite: optionalString(v.website) } : {}),
+    ...(optionalString(v.primaryCategory) ? { primaryCategory: optionalString(v.primaryCategory) } : {}),
+    ...(optionalString(v.productsSolutions) ? { productsSolutions: optionalString(v.productsSolutions) } : {}),
+    howDidYouHearAboutUs: v.source,
+    areasOfInterest: v.interest,
+    uid: v.submissionId,
+    ...(optionalString(v.title) ? { title: optionalString(v.title) } : {}),
+  };
+  warnEmptyFields("Visitor", data);
+  return postRegistration("odisha-mining/registerAttendee", { data });
 }
 
-/**
- * EXHIBITOR REGISTRATION
- */
-export async function syncWarpbayExhibitor(
-  exhibitor: ExhibitorPayload
-): Promise<string> {
-  const place = cityStateParts(
-    exhibitor.cityState
-  );
+export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<string> {
+  const location = cityStateParts(v.cityState);
+  const city = optionalString(v.city) ?? location.city;
+  const state = optionalString(v.state) ?? location.state;
+  const data = {
+    companyName: v.company,
+    contactPerson: v.name,
+    designation: v.designation,
+    email: v.email,
+    mobile: v.phone,
+    ...(optionalString(v.countryCode) ? { countryCode: optionalString(v.countryCode) } : {}),
+    country: v.country,
+    ...(city ? { city } : {}),
+    ...(state ? { state } : {}),
+    ...(optionalString(v.website) ? { companyWebsite: optionalString(v.website) } : {}),
+    ...(optionalString(v.address) ? { companyAddress: optionalString(v.address) } : {}),
+    ...(optionalString(v.taxId) ? { taxId: optionalString(v.taxId) } : {}),
+    primaryCategory: v.category,
+    productsSolutions: v.exhibitDetails,
+    ...(optionalString(v.brands) ? { brandsProductNames: optionalString(v.brands) } : {}),
+    standPreference: v.standSize,
+    ...(v.participationInterests.length ? { additionalParticipation: v.participationInterests } : {}),
+    ...(optionalString(v.message) ? { requirementsOrQuestions: optionalString(v.message) } : {}),
+  };
 
-  return postRegistration(
-    "event/addOdishaMiningExhibitorOrganizationForm",
-    {
-      companyName: exhibitor.company,
-
-      contactPerson: exhibitor.name,
-
-      designation: exhibitor.designation,
-
-      email: exhibitor.email,
-
-      mobile: exhibitor.phone,
-
-      country: exhibitor.country,
-
-      ...place,
-
-      companyWebsite: nonEmpty(
-        exhibitor.website
-      ),
-
-      companyAddress:
-        exhibitor.address,
-
-      taxId: exhibitor.taxId,
-
-      primaryCategory:
-        exhibitor.category,
-
-      productsSolutions:
-        exhibitor.exhibitDetails,
-
-      brandsProductNames:
-        exhibitor.brands,
-
-      standPreference:
-        exhibitor.standSize,
-
-      additionalParticipation:
-        exhibitor.participationInterests,
-
-      requirementsOrQuestions:
-        exhibitor.message,
-
-      // countryCode optional: not sent.
-    }
-  );
+  // These fields are present in the sample request; provider must confirm
+  // which are truly mandatory for real submissions.
+  const absentInSampleShape = [
+    "city", "state", "companyWebsite", "companyAddress", "taxId",
+    "brandsProductNames", "additionalParticipation", "requirementsOrQuestions",
+  ].filter((key) => !(key in data));
+  if (absentInSampleShape.length) {
+    console.warn("WARPBAY Exhibitor absent optional/undocumented field names:", absentInSampleShape);
+  }
+  warnEmptyFields("Exhibitor", data);
+  return postRegistration("event/addOdishaMiningExhibitorOrganizationForm", data);
 }

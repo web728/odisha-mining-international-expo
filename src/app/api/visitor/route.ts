@@ -163,6 +163,9 @@ export async function POST(req: Request) {
     const warpbayTask = syncWarpbayVisitor({
       submissionId, name, designation, company, email, phone,
       country, website, city, profile, source, interest,
+      state: clean(body.state, 120), title: clean(body.title, 40),
+      primaryCategory: clean(body.primaryCategory, 220),
+      productsSolutions: clean(body.productsSolutions, 3000),
     }).then(async (userId) => {
       await collection.updateOne({ _id: insertedId }, {
         $set: { warpbaySynced: true, warpbayUserId: userId, warpbaySyncedAt: new Date() },

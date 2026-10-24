@@ -829,6 +829,8 @@ export async function POST(req: Request) {
         submissionId, name, designation, company, email, phone, country,
         website, cityState, address, taxId, category, exhibitDetails,
         brands, standSize, participationInterests, message,
+        city: clean(body.city, 120), state: clean(body.state, 120),
+        countryCode: clean(body.countryCode, 20),
       }).then(async (userId) => {
         await collection.updateOne({ submissionId }, {
           $set: { warpbaySynced: true, warpbayUserId: userId, warpbaySyncedAt: new Date() },
