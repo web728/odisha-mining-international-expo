@@ -205,8 +205,8 @@ export function VisitorForm() {
         title="Your Details"
       >
         <div className="grid gap-5 sm:grid-cols-2">
-          <SelectField label="Title" name="title" defaultValue="">
-            <option value="">Select title (optional)</option>
+          <SelectField label="Title" name="title" required defaultValue="">
+            <option value="" disabled>Select title</option>
             <option value="Mr">Mr</option>
             <option value="Ms">Ms</option>
             <option value="Mrs">Mrs</option>
@@ -255,7 +255,7 @@ export function VisitorForm() {
             required
             autoComplete="address-level2"
           />
-          <TextField label="State / Province" name="state" autoComplete="address-level1" />
+          <TextField label="State / Province" name="state" required autoComplete="address-level1" />
           <TextField
             label="Country"
             name="country"
@@ -269,8 +269,8 @@ export function VisitorForm() {
         title="Visitor Profile"
       >
         <div className="grid gap-5">
-          <TextField label="Primary Category" name="primaryCategory" placeholder="E.g. Mining Equipment" />
-          <TextField label="Products / Solutions Interested In" name="productsSolutions" placeholder="E.g. Mining Machinery and Solutions" />
+          <TextField label="Primary Category" name="primaryCategory" required placeholder="E.g. Mining Equipment" />
+          <TextField label="Products / Solutions Interested In" name="productsSolutions" required placeholder="E.g. Mining Machinery and Solutions" />
           <SelectField
             label="Visitor Profile"
             name="profile"

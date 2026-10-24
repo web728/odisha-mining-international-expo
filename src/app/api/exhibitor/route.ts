@@ -825,11 +825,23 @@ export async function POST(req: Request) {
 
     // WARPBAY sync is independent of the saved registration and existing Sheets/mail tasks.
       // Do not retry blindly: WARPBAY does not document idempotency.
-      const warpbayTask = syncWarpbayExhibitor({
+      const warpbayCity = clean(body.city, 120);
+      const warpbayState = clean(body.state, 120);
+      // Never invent missing location details. Existing registrations still save
+      // in MongoDB/Sheets even if WARPBAY cannot accept the payload.
+      const warpbayTask = (!warpbayCity || !warpbayState)
+        ? Promise.resolve().then(async () => {
+            console.warn("Exhibitor WARPBAY sync skipped: missing input field names:",
+              [!warpbayCity ? "city" : null, !warpbayState ? "state" : null].filter(Boolean));
+            await collection.updateOne({ submissionId }, {
+              $set: { warpbaySynced: false, warpbayLastAttemptAt: new Date(), warpbayErrorCode: "MISSING_LOCATION" },
+            });
+          })
+        : syncWarpbayExhibitor({
         submissionId, name, designation, company, email, phone, country,
         website, cityState, address, taxId, category, exhibitDetails,
         brands, standSize, participationInterests, message,
-        city: clean(body.city, 120), state: clean(body.state, 120),
+        city: warpbayCity, state: warpbayState,
         countryCode: clean(body.countryCode, 20),
       }).then(async (userId) => {
         await collection.updateOne({ submissionId }, {

@@ -492,9 +492,45 @@ export function ExhibitorForm() {
 
           <TextField
 
-            label="City / State"
+            label="City"
+
+            name="city"
+
+            required
+
+            autoComplete="address-level2"
+
+          />
+
+          <TextField
+
+            label="State / Province"
+
+            name="state"
+
+            required
+
+            autoComplete="address-level1"
+
+          />
+
+          <TextField
+
+            label="City / State (legacy / optional)"
 
             name="cityState"
+
+            placeholder="Optional, e.g. Bhubaneswar, Odisha"
+
+          />
+
+          <TextField
+
+            label="Country Code (optional)"
+
+            name="countryCode"
+
+            placeholder="e.g. +91"
 
           />
 

@@ -124,16 +124,16 @@ export async function syncWarpbayVisitor(v: VisitorPayload): Promise<string> {
     email: v.email,
     mobile: v.phone,
     country: v.country,
-    ...(optionalString(v.state) ? { state: optionalString(v.state) } : {}),
+    state: optionalString(v.state) ?? "",
     city: v.city,
     label: "Visitor",
-    ...(optionalString(v.website) ? { companyWebsite: optionalString(v.website) } : {}),
-    ...(optionalString(v.primaryCategory) ? { primaryCategory: optionalString(v.primaryCategory) } : {}),
-    ...(optionalString(v.productsSolutions) ? { productsSolutions: optionalString(v.productsSolutions) } : {}),
+    companyWebsite: optionalString(v.website) ?? "",
+    primaryCategory: optionalString(v.primaryCategory) ?? "",
+    productsSolutions: optionalString(v.productsSolutions) ?? "",
     howDidYouHearAboutUs: v.source,
     areasOfInterest: v.interest,
     uid: v.submissionId,
-    ...(optionalString(v.title) ? { title: optionalString(v.title) } : {}),
+    title: optionalString(v.title) ?? "",
   };
   warnEmptyFields("Visitor", data);
   return postRegistration("odisha-mining/registerAttendee", { data });
@@ -151,19 +151,18 @@ export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<string>
     mobile: v.phone,
     ...(optionalString(v.countryCode) ? { countryCode: optionalString(v.countryCode) } : {}),
     country: v.country,
-    ...(city ? { city } : {}),
-    ...(state ? { state } : {}),
-    ...(optionalString(v.website) ? { companyWebsite: optionalString(v.website) } : {}),
-    ...(optionalString(v.address) ? { companyAddress: optionalString(v.address) } : {}),
-    ...(optionalString(v.taxId) ? { taxId: optionalString(v.taxId) } : {}),
+    city: city ?? "",
+    state: state ?? "",
+    companyWebsite: optionalString(v.website) ?? "",
+    companyAddress: optionalString(v.address) ?? "",
+    taxId: optionalString(v.taxId) ?? "",
     primaryCategory: v.category,
     productsSolutions: v.exhibitDetails,
-    ...(optionalString(v.brands) ? { brandsProductNames: optionalString(v.brands) } : {}),
+    brandsProductNames: optionalString(v.brands) ?? "",
     standPreference: v.standSize,
-    ...(v.participationInterests.length ? { additionalParticipation: v.participationInterests } : {}),
-    ...(optionalString(v.message) ? { requirementsOrQuestions: optionalString(v.message) } : {}),
+    additionalParticipation: v.participationInterests,
+    requirementsOrQuestions: optionalString(v.message) ?? "",
   };
-
   // These fields are present in the sample request; provider must confirm
   // which are truly mandatory for real submissions.
   const absentInSampleShape = [

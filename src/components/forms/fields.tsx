@@ -1,5 +1,7 @@
-import {
+
+import type {
   InputHTMLAttributes,
+  ReactNode,
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
 } from "react";
@@ -10,7 +12,7 @@ const base =
 type FieldLabelProps = {
   label: string;
   required?: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 function FieldLabel({
@@ -22,52 +24,67 @@ function FieldLabel({
     <label className="block">
       <span className="text-[11px] font-extrabold uppercase tracking-[.08em] text-zinc-700">
         {label}
-        {required && <span className="ml-1 text-brand-dark">*</span>}
+        {required && (
+          <span
+            className="ml-1 text-brand-dark"
+            aria-hidden="true"
+          >
+            *
+          </span>
+        )}
       </span>
-
       {children}
     </label>
   );
 }
 
+type TextFieldProps =
+  InputHTMLAttributes<HTMLInputElement> & {
+    label: string;
+    name: string;
+  };
+
 export function TextField({
   label,
   name,
   required = false,
+  className = "",
   ...props
-}: InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
-  name: string;
-}) {
+}: TextFieldProps) {
   return (
     <FieldLabel label={label} required={required}>
       <input
+        {...props}
         name={name}
         required={required}
-        className={base}
-        {...props}
+        className={`${base} ${className}`.trim()}
       />
     </FieldLabel>
   );
 }
 
+type SelectFieldProps =
+  SelectHTMLAttributes<HTMLSelectElement> & {
+    label: string;
+    name: string;
+    children: ReactNode;
+  };
+
 export function SelectField({
   label,
   name,
   required = false,
+  className = "",
   children,
   ...props
-}: SelectHTMLAttributes<HTMLSelectElement> & {
-  label: string;
-  name: string;
-}) {
+}: SelectFieldProps) {
   return (
     <FieldLabel label={label} required={required}>
       <select
+        {...props}
         name={name}
         required={required}
-        className={`${base} cursor-pointer appearance-none pr-10`}
-        {...props}
+        className={`${base} cursor-pointer appearance-none pr-10 ${className}`.trim()}
       >
         {children}
       </select>
@@ -75,22 +92,26 @@ export function SelectField({
   );
 }
 
+type TextAreaFieldProps =
+  TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    label: string;
+    name: string;
+  };
+
 export function TextAreaField({
   label,
   name,
   required = false,
+  className = "",
   ...props
-}: TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  label: string;
-  name: string;
-}) {
+}: TextAreaFieldProps) {
   return (
     <FieldLabel label={label} required={required}>
       <textarea
+        {...props}
         name={name}
         required={required}
-        className={`${base} min-h-36 resize-y leading-6`}
-        {...props}
+        className={`${base} min-h-36 resize-y leading-6 ${className}`.trim()}
       />
     </FieldLabel>
   );
