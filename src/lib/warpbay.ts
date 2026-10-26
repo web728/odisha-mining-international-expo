@@ -1,4 +1,4 @@
-/** WARPBAY registration sync. Server-only; never expose API key to browsers. */
+/** WARPBAY registration sync; server-side only. */
 import "server-only";
 
 const BASE = "https://app-server-63238821306.asia-south1.run.app/api/v1";
@@ -41,6 +41,12 @@ export type ExhibitorPayload = Common & {
   state?: string;
 };
 
+export type WarpbayResult =
+  | { status: "synced"; userId: string }
+  | { status: "already_registered" }
+  | { status: "role_conflict" }
+  | { status: "accepted_unconfirmed" };
+
 function optionalString(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
@@ -53,31 +59,24 @@ function cityStateParts(value: string) {
   };
 }
 
-/** Log field *names* only; never email, phone, API key, or submitted PII. */
 function warnEmptyFields(kind: string, payload: Record<string, unknown>) {
   const empty = Object.entries(payload)
-    .filter(([, val]) => val === undefined || val === null ||
-      (typeof val === "string" && !val.trim()) ||
-      (Array.isArray(val) && !val.length))
+    .filter(([, value]) => value === undefined || value === null ||
+      (typeof value === "string" && !value.trim()) ||
+      (Array.isArray(value) && !value.length))
     .map(([key]) => key);
   if (empty.length) console.warn(`WARPBAY ${kind} empty field names:`, empty);
 }
-
-export type WarpbayResult =
-  | { status: "synced"; userId: string }
-  | { status: "already_registered" }
-  | { status: "accepted_unconfirmed" };
 
 async function postRegistration(path: string, body: unknown): Promise<WarpbayResult> {
   const apiKey = process.env.WARPBAY_API_KEY?.trim();
   if (!apiKey) throw new Error("WARPBAY_API_KEY is missing");
 
-  // Provider reported eventId is configured on their backend.
-  // Do not append eventId to the URL unless they specifically instruct it.
-  const url = `${BASE}/${path}`;
+  // Vendor says eventId is hardcoded on their backend.
+  const endpoint = new URL(`${BASE}/${path}`);
   let response: Response;
   try {
-    response = await fetch(url, {
+    response = await fetch(endpoint.toString(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -97,24 +96,27 @@ async function postRegistration(path: string, body: unknown): Promise<WarpbayRes
     throw new Error("WARPBAY request failed before response");
   }
 
-  const responseText = await response.text();
+  const raw = await response.text();
   let parsed: unknown;
-  try { parsed = JSON.parse(responseText); } catch { parsed = null; }
-
-  const object = parsed && typeof parsed === "object"
-    ? parsed as Record<string, unknown> : {};
-  const detail = [object.message, object.error, object.reason]
+  try { parsed = JSON.parse(raw); } catch { parsed = null; }
+  const obj: Record<string, unknown> =
+    parsed && typeof parsed === "object" ? parsed as Record<string, unknown> : {};
+  const detail = [obj.message, obj.error, obj.reason]
     .find((value) => typeof value === "string");
   const message = typeof detail === "string" ? detail : "";
+  const normalized = message.toLowerCase();
 
-  // Provider sometimes returns HTTP 500 for a business-level duplicate.
-  // Never count this as a new successful WARPBAY registration.
-  if (/already\s+registered\s+for\s+this\s+event/i.test(message)) {
-    console.info("WARPBAY existing registration detected:", { path, status: response.status });
+  // Business-level errors can be returned as HTTP 409 or 500.
+  // Keep role conflict separate from duplicate registration.
+  if (normalized.includes("user is organizer")) {
+    return { status: "role_conflict" };
+  }
+  if (/already\s+registered|already\s+exists|already\s+been\s+registered/i.test(message)) {
     return { status: "already_registered" };
   }
 
   if (!response.ok) {
+    // Only log bounded provider message. Avoid dumping request bodies or secrets.
     console.error("WARPBAY API FAILED:", {
       path, status: response.status,
       error: message.slice(0, 160) || "No error detail",
@@ -122,19 +124,20 @@ async function postRegistration(path: string, body: unknown): Promise<WarpbayRes
     throw new Error(`WARPBAY HTTP ${response.status}`);
   }
 
-  if (typeof object.userId === "string" && object.userId.trim()) {
-    return { status: "synced", userId: object.userId.trim() };
+  if (typeof obj.userId === "string" && obj.userId.trim()) {
+    return { status: "synced", userId: obj.userId.trim() };
   }
 
-  // A 2xx response without userId may indicate acceptance, but not confirmed sync.
-  // Do not submit again automatically; let staff reconcile with WARPBAY.
   console.warn("WARPBAY 2xx without userId; manual reconciliation required:", { path });
   return { status: "accepted_unconfirmed" };
 }
 
 export async function syncWarpbayVisitor(v: VisitorPayload): Promise<WarpbayResult> {
+  // Provider's actual req.body.data destructuring does NOT list lastName.
+  // Send exact documented fields; the provider must repair an internal
+  // lastName validation requirement if multi-word fullName still fails.
   const data = {
-    fullName: v.name,
+    fullName: v.name.trim(),
     organization: v.company,
     jobTitle: v.designation,
     email: v.email,
@@ -158,8 +161,6 @@ export async function syncWarpbayVisitor(v: VisitorPayload): Promise<WarpbayResu
 
 export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<WarpbayResult> {
   const location = cityStateParts(v.cityState);
-  const city = optionalString(v.city) ?? location.city;
-  const state = optionalString(v.state) ?? location.state;
   const data = {
     companyName: v.company,
     contactPerson: v.name,
@@ -168,8 +169,8 @@ export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<Warpbay
     mobile: v.phone,
     countryCode: v.countryCode,
     country: v.country,
-    city: city ?? "",
-    state: state ?? "",
+    city: optionalString(v.city) ?? location.city ?? "",
+    state: optionalString(v.state) ?? location.state ?? "",
     companyWebsite: optionalString(v.website) ?? "",
     companyAddress: optionalString(v.address) ?? "",
     taxId: optionalString(v.taxId) ?? "",
@@ -180,15 +181,6 @@ export async function syncWarpbayExhibitor(v: ExhibitorPayload): Promise<Warpbay
     additionalParticipation: v.participationInterests,
     requirementsOrQuestions: optionalString(v.message) ?? "",
   };
-  // These fields are present in the sample request; provider must confirm
-  // which are truly mandatory for real submissions.
-  const absentInSampleShape = [
-    "city", "state", "companyWebsite", "companyAddress", "taxId",
-    "brandsProductNames", "additionalParticipation", "requirementsOrQuestions",
-  ].filter((key) => !(key in data));
-  if (absentInSampleShape.length) {
-    console.warn("WARPBAY Exhibitor absent optional/undocumented field names:", absentInSampleShape);
-  }
   warnEmptyFields("Exhibitor", data);
   return postRegistration("event/addOdishaMiningExhibitorOrganizationForm", data);
 }

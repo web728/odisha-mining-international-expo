@@ -28,21 +28,34 @@ const UUID_PATTERN =
 type WarpbayStatus =
   | "synced"
   | "already_registered"
+  | "role_conflict"
   | "accepted_unconfirmed"
-  | "failed"
   | "missing_data"
+  | "failed"
   | "unconfirmed";
 
+const SUCCESS_MESSAGE =
+  "Visitor registration submitted successfully.";
+
 function getWarpbayResponseMessage(
-  status: WarpbayStatus,
-  defaultMessage: string
+  status: WarpbayStatus
 ): string {
   switch (status) {
+    case "synced":
+      return SUCCESS_MESSAGE;
+
     case "already_registered":
       return (
         "You are already registered for this event on WARPBAY. " +
         "Your enquiry has been saved. " +
         "Our team will verify your existing registration."
+      );
+
+    case "role_conflict":
+      return (
+        "Your enquiry has been saved, but your account " +
+        "already has an Organizer role on WARPBAY. " +
+        "Please contact the event team for assistance."
       );
 
     case "accepted_unconfirmed":
@@ -61,14 +74,11 @@ function getWarpbayResponseMessage(
 
     case "failed":
     case "unconfirmed":
+    default:
       return (
         "Your enquiry has been saved successfully. " +
         "External registration confirmation is pending."
       );
-
-    case "synced":
-    default:
-      return defaultMessage;
   }
 }
 
@@ -79,9 +89,10 @@ function existingWarpbayStatus(
   if (
     status === "synced" ||
     status === "already_registered" ||
+    status === "role_conflict" ||
     status === "accepted_unconfirmed" ||
-    status === "failed" ||
     status === "missing_data" ||
+    status === "failed" ||
     status === "unconfirmed"
   ) {
     return status;
@@ -93,6 +104,20 @@ function existingWarpbayStatus(
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+
+    if (
+      !body ||
+      typeof body !== "object" ||
+      Array.isArray(body)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid request payload.",
+        },
+        { status: 400 }
+      );
+    }
 
     const callerId = validateCallerId(body.caller_id);
 
@@ -107,8 +132,7 @@ export async function POST(req: Request) {
       return NextResponse.json({
         success: true,
         recorded: false,
-        message:
-          "Visitor registration submitted successfully.",
+        message: SUCCESS_MESSAGE,
       });
     }
 
@@ -127,9 +151,44 @@ export async function POST(req: Request) {
       );
     }
 
-    // Clean form inputs.
-    const name = clean(body.name, 120);
-    const designation = clean(body.designation, 120);
+    /*
+     * Support both existing Full Name form and
+     * newer First Name + Last Name form.
+     *
+     * WARPBAY's supplied API contract uses fullName.
+     * Do not invent extra provider fields here.
+     */
+    const firstName = clean(body.firstName, 80);
+    const lastName = clean(body.lastName, 80);
+    const submittedName = clean(body.name, 120);
+
+    // Do not silently use a partial split-name entry.
+    const hasSplitNameInput =
+      Boolean(firstName) || Boolean(lastName);
+
+    if (
+      hasSplitNameInput &&
+      (!firstName || !lastName)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Please enter both first name and last name.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const name = hasSplitNameInput
+      ? clean(`${firstName} ${lastName}`, 120)
+      : submittedName;
+
+    const designation = clean(
+      body.designation,
+      120
+    );
+
     const company = clean(body.company, 180);
 
     const email = clean(
@@ -138,7 +197,11 @@ export async function POST(req: Request) {
     ).toLowerCase();
 
     const phone = clean(body.phone, 50);
-    const countryCode = clean(body.countryCode, 8);
+
+    const countryCode = clean(
+      body.countryCode,
+      8
+    ).replace(/[\s()-]/g, "");
 
     const website = clean(body.website, 300);
     const city = clean(body.city, 120);
@@ -146,10 +209,12 @@ export async function POST(req: Request) {
     const country = clean(body.country, 120);
 
     const title = clean(body.title, 40);
+
     const primaryCategory = clean(
       body.primaryCategory,
       220
     );
+
     const productsSolutions = clean(
       body.productsSolutions,
       3000
@@ -166,7 +231,7 @@ export async function POST(req: Request) {
 
     const consent = cleanBoolean(body.consent);
 
-    // Existing required fields + WARPBAY location fields.
+    // Required fields.
     if (
       !name ||
       !designation ||
@@ -176,12 +241,12 @@ export async function POST(req: Request) {
       !city ||
       !state ||
       !country ||
-      !profile ||
-      !source ||
-      !interest.length ||
       !title ||
       !primaryCategory ||
-      !productsSolutions
+      !productsSolutions ||
+      !profile ||
+      !source ||
+      !interest.length
     ) {
       return NextResponse.json(
         {
@@ -193,7 +258,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Country code + mobile are separate values.
+    // Country calling code and national number
+    // must arrive separately from PhoneField.
     if (
       !/^\+[1-9]\d{0,3}$/.test(countryCode) ||
       !/^\d{5,15}$/.test(phone)
@@ -232,7 +298,7 @@ export async function POST(req: Request) {
 
     const date = submittedAt();
 
-    // MongoDB is the registration source of truth.
+    // MongoDB is the source of truth.
     const client = await getMongoClient();
 
     const collection = client
@@ -247,9 +313,18 @@ export async function POST(req: Request) {
         caller_id: callerId,
 
         fullName: name,
+
+        ...(hasSplitNameInput
+          ? {
+              firstName,
+              lastName,
+            }
+          : {}),
+
         designation,
         company,
         email,
+
         phone,
         countryCode,
 
@@ -257,6 +332,7 @@ export async function POST(req: Request) {
         city,
         state,
         country,
+
         title,
         primaryCategory,
         productsSolutions,
@@ -277,7 +353,7 @@ export async function POST(req: Request) {
 
       insertedId = insertion.insertedId;
     } catch (error) {
-      // Requires existing partial unique index on submissionId.
+      // Relies on the unique submissionId index.
       if (
         error instanceof MongoServerError &&
         error.code === 11000
@@ -305,10 +381,10 @@ export async function POST(req: Request) {
 
             warpbayStatus: existingStatus,
 
-            message: getWarpbayResponseMessage(
-              existingStatus,
-              "Visitor registration submitted successfully."
-            ),
+            message:
+              getWarpbayResponseMessage(
+                existingStatus
+              ),
           });
         }
       }
@@ -316,7 +392,10 @@ export async function POST(req: Request) {
       throw error;
     }
 
-    // Google Sheets sync.
+    /*
+     * GOOGLE SHEETS
+     * Caller ID mapped to existing Caller ID header.
+     */
     const sheetId = process.env.GOOGLE_SHEET_ID;
 
     const sheetTask = sheetId
@@ -327,18 +406,21 @@ export async function POST(req: Request) {
             {
               Date: date,
               Platform: "Website",
+
               "Register As": "Visitor",
 
               "Company Name": company,
               "Contact Person": name,
               Designation: designation,
+
               "Email Id": email,
               "Mobile No.": phone,
-
               Website: website,
+
               Address: [city, state]
                 .filter(Boolean)
                 .join(", "),
+
               Country: country,
 
               "Area of Interest":
@@ -367,7 +449,9 @@ export async function POST(req: Request) {
         })
       : Promise.resolve();
 
-    // Admin email.
+    /*
+     * ADMIN EMAIL
+     */
     const recipients = mailRecipients();
 
     const mailTask = recipients.length
@@ -385,7 +469,12 @@ export async function POST(req: Request) {
             html: buildAdminEmailHtml({
               badge: "Visitor Registration",
               submittedAt: date,
+
               rows: [
+                {
+                  label: "Submission ID",
+                  value: submissionId,
+                },
                 {
                   label: "Full Name",
                   value: name,
@@ -393,6 +482,10 @@ export async function POST(req: Request) {
                 {
                   label: "Company",
                   value: company,
+                },
+                {
+                  label: "Designation",
+                  value: designation,
                 },
                 {
                   label: "Email",
@@ -415,6 +508,10 @@ export async function POST(req: Request) {
                   value: country,
                 },
                 {
+                  label: "Title",
+                  value: title,
+                },
+                {
                   label: "Profile",
                   value: profile,
                 },
@@ -429,6 +526,15 @@ export async function POST(req: Request) {
                 {
                   label: "Areas of Interest",
                   value: interest.join(", "),
+                },
+                {
+                  label: "How Heard About Us",
+                  value: source,
+                },
+                {
+                  label: "Caller ID",
+                  value:
+                    callerId ?? "Unassigned",
                 },
               ],
             }),
@@ -448,11 +554,10 @@ export async function POST(req: Request) {
 
     /*
      * WARPBAY:
-     * Keep status in an object so TypeScript does not
-     * incorrectly narrow the variable to "failed".
+     * No automatic retry to avoid duplicates.
      *
-     * No automatic API retry because WARPBAY has not
-     * documented duplicate/idempotency semantics.
+     * Object state avoids TypeScript narrowing
+     * errors inside async callbacks.
      */
     const warpbayOutcome: {
       status: WarpbayStatus;
@@ -460,26 +565,28 @@ export async function POST(req: Request) {
       status: "unconfirmed",
     };
 
-    const warpbayTask = syncWarpbayVisitor({
-      submissionId,
-      name,
-      designation,
-      company,
-      email,
-      phone,
-      countryCode,
-      country,
-      website,
-      city,
-      state,
-      title,
-      primaryCategory,
-      productsSolutions,
-      profile,
-      source,
-      interest,
-    })
-      .then(async (result) => {
+    const warpbayTask = (async () => {
+      try {
+        const result = await syncWarpbayVisitor({
+          submissionId,
+          name,
+          designation,
+          company,
+          email,
+          phone,
+          countryCode,
+          country,
+          website,
+          city,
+          state,
+          title,
+          primaryCategory,
+          productsSolutions,
+          profile,
+          source,
+          interest,
+        });
+
         warpbayOutcome.status = result.status;
 
         try {
@@ -508,8 +615,8 @@ export async function POST(req: Request) {
             }
           );
         } catch (dbError) {
-          // Do not change the WARPBAY outcome if
-          // WARPBAY succeeded but Mongo update failed.
+          // External registration may have succeeded.
+          // Do not call WARPBAY again here.
           console.error(
             "Visitor WARPBAY status DB update failed:",
             dbError instanceof Error
@@ -517,8 +624,7 @@ export async function POST(req: Request) {
               : "unknown error"
           );
         }
-      })
-      .catch(async (error: unknown) => {
+      } catch (error) {
         warpbayOutcome.status = "failed";
 
         console.error(
@@ -535,17 +641,21 @@ export async function POST(req: Request) {
               $set: {
                 warpbaySynced: false,
                 warpbayStatus: "failed",
+
                 warpbayLastAttemptAt:
                   new Date(),
               },
             }
           );
         } catch {
-          // Registration stays saved.
+          // Mongo registration remains saved.
         }
-      });
+      }
+    })();
 
-    // Wait for all secondary tasks.
+    /*
+     * Run secondary tasks independently.
+     */
     const results = await Promise.allSettled([
       sheetTask,
       mailTask,
@@ -582,14 +692,14 @@ export async function POST(req: Request) {
       warpbayStatus:
         finalWarpbayStatus,
 
-      message: getWarpbayResponseMessage(
-        finalWarpbayStatus,
-        "Visitor registration submitted successfully."
-      ),
+      message:
+        getWarpbayResponseMessage(
+          finalWarpbayStatus
+        ),
     });
   } catch (error) {
     console.error(
-      "Visitor form error:",
+      "Visitor registration error:",
       error instanceof Error
         ? error.message
         : "unknown error"
