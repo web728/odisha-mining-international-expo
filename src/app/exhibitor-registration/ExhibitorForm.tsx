@@ -1,1088 +1,135 @@
 "use client";
-
-import {
-
-  FormEvent,
-
-  useRef,
-
-  useState,
-  useEffect,
-
-} from "react";
-
+import { FormEvent, useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { getCallerId, captureCallerAttribution } from "@/lib/callerAttribution";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { TextField, SelectField, TextAreaField } from "@/components/forms/fields";
 import { PhoneField } from "@/components/forms/PhoneField";
-
-import {
-
-  ArrowRight,
-
-  Loader2,
-
-} from "lucide-react";
-
 import { FormStatus } from "@/components/forms/FormStatus";
+import { captureCallerAttribution, getCallerId } from "@/lib/callerAttribution";
+import { useLeadDraft } from "@/components/forms/useLeadDraft";
 
-import {
-
-  SelectField,
-
-  TextAreaField,
-
-  TextField,
-
-} from "@/components/forms/fields";
-
-const categories = [
-
-  "Mining Machinery & Equipment",
-
-  "Infrastructure & Construction",
-
-  "Mineral Processing",
-
-  "Logistics & Transportation",
-
-  "Safety & Sustainability",
-
-  "Heavy Engineering & Industrial Solutions",
-
-  "Other",
-
-] as const;
-
-const standOptions = [
-
-  "9 sqm shell scheme",
-
-  "18 sqm shell scheme",
-
-  "27+ sqm custom / bare",
-
-  "Outdoor machinery display",
-
-  "Not sure yet",
-
-] as const;
-
-const participationOptions = [
-
-  "Live Machinery / Product Demonstration",
-
-  "Sponsorship / Branding Opportunities",
-
-  "B2B Meetings",
-
-  "Dealer / Distributor Networking",
-
-] as const;
-
-type Status = {
-
-  type:
-
-    | "idle"
-
-    | "loading"
-
-    | "success"
-
-    | "error";
-
-  message?: string;
-
-};
+type Status = { type: "idle" | "loading" | "success" | "error"; message?: string };
+type Result = { success?: boolean; recorded?: boolean; duplicate?: boolean; submissionId?: string; caller_id?: string | null; warpbayStatus?: string; message?: string };
+const read = (fd: FormData, key: string) => String(fd.get(key) ?? "").trim();
 
 export function ExhibitorForm() {
-
-  const [status, setStatus] = useState<Status>({
-
-    type: "idle",
-
-  });
-
+  const [status, setStatus] = useState<Status>({ type: "idle" });
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
-
-  const [
-
-    captchaToken,
-
-    setCaptchaToken,
-
-  ] = useState<string | null>(null);
-
-  const captchaRef = useRef<ReCAPTCHA>(null);
+  const [draftConsent, setDraftConsent] = useState(false);
+  const [formVersion, setFormVersion] = useState(0);
   const busyRef = useRef(false);
   const submissionRef = useRef<string | null>(null);
+  const captchaRef = useRef<ReCAPTCHA>(null);
+  const draft = useLeadDraft("exhibitor");
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   useEffect(() => { captureCallerAttribution(); }, []);
 
-  const siteKey =
-
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-
-  async function onSubmit(
-
-    e: FormEvent<HTMLFormElement>,
-
-  ) {
-
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (busyRef.current) return;
-
-    if (!accepted) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "Please accept the consent statement to continue.",
-
-      });
-
-      return;
-
-    }
-
-    if (!siteKey) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "reCAPTCHA configuration is missing.",
-
-      });
-
-      return;
-
-    }
-
-    if (!captchaToken) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "Please complete the reCAPTCHA verification.",
-
-      });
-
-      return;
-
-    }
-
     const form = e.currentTarget;
-
-    const formData = new FormData(form);
-
-    const data = {
-
-      submissionId: submissionRef.current ?? (submissionRef.current = crypto.randomUUID()),
-      caller_id: getCallerId(),
-      company: formData.get("company"),
-
-      name: formData.get("name"),
-
-      designation:
-
-        formData.get("designation"),
-
-      email: formData.get("email"),
-
-      phone: formData.get("phone"),
-
-      country: formData.get("country"),
-      countryCode: formData.get("countryCode"),
-      city: formData.get("city"),
-      state: formData.get("state"),
-
-      website: formData.get("website"),
-
-      address: formData.get("address"),
-
-      cityState:
-
-        formData.get("cityState"),
-
-      taxId: formData.get("taxId"),
-
-      category: formData.get("category"),
-
-      exhibitDetails:
-
-        formData.get("exhibitDetails"),
-
-      brands: formData.get("brands"),
-
-      standSize:
-
-        formData.get("standSize"),
-
-      participationInterests:
-
-        formData.getAll(
-
-          "participationInterests",
-
-        ),
-
-      message: formData.get("message"),
-
-      consent: true,
-
-      captchaToken,
-
-      company_website:
-
-        formData.get("company_website"),
-
-    };
-
-    busyRef.current = true;
-    setStatus({
-
-      type: "loading",
-
-    });
-
-    try {
-
-      const response = await fetch(
-
-        "/api/exhibitor",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "Content-Type":
-
-              "application/json",
-
-          },
-
-          body: JSON.stringify(data),
-
-        },
-
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || result.success !== true) {
-
-        throw new Error(
-
-          (result.warpbayStatus === "already_registered"
-            ? "Already registered for this event on WARPBAY. Your enquiry is saved; our team will verify your existing registration."
-            : result.warpbayStatus === "accepted_unconfirmed"
-            ? "Enquiry saved. WARPBAY did not provide a registration ID; our team will verify it."
-            : result.message) ||
-
-            "Submission failed.",
-
-        );
-
-      }
-
-      if (result.recorded !== true || typeof result.submissionId !== "string") {
-        // Honeypot responses acknowledge submission without recording a lead.
-        setStatus({ type: "success", message: result.message || "Registration submitted successfully." });
-        submissionRef.current = null;
-        form.reset();
-        setAccepted(false);
-        setCaptchaToken(null);
-        captchaRef.current?.reset();
-        return;
-      }
-
-      if (!result.duplicate) {
-        try {
-          const key = `ome_ga4_success_${result.submissionId}`;
-          if (!sessionStorage.getItem(key)) {
-            const analytics = window as Window & { gtag?: (...args: unknown[]) => void };
-            if (typeof analytics.gtag === "function") {
-              // The site's existing GA4 consent configuration must govern gtag.
-              analytics.gtag("event", "exhibitor_registration_success", {
-                caller_id: result.caller_id ?? "unassigned",
-              });
-              sessionStorage.setItem(key, "1");
-            }
-          }
-        } catch (trackingError) {
-          console.warn("GA4 registration tracking unavailable:", trackingError);
-        }
-      }
-      submissionRef.current = null;
-
-      setStatus({
-
-        type: "success",
-
-        message:
-
-          (result.warpbayStatus === "already_registered"
-            ? "Already registered for this event on WARPBAY. Your enquiry is saved; our team will verify your existing registration."
-            : result.warpbayStatus === "accepted_unconfirmed"
-            ? "Enquiry saved. WARPBAY did not provide a registration ID; our team will verify it."
-            : result.message) ||
-
-          "Thank you. Our exhibition team will contact you shortly.",
-
-      });
-
-      form.reset();
-
-      setAccepted(false);
-
-      setCaptchaToken(null);
-
-      captchaRef.current?.reset();
-
-    } catch (error) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          error instanceof Error
-
-            ? error.message
-
-            : "Submission failed.",
-
-      });
-
-      setCaptchaToken(null);
-
-      captchaRef.current?.reset();
-
-    } finally {
-      busyRef.current = false;
+    if (!accepted || !captchaToken || !siteKey) {
+      setStatus({ type: "error", message: !accepted ? "Please accept the registration consent." : "Please complete reCAPTCHA." });
+      return;
     }
-
+    const fd = new FormData(form);
+    const phone = read(fd, "phone");
+    const countryCode = read(fd, "countryCode");
+    if (!/^\+[1-9]\d{0,3}$/.test(countryCode) || !/^\d{5,15}$/.test(phone)) {
+      setStatus({ type: "error", message: "Please enter a valid mobile number and country calling code." });
+      return;
+    }
+    const payload = {
+      submissionId: submissionRef.current ?? (submissionRef.current = crypto.randomUUID()),
+      draftId: draftConsent ? draft.draftId() : null,
+      caller_id: getCallerId(),
+      company: read(fd, "company"), name: read(fd, "name"),
+      designation: read(fd, "designation"), email: read(fd, "email"),
+      phone: read(fd, "phone"), countryCode: read(fd, "countryCode"),
+      country: read(fd, "country"), standSize: read(fd, "standSize"),
+      exhibitDetails: read(fd, "exhibitDetails"),
+      consent: true, captchaToken, company_website: read(fd, "company_website"),
+    };
+    busyRef.current = true;
+    setStatus({ type: "loading" });
+    try {
+      const response = await fetch("/api/exhibitor", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result: Result = await response.json();
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.message || "Unable to submit registration.");
+      }
+      if (result.recorded === true && result.submissionId && !result.duplicate) {
+        try {
+          const eventKey = `ome_ga4_exhibitor_success_${result.submissionId}`;
+          const analytics = window as Window & { gtag?: (...args: unknown[]) => void };
+          if (!sessionStorage.getItem(eventKey) && typeof analytics.gtag === "function") {
+            analytics.gtag("event", "exhibitor_registration_success", { caller_id: result.caller_id ?? "unassigned" });
+            sessionStorage.setItem(eventKey, "1");
+          }
+        } catch { /* analytics must not affect registration */ }
+      }
+      if (result.recorded === true) draft.markConverted();
+      submissionRef.current = null;
+      setStatus({ type: "success", message: result.message || "Your enquiry has been saved." });
+      form.reset();
+      setAccepted(false);
+      setDraftConsent(false);
+      setCaptchaToken(null);
+      captchaRef.current?.reset();
+      setFormVersion((value) => value + 1);
+    } catch (error) {
+      setStatus({ type: "error", message: error instanceof Error ? error.message : "Submission failed." });
+      setCaptchaToken(null);
+      captchaRef.current?.reset();
+    } finally { busyRef.current = false; }
   }
 
   return (
-
-    <form
-
-      onSubmit={onSubmit}
-
-      aria-labelledby="exhibitor-form-title"
-
-      aria-describedby="exhibitor-form-status"
-
-      className="grid gap-9"
-
-    >
-
-      <h2
-
-        id="exhibitor-form-title"
-
-        className="sr-only"
-
-      >
-
-        Exhibitor Stand Enquiry Form
-
-      </h2>
-
-      <FormSection
-
-        number="01"
-
-        title="Company Details"
-
-        text="Tell us who you are and how our exhibition team can reach you."
-
-      >
-
-        <div className="grid gap-5 sm:grid-cols-2">
-
-          <TextField
-
-            label="Company Name"
-
-            name="company"
-
-            required
-
-            autoComplete="organization"
-
-          />
-
-          <TextField
-
-            label="Contact Person"
-
-            name="name"
-
-            required
-
-            autoComplete="name"
-
-          />
-
-          <TextField
-
-            label="Designation"
-
-            name="designation"
-
-            required
-
-          />
-
-          <TextField
-
-            label="Email"
-
-            name="email"
-
-            type="email"
-
-            required
-
-            autoComplete="email"
-
-          />
-
-          <PhoneField />
-
-          <TextField
-
-            label="Country"
-
-            name="country"
-
-            required
-
-            autoComplete="country-name"
-
-          />
-
-          <TextField
-
-            label="Company Website"
-
-            name="website"
-
-            type="url"
-
-            placeholder="https\://"
-
-          />
-
-          <TextField
-
-            label="City"
-
-            name="city"
-
-            required
-
-            autoComplete="address-level2"
-
-          />
-
-          <TextField
-
-            label="State / Province"
-
-            name="state"
-
-            required
-
-            autoComplete="address-level1"
-
-          />
-
-          <TextField
-
-            label="City / State (legacy / optional)"
-
-            name="cityState"
-
-            placeholder="Optional, e.g. Bhubaneswar, Odisha"
-
-          />
-
-          
-
-          <div className="sm:col-span-2">
-
-            <TextField
-
-              label="Company Address"
-
-              name="address"
-
-              autoComplete="street-address"
-
-            />
-
-          </div>
-
-          <div className="sm:col-span-2">
-
-            <TextField
-
-              label="GST / VAT / Tax ID"
-
-              name="taxId"
-
-              placeholder="Optional"
-
-            />
-
-          </div>
-
+    <form key={formVersion} onSubmit={onSubmit} onChange={draft.onChange} onBlur={draft.onBlur} className="grid gap-6">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField label="Company Name" name="company" required autoComplete="organization" />
+        <TextField label="Contact Person" name="name" required autoComplete="name" />
+        <TextField label="Designation" name="designation" required />
+        <PhoneField required />
+        <TextField label="Email Address" name="email" type="email" required autoComplete="email" />
+        <TextField label="Country" name="country" required autoComplete="country-name" />
+        <SelectField label="Preferred Booth Size (Optional)" name="standSize" defaultValue="">
+          <option value="">Select if applicable</option>
+          <option value="9 sqm shell scheme">9 sqm shell scheme</option>
+          <option value="18 sqm shell scheme">18 sqm shell scheme</option>
+          <option value="27+ sqm custom / bare">27+ sqm custom / bare</option>
+          <option value="Outdoor machinery display">Outdoor machinery display</option>
+          <option value="Not sure yet">Not sure yet</option>
+        </SelectField>
+        <div className="sm:col-span-2">
+          <TextAreaField label="Products & Services" name="exhibitDetails" required />
         </div>
-
-      </FormSection>
-
-      <FormSection
-
-        number="02"
-
-        title="What You'll Exhibit"
-
-        text="Help us understand your products, technologies and sector."
-
-      >
-
-        <div className="grid gap-5">
-
-          <SelectField
-
-            label="Primary Category"
-
-            name="category"
-
-            required
-
-            defaultValue=""
-
-          >
-
-            <option
-
-              value=""
-
-              disabled
-
-            >
-
-              Select a category…
-
-            </option>
-
-            {categories.map(
-
-              (category) => (
-
-                <option
-
-                  key={category}
-
-                  value={category}
-
-                >
-
-                  {category}
-
-                </option>
-
-              ),
-
-            )}
-
-          </SelectField>
-
-          <TextAreaField
-
-            label="Products / Solutions to be Exhibited"
-
-            name="exhibitDetails"
-
-            required
-
-            placeholder="Briefly describe the machinery, equipment, technology, products or services you plan to showcase."
-
-          />
-
-          <TextField
-
-            label="Brands / Product Names"
-
-            name="brands"
-
-            placeholder="Optional"
-
-          />
-
-        </div>
-
-      </FormSection>
-
-      <FormSection
-
-        number="03"
-
-        title="Stand Preference"
-
-        text="Select the participation format closest to your current requirement."
-
-      >
-
-        <fieldset>
-
-          <legend className="sr-only">
-
-            Stand Preference
-
-          </legend>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-
-            {standOptions.map(
-
-              (option) => (
-
-                <label
-
-                  key={option}
-
-                  className="group flex cursor-pointer items-center gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
-
-                >
-
-                  <input
-
-                    type="radio"
-
-                    name="standSize"
-
-                    value={option}
-
-                    required
-
-                    className="size-4 accent-[#f9b900]"
-
-                  />
-
-                  <span className="text-sm font-semibold text-zinc-800">
-
-                    {option}
-
-                  </span>
-
-                </label>
-
-              ),
-
-            )}
-
-          </div>
-
-        </fieldset>
-
-      </FormSection>
-
-      <FormSection
-
-        number="04"
-
-        title="Additional Participation"
-
-        text="Optional opportunities your company may be interested in."
-
-      >
-
-        <fieldset>
-
-          <legend className="sr-only">
-
-            Additional Participation
-
-          </legend>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-
-            {participationOptions.map(
-
-              (option) => (
-
-                <label
-
-                  key={option}
-
-                  className="group flex cursor-pointer items-start gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
-
-                >
-
-                  <input
-
-                    type="checkbox"
-
-                    name="participationInterests"
-
-                    value={option}
-
-                    className="mt-0.5 size-4 accent-[#f9b900]"
-
-                  />
-
-                  <span className="text-sm font-semibold leading-5 text-zinc-800">
-
-                    {option}
-
-                  </span>
-
-                </label>
-
-              ),
-
-            )}
-
-          </div>
-
-        </fieldset>
-
-      </FormSection>
-
-      <FormSection
-
-        number="05"
-
-        title="Anything Else?"
-
-        text="Share special requirements or questions for our exhibition team."
-
-      >
-
-        <TextAreaField
-
-          label="Requirements or Questions"
-
-          name="message"
-
-          placeholder="Stand configuration, power requirements, machinery display, sponsorship, logistics or any other requirement..."
-
-        />
-
-      </FormSection>
-
-      {/* Honeypot */}
-
-      <div
-
-        className="absolute -left-[9999px]"
-
-        aria-hidden="true"
-
-      >
-
-        <TextField
-
-          label="Website"
-
-          name="company_website"
-
-          tabIndex={-1}
-
-          autoComplete="off"
-
-        />
-
       </div>
-
-      <label className="flex cursor-pointer items-start gap-3 border-t border-zinc-300 pt-6">
-
-        <input
-
-          type="checkbox"
-
-          checked={accepted}
-
-          onChange={(e) =>
-
-            setAccepted(
-
-              e.target.checked,
-
-            )
-
-          }
-
-          required
-
-          aria-required="true"
-
-          className="mt-1 size-4 shrink-0 accent-[#f9b900]"
-
-        />
-
-        <span className="text-[11px] leading-5 text-zinc-600">
-
-          I agree to be contacted by Futurex Trade Fair &
-
-          Events Pvt. Ltd. about exhibiting at the 5th
-
-          Odisha Mining & Infrastructure International Expo.
-
-          My details won&apos;t be shared with third parties.
-
-        </span>
-
+      <div className="absolute -left-[9999px]" aria-hidden="true">
+        <TextField label="Website" name="company_website" tabIndex={-1} autoComplete="off" />
+      </div>
+      <label className="flex items-start gap-3 text-sm text-zinc-700">
+        <input type="checkbox" name="draftConsent" value="yes" checked={draftConsent}
+          onChange={(e) => setDraftConsent(e.target.checked)} className="mt-1" />
+        <span>Optional: I agree that my entered contact details may be saved before submission so the event team can follow up if I leave this form unfinished.</span>
       </label>
-
-      <div className="overflow-x-auto">
-
-        {siteKey ? (
-
-          <ReCAPTCHA
-
-            ref={captchaRef}
-
-            sitekey={siteKey}
-
-            onChange={setCaptchaToken}
-
-            onExpired={() =>
-
-              setCaptchaToken(null)
-
-            }
-
-            onErrored={() =>
-
-              setCaptchaToken(null)
-
-            }
-
-          />
-
-        ) : (
-
-          <div
-
-            role="alert"
-
-            className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-
-          >
-
-            reCAPTCHA configuration is missing.
-
-          </div>
-
-        )}
-
-      </div>
-
-      <div
-
-        id="exhibitor-form-status"
-
-        aria-live="polite"
-
-        aria-atomic="true"
-
-      >
-
-        <FormStatus status={status} />
-
-      </div>
-
-      <button
-
-        type="submit"
-
-        disabled={
-
-          status.type === "loading"
-
-        }
-
-        aria-busy={
-
-          status.type === "loading"
-
-        }
-
-        className="group inline-flex min-h-13 w-full items-center justify-center gap-3 bg-brand-black px-7 text-[11px] font-extrabold uppercase tracking-[.09em] text-white transition duration-300 hover:bg-brand hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
-
-      >
-
-        {status.type === "loading" ? (
-
-          <>
-
-            <Loader2
-
-              aria-hidden="true"
-
-              className="size-4 animate-spin"
-
-            />
-
-            Sending Enquiry...
-
-          </>
-
-        ) : (
-
-          <>
-
-            Send Stand Enquiry
-
-            <ArrowRight
-
-              aria-hidden="true"
-
-              className="size-4 transition-transform duration-300 group-hover:translate-x-1"
-
-            />
-
-          </>
-
-        )}
-
+      <label className="flex items-start gap-3 text-sm text-zinc-700">
+        <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} required className="mt-1" />
+        <span>I agree to be contacted about Odisha Mining & Infrastructure International Expo 2027. <strong>*</strong></span>
+      </label>
+      {siteKey ? <ReCAPTCHA ref={captchaRef} sitekey={siteKey} onChange={setCaptchaToken}
+        onExpired={() => setCaptchaToken(null)} onErrored={() => setCaptchaToken(null)} />
+        : <p role="alert">reCAPTCHA configuration missing.</p>}
+      <FormStatus status={status} />
+      <button type="submit" disabled={status.type === "loading"}
+        className="group inline-flex min-h-12 w-full items-center justify-center gap-3 bg-brand-black px-7 py-3 text-xs font-extrabold uppercase text-white disabled:opacity-60 sm:w-fit">
+        {status.type === "loading" ? <><Loader2 className="size-4 animate-spin" /> Sending...</>
+          : <>Send Stand Enquiry <ArrowRight className="size-4" /></>}
       </button>
-
-      <p className="text-xs leading-6 text-zinc-500">
-
-        Prefer to talk directly? Call{" "}
-
-        <a
-
-          href="tel:+919810855697"
-
-          className="font-bold text-zinc-950 underline decoration-brand decoration-2 underline-offset-4"
-
-        >
-
-          +91 98108 55697
-
-        </a>{" "}
-
-        (Namit Gupta) or{" "}
-
-        <a
-
-          href="https\://wa.me/919810855697"
-
-          target="_blank"
-
-          rel="noopener noreferrer"
-
-          className="font-bold text-zinc-950 underline decoration-brand decoration-2 underline-offset-4"
-
-        >
-
-          message on WhatsApp
-
-        </a>
-
-        .
-
-      </p>
-
     </form>
-
   );
-
-}
-
-function FormSection({
-
-  number,
-
-  title,
-
-  text,
-
-  children,
-
-}: {
-
-  number: string;
-
-  title: string;
-
-  text: string;
-
-  children: React.ReactNode;
-
-}) {
-
-  const headingId = `form-section-${number}`;
-
-  return (
-
-    <section
-
-      aria-labelledby={headingId}
-
-    >
-
-      <div className="mb-5 flex items-start gap-4 border-b border-zinc-300 pb-4">
-
-        <span
-
-          aria-hidden="true"
-
-          className="text-[10px] font-black tracking-[.15em] text-brand-dark"
-
-        >
-
-          {number}
-
-        </span>
-
-        <div>
-
-          <h3
-
-            id={headingId}
-
-            className="text-lg font-black tracking-[-.025em] text-zinc-950"
-
-          >
-
-            {title}
-
-          </h3>
-
-          <p className="mt-1 text-xs leading-5 text-zinc-500">
-
-            {text}
-
-          </p>
-
-        </div>
-
-      </div>
-
-      {children}
-
-    </section>
-
-  );
-
 }

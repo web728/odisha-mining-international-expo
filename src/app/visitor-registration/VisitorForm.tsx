@@ -1,904 +1,125 @@
 "use client";
-
-import {
-
-  FormEvent,
-
-  useRef,
-
-  useState,
-
-  useEffect,
-
-} from "react";
-
+import { FormEvent, useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-
-import { getCallerId, captureCallerAttribution } from "@/lib/callerAttribution";
-
+import { ArrowRight, Loader2 } from "lucide-react";
+import { TextField, SelectField, TextAreaField } from "@/components/forms/fields";
 import { PhoneField } from "@/components/forms/PhoneField";
-
-import {
-
-  ArrowRight,
-
-  Loader2,
-
-} from "lucide-react";
-
 import { FormStatus } from "@/components/forms/FormStatus";
+import { captureCallerAttribution, getCallerId } from "@/lib/callerAttribution";
+import { useLeadDraft } from "@/components/forms/useLeadDraft";
 
-import {
-
-  SelectField,
-
-  TextField,
-
-} from "@/components/forms/fields";
-
-const interests = [
-
-  "Mining Machinery & Equipment",
-
-  "Infrastructure & Construction",
-
-  "Mineral Processing",
-
-  "Logistics & Transportation",
-
-  "Safety & Sustainability",
-
-  "Heavy Engineering & Industrial Solutions",
-
-];
-
-const visitorProfiles = [
-
-  "Mine Owner / Developer / Operator",
-
-  "Manufacturer",
-
-  "Contractor / Builder",
-
-  "Consultant / Engineering Firm",
-
-  "Distributor / Transporter",
-
-  "Government / PSU / Nodal Agency",
-
-  "Association / Academia",
-
-  "Financial Institution / Investor / Consultant",
-
-  "Dealer / Distributor",
-
-  "Media / Press",
-
-  "Other",
-
-];
-
-const sources = [
-
-  "Google Search",
-
-  "Email",
-
-  "WhatsApp",
-
-  "Facebook",
-
-  "Instagram",
-
-  "LinkedIn",
-
-  "Industry Association",
-
-  "Colleague / Business Contact",
-
-  "Previous Edition",
-
-  "Other",
-
-];
-
-type Status = {
-
-  type: "idle" | "loading" | "success" | "error";
-
-  message?: string;
-
-};
+type Status = { type: "idle" | "loading" | "success" | "error"; message?: string };
+type Result = { success?: boolean; recorded?: boolean; duplicate?: boolean; submissionId?: string; caller_id?: string | null; warpbayStatus?: string; message?: string };
+const read = (fd: FormData, key: string) => String(fd.get(key) ?? "").trim();
 
 export function VisitorForm() {
-
-  const [status, setStatus] = useState<Status>({
-
-    type: "idle",
-
-  });
-
-  const [captchaToken, setCaptchaToken] =
-
-    useState<string | null>(null);
-
+  const [status, setStatus] = useState<Status>({ type: "idle" });
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
-
-  const captchaRef = useRef<ReCAPTCHA>(null);
-
+  const [draftConsent, setDraftConsent] = useState(false);
+  const [formVersion, setFormVersion] = useState(0);
+  const busyRef = useRef(false);
   const submissionRef = useRef<string | null>(null);
-
-  const submittingRef = useRef(false);
-
+  const captchaRef = useRef<ReCAPTCHA>(null);
+  const draft = useLeadDraft("visitor");
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   useEffect(() => { captureCallerAttribution(); }, []);
 
-
-
-  const siteKey =
-
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-
-  async function onSubmit(
-
-    e: FormEvent<HTMLFormElement>
-
-  ) {
-
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    if (submittingRef.current) return;
-
-    if (!siteKey) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "reCAPTCHA configuration is missing.",
-
-      });
-
-      return;
-
-    }
-
-    if (!captchaToken) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "Please complete the reCAPTCHA verification.",
-
-      });
-
-      return;
-
-    }
-
-    if (!accepted) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "Please accept the consent statement to continue.",
-
-      });
-
-      return;
-
-    }
-
+    if (busyRef.current) return;
     const form = e.currentTarget;
-
-    const data = new FormData(form);
-
-    const interest = data
-
-      .getAll("interest")
-
-      .map(String);
-
-    if (!interest.length) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          "Please select at least one area of interest.",
-
-      });
-
+    if (!accepted || !captchaToken || !siteKey) {
+      setStatus({ type: "error", message: !accepted ? "Please accept the registration consent." : "Please complete reCAPTCHA." });
       return;
-
     }
-
+    const fd = new FormData(form);
+    const phone = read(fd, "phone");
+    const countryCode = read(fd, "countryCode");
+    if (!/^\+[1-9]\d{0,3}$/.test(countryCode) || !/^\d{5,15}$/.test(phone)) {
+      setStatus({ type: "error", message: "Please enter a valid mobile number and country calling code." });
+      return;
+    }
     const payload = {
-
       submissionId: submissionRef.current ?? (submissionRef.current = crypto.randomUUID()),
-
+      draftId: draftConsent ? draft.draftId() : null,
       caller_id: getCallerId(),
-
-      name: `${String(data.get("firstName") ?? "").trim()} ${String(data.get("lastName") ?? "").trim()}`.trim(),
-
-      designation: data.get("designation"),
-
-      company: data.get("company"),
-
-      email: data.get("email"),
-
-      phone: data.get("phone"),
-
-      countryCode: data.get("countryCode"),
-
-      website: data.get("website"),
-
-      city: data.get("city"),
-
-      country: data.get("country"),
-
-      state: data.get("state"),
-
-      title: data.get("title"),
-
-      primaryCategory: data.get("primaryCategory"),
-
-      productsSolutions: data.get("productsSolutions"),
-
-      profile: data.get("profile"),
-
-      interest,
-
-      source: data.get("source"),
-
-      consent: true,
-
-      captchaToken,
-
-      company_website:
-
-        data.get("company_website"),
-
+      name: read(fd, "name"), company: read(fd, "company"),
+      designation: read(fd, "designation"), email: read(fd, "email"),
+      phone: read(fd, "phone"), countryCode: read(fd, "countryCode"),
+      country: read(fd, "country"), businessCategory: read(fd, "businessCategory"),
+      primaryCategory: read(fd, "businessCategory"),
+      consent: true, captchaToken, company_website: read(fd, "company_website"),
     };
-
-    submittingRef.current = true;
-
-    setStatus({
-
-      type: "loading",
-
-    });
-
+    busyRef.current = true;
+    setStatus({ type: "loading" });
     try {
-
-      const response = await fetch(
-
-        "/api/visitor",
-
-        {
-
-          method: "POST",
-
-          headers: {
-
-            "Content-Type":
-
-              "application/json",
-
-          },
-
-          body: JSON.stringify(payload),
-
-        }
-
-      );
-
-      const result =
-
-        await response.json();
-
-      if (!response.ok) {
-
-        throw new Error(
-
-          (result.warpbayStatus === "already_registered"
-
-            ? "Already registered for this event on WARPBAY. Your enquiry is saved; our team will verify your existing registration."
-
-            : result.warpbayStatus === "accepted_unconfirmed"
-
-            ? "Enquiry saved. WARPBAY did not provide a registration ID; our team will verify it."
-
-            : result.message) ||
-
-            "Submission failed."
-
-        );
-
-      }
-
-      if (result.recorded === true && typeof result.submissionId === "string" && !result.duplicate) {
-
-      // GA4 tracks only confirmed new MongoDB records, never a click or honeypot response.
-
-      try {
-
-        const key = `ome_ga4_visitor_success_${result.submissionId}`;
-
-        const analytics = window as Window & { gtag?: (...args: unknown[]) => void };
-
-        if (!sessionStorage.getItem(key) && typeof analytics.gtag === "function") {
-
-          // Existing site analytics-consent settings must govern whether gtag sends the hit.
-
-          analytics.gtag("event", "visitor_registration_success", {
-
-            caller_id: result.caller_id ?? "unassigned",
-
-          });
-
-          sessionStorage.setItem(key, "1");
-
-        }
-
-      } catch (trackingError) {
-
-        console.warn("GA4 visitor tracking unavailable:", trackingError);
-
-      }
-
-    }
-
-    submissionRef.current = null;
-
-
-
-      setStatus({
-
-        type: "success",
-
-        message:
-
-          (result.warpbayStatus === "already_registered"
-
-            ? "Already registered for this event on WARPBAY. Your enquiry is saved; our team will verify your existing registration."
-
-            : result.warpbayStatus === "accepted_unconfirmed"
-
-            ? "Enquiry saved. WARPBAY did not provide a registration ID; our team will verify it."
-
-            : result.message) ||
-
-          "Visitor registration submitted successfully.",
-
+      const response = await fetch("/api/visitor", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-
+      const result: Result = await response.json();
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.message || "Unable to submit registration.");
+      }
+      if (result.recorded === true && result.submissionId && !result.duplicate) {
+        try {
+          const eventKey = `ome_ga4_visitor_success_${result.submissionId}`;
+          const analytics = window as Window & { gtag?: (...args: unknown[]) => void };
+          if (!sessionStorage.getItem(eventKey) && typeof analytics.gtag === "function") {
+            analytics.gtag("event", "visitor_registration_success", { caller_id: result.caller_id ?? "unassigned" });
+            sessionStorage.setItem(eventKey, "1");
+          }
+        } catch { /* analytics must not affect registration */ }
+      }
+      if (result.recorded === true) draft.markConverted();
+      submissionRef.current = null;
+      setStatus({ type: "success", message: result.message || "Your enquiry has been saved." });
       form.reset();
-
       setAccepted(false);
-
+      setDraftConsent(false);
       setCaptchaToken(null);
-
       captchaRef.current?.reset();
-
+      setFormVersion((value) => value + 1);
     } catch (error) {
-
-      setStatus({
-
-        type: "error",
-
-        message:
-
-          error instanceof Error
-
-            ? error.message
-
-            : "Submission failed.",
-
-      });
-
+      setStatus({ type: "error", message: error instanceof Error ? error.message : "Submission failed." });
       setCaptchaToken(null);
-
       captchaRef.current?.reset();
-
-    } finally {
-
-      submittingRef.current = false;
-
-    }
-
+    } finally { busyRef.current = false; }
   }
 
   return (
-
-    <form
-
-      onSubmit={onSubmit}
-
-      className="grid gap-8"
-
-    >
-
-      <FormSection
-
-        number="01"
-
-        title="Your Details"
-
-      >
-
-        <div className="grid gap-5 sm:grid-cols-2">
-
-          <SelectField label="Title" name="title" required defaultValue="">
-
-            <option value="" disabled>Select title</option>
-
-            <option value="Mr">Mr</option>
-
-            <option value="Ms">Ms</option>
-
-            <option value="Mrs">Mrs</option>
-
-            <option value="Dr">Dr</option>
-
-          </SelectField>
-
-            <TextField
-              label="First Name"
-              name="firstName"
-              required
-              autoComplete="given-name"
-            />
-            <TextField
-              label="Last Name"
-              name="lastName"
-              required
-              autoComplete="family-name"
-            />
-
-          <TextField
-
-            label="Designation"
-
-            name="designation"
-
-            required
-
-          />
-
-          <TextField
-
-            label="Company / Organisation"
-
-            name="company"
-
-            required
-
-            autoComplete="organization"
-
-          />
-
-          <TextField
-
-            label="Company Website"
-
-            name="website"
-
-            type="url"
-
-            placeholder="https://"
-
-          />
-
-          <TextField
-
-            label="Email"
-
-            name="email"
-
-            type="email"
-
-            required
-
-            autoComplete="email"
-
-          />
-
-          <PhoneField />
-
-          <TextField
-
-            label="City"
-
-            name="city"
-
-            required
-
-            autoComplete="address-level2"
-
-          />
-
-          <TextField label="State / Province" name="state" required autoComplete="address-level1" />
-
-          <TextField
-
-            label="Country"
-
-            name="country"
-
-            required
-
-            autoComplete="country-name"
-
-          />
-
-        </div>
-
-      </FormSection>
-
-      <FormSection
-
-        number="02"
-
-        title="Visitor Profile"
-
-      >
-
-        <div className="grid gap-5">
-
-          <TextField label="Primary Category" name="primaryCategory" required placeholder="E.g. Mining Equipment" />
-
-          <TextField label="Products / Solutions Interested In" name="productsSolutions" required placeholder="E.g. Mining Machinery and Solutions" />
-
-          <SelectField
-
-            label="Visitor Profile"
-
-            name="profile"
-
-            required
-
-            defaultValue=""
-
-          >
-
-            <option
-
-              value=""
-
-              disabled
-
-            >
-
-              Select one…
-
-            </option>
-
-            {visitorProfiles.map(
-
-              (profile) => (
-
-                <option
-
-                  key={profile}
-
-                  value={profile}
-
-                >
-
-                  {profile}
-
-                </option>
-
-              )
-
-            )}
-
-          </SelectField>
-
-          <SelectField
-
-            label="How did you hear about us?"
-
-            name="source"
-
-            required
-
-            defaultValue=""
-
-          >
-
-            <option
-
-              value=""
-
-              disabled
-
-            >
-
-              Select one…
-
-            </option>
-
-            {sources.map((source) => (
-
-              <option
-
-                key={source}
-
-                value={source}
-
-              >
-
-                {source}
-
-              </option>
-
-            ))}
-
-          </SelectField>
-
-        </div>
-
-      </FormSection>
-
-      <FormSection
-
-        number="03"
-
-        title="Areas of Interest"
-
-      >
-
-        <div className="grid gap-3 sm:grid-cols-2">
-
-          {interests.map((item) => (
-
-            <label
-
-              key={item}
-
-              className="group flex cursor-pointer items-start gap-3 border border-zinc-300 bg-white p-4 transition hover:border-brand"
-
-            >
-
-              <input
-
-                type="checkbox"
-
-                name="interest"
-
-                value={item}
-
-                className="mt-0.5 size-4 accent-[#f9b900]"
-
-              />
-
-              <span className="text-sm font-semibold leading-5 text-zinc-800">
-
-                {item}
-
-              </span>
-
-            </label>
-
-          ))}
-
-        </div>
-
-      </FormSection>
-
-      <div
-
-        className="absolute -left-[9999px]"
-
-        aria-hidden="true"
-
-      >
-
-        <TextField
-
-          label="Website"
-
-          name="company_website"
-
-          tabIndex={-1}
-
-          autoComplete="off"
-
-        />
-
+    <form key={formVersion} onSubmit={onSubmit} onChange={draft.onChange} onBlur={draft.onBlur} className="grid gap-6">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField label="Full Name" name="name" required autoComplete="name" />
+        <TextField label="Company / Organisation" name="company" required autoComplete="organization" />
+        <TextField label="Designation" name="designation" required />
+        <PhoneField required />
+        <TextField label="Email Address" name="email" type="email" required autoComplete="email" />
+        <TextField label="Business / Category (Optional)" name="businessCategory" />
+        <TextField label="Country" name="country" required autoComplete="country-name" />
       </div>
-
-      <label className="flex cursor-pointer items-start gap-3 border-t border-zinc-300 pt-6">
-
-        <input
-
-          type="checkbox"
-
-          checked={accepted}
-
-          onChange={(e) =>
-
-            setAccepted(
-
-              e.target.checked
-
-            )
-
-          }
-
-          className="mt-1 size-4 shrink-0 accent-[#f9b900]"
-
-        />
-
-        <span className="text-[11px] leading-5 text-zinc-600">
-
-          I agree to be contacted by Futurex Trade
-
-          Fair & Events Pvt. Ltd. about the 5th
-
-          Odisha Mining & Infrastructure
-
-          International Expo. My details won&apos;t
-
-          be shared with third parties.
-
-        </span>
-
+      <div className="absolute -left-[9999px]" aria-hidden="true">
+        <TextField label="Website" name="company_website" tabIndex={-1} autoComplete="off" />
+      </div>
+      <label className="flex items-start gap-3 text-sm text-zinc-700">
+        <input type="checkbox" name="draftConsent" value="yes" checked={draftConsent}
+          onChange={(e) => setDraftConsent(e.target.checked)} className="mt-1" />
+        <span>Optional: I agree that my entered contact details may be saved before submission so the event team can follow up if I leave this form unfinished.</span>
       </label>
-
-      <div className="overflow-x-auto">
-
-        {siteKey ? (
-
-          <ReCAPTCHA
-
-            ref={captchaRef}
-
-            sitekey={siteKey}
-
-            onChange={
-
-              setCaptchaToken
-
-            }
-
-            onExpired={() =>
-
-              setCaptchaToken(
-
-                null
-
-              )
-
-            }
-
-            onErrored={() =>
-
-              setCaptchaToken(
-
-                null
-
-              )
-
-            }
-
-          />
-
-        ) : (
-
-          <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-
-            reCAPTCHA configuration is missing.
-
-          </div>
-
-        )}
-
-      </div>
-
+      <label className="flex items-start gap-3 text-sm text-zinc-700">
+        <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} required className="mt-1" />
+        <span>I agree to be contacted about Odisha Mining & Infrastructure International Expo 2027. <strong>*</strong></span>
+      </label>
+      {siteKey ? <ReCAPTCHA ref={captchaRef} sitekey={siteKey} onChange={setCaptchaToken}
+        onExpired={() => setCaptchaToken(null)} onErrored={() => setCaptchaToken(null)} />
+        : <p role="alert">reCAPTCHA configuration missing.</p>}
       <FormStatus status={status} />
-
-      <button
-
-        type="submit"
-
-        disabled={
-
-          status.type ===
-
-          "loading"
-
-        }
-
-        className="group inline-flex min-h-13 w-full items-center justify-center gap-3 bg-brand-black px-7 text-[11px] font-extrabold uppercase tracking-[.09em] text-white transition duration-300 hover:bg-brand hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
-
-      >
-
-        {status.type ===
-
-        "loading" ? (
-
-          <>
-
-            <Loader2 className="size-4 animate-spin" />
-
-            Registering...
-
-          </>
-
-        ) : (
-
-          <>
-
-            Register to Visit — Free
-
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-
-          </>
-
-        )}
-
+      <button type="submit" disabled={status.type === "loading"}
+        className="group inline-flex min-h-12 w-full items-center justify-center gap-3 bg-brand-black px-7 py-3 text-xs font-extrabold uppercase text-white disabled:opacity-60 sm:w-fit">
+        {status.type === "loading" ? <><Loader2 className="size-4 animate-spin" /> Sending...</>
+          : <>Register to Visit — Free <ArrowRight className="size-4" /></>}
       </button>
-
     </form>
-
   );
-
-}
-
-function FormSection({
-
-  number,
-
-  title,
-
-  children,
-
-}: {
-
-  number: string;
-
-  title: string;
-
-  children: React.ReactNode;
-
-}) {
-
-  return (
-
-    <section>
-
-      <div className="mb-5 flex items-center gap-4 border-b border-zinc-300 pb-4">
-
-        <span className="text-[10px] font-black tracking-[.15em] text-brand-dark">
-
-          {number}
-
-        </span>
-
-        <h3 className="text-lg font-black tracking-[-.025em] text-zinc-950">
-
-          {title}
-
-        </h3>
-
-      </div>
-
-      {children}
-
-    </section>
-
-  );
-
 }
