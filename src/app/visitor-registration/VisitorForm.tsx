@@ -102,11 +102,7 @@ export function VisitorForm() {
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <TextField label="Website" name="company_website" tabIndex={-1} autoComplete="off" />
       </div>
-      <label className="flex items-start gap-3 text-sm text-zinc-700">
-        <input type="checkbox" name="draftConsent" value="yes" checked={draftConsent}
-          onChange={(e) => setDraftConsent(e.target.checked)} className="mt-1" />
-        <span>Optional: I agree that my entered contact details may be saved before submission so the event team can follow up if I leave this form unfinished.</span>
-      </label>
+    
       <label className="flex items-start gap-3 text-sm text-zinc-700">
         <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} required className="mt-1" />
         <span>I agree to be contacted about Odisha Mining & Infrastructure International Expo 2027. <strong>*</strong></span>

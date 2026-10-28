@@ -89,8 +89,6 @@ function getWarpbayResponseMessage(
 
       return (
 
-        "You are already registered for this event on WARPBAY. " +
-
         "Your enquiry has been saved. " +
 
         "Our team will verify your existing registration."
@@ -100,17 +98,14 @@ function getWarpbayResponseMessage(
 
 
     case "role_conflict":
-      return "Your enquiry has been saved. The WARPBAY account has an incompatible role; our team will review it.";
+      return "Your enquiry has been saved. our team will review it.";
 
     case "accepted_unconfirmed":
 
       return (
 
         "Your enquiry has been saved. " +
-
-        "WARPBAY did not return a registration ID. " +
-
-        "Our team will verify your registration status."
+        "Our team will review your submission."
 
       );
 
@@ -121,8 +116,6 @@ function getWarpbayResponseMessage(
       return (
 
         "Your enquiry has been saved. " +
-
-        "Some required registration details are missing. " +
 
         "Our team will review your submission."
 
