@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -10,6 +9,12 @@ import { participantLogos } from "@/data/site";
 import { Gallery } from "./gallery-video";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+const mediaPartners = [
+  { name: "B2B", file: "b2b.jpeg" },
+  { name: "India Mining", file: "india-mining.png" },
+  { name: "Motor India", file: "motor-india-dark.png" },
+] as const;
 
 export function HomeShowcase() {
   return (
@@ -126,27 +131,56 @@ function Partners() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease }}
-          className="grid border border-zinc-200 md:grid-cols-2"
+          className="border border-zinc-200"
         >
-          <Partner title="Organiser">
-            <Image
-              src="/image/futurex.jpg"
-              alt="Futurex Trade Fair & Events Pvt. Ltd."
-              width={210}
-              height={90}
-              className="max-h-20 w-auto object-contain"
-            />
-          </Partner>
+          {/* Row 1: Organiser + LanYard Sponsor */}
+          <div className="grid md:grid-cols-2">
+            <Partner title="Organiser">
+              <Image
+                src="/image/futurex.jpg"
+                alt="Futurex Trade Fair & Events Pvt. Ltd."
+                width={210}
+                height={90}
+                className="max-h-20 w-auto object-contain"
+              />
+            </Partner>
 
-          <Partner title="LanYard Sponsor">
-            <Image
-              src="/image/crusher.png"
-              alt="Mr Crusher"
-              width={210}
-              height={90}
-              className="max-h-20 w-auto object-contain"
+            <Partner title="LanYard Sponsor">
+              <Image
+                src="/image/crusher.png"
+                alt="Mr Crusher"
+                width={210}
+                height={90}
+                className="max-h-20 w-auto object-contain"
+              />
+            </Partner>
+          </div>
+
+          {/* Row 2: Media Partners (centered) */}
+          <div className="group relative border-t border-zinc-200 p-7 text-center">
+            <h3 className="mb-6 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
+              Media Partners
+            </h3>
+
+            <ul className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
+              {mediaPartners.map(({ name, file }) => (
+                <li key={name}>
+                  <Image
+                    src={`/logo/${file}`}
+                    alt={name}
+                    width={220}
+                    height={100}
+                    className="max-h-22 w-auto object-contain"
+                  />
+                </li>
+              ))}
+            </ul>
+
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
             />
-          </Partner>
+          </div>
         </motion.div>
       </Container>
     </section>
@@ -162,7 +196,7 @@ function Partner({
 }) {
   return (
     <article className="group relative flex min-h-40 flex-col justify-center border-b border-zinc-200 p-7 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0">
-      <h3 className="mb-5 text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
+      <h3 className="mb-5 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
         {title}
       </h3>
 
@@ -175,7 +209,6 @@ function Partner({
     </article>
   );
 }
-
 /* ---------------- CTA ---------------- */
 
 function FinalCTA() {
