@@ -1,5 +1,7 @@
+
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -10,11 +12,87 @@ import { Gallery } from "./gallery-video";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+/* ---------------- Logo Website Links ---------------- */
+
+// Past Participants: logo file name ke according URL lagao.
+// Jiska URL nahi hai, use "#" rehne do.
+
+const participantLogoLinks: Record<string, string> = {
+  // Examples:
+  // "tata.png": "https://www.tatasteel.com",
+  // "jcb.png": "https://www.jcb.com",
+  // "example.png": "#",
+};
+
+// Organiser and Sponsor Links
+const organiserUrl = "https://www.futurextrade.com/";
+const lanyardSponsorUrl = "https://mrcrushers.in/";
+
+// Media Partners Links
 const mediaPartners = [
-  { name: "B2B", file: "b2b.jpeg" },
-  { name: "India Mining", file: "india-mining.png" },
-  { name: "Motor India", file: "motor-india-dark.png" },
+  {
+    name: "B2B",
+    file: "b2b.jpeg",
+    url: "https://b2bpurchase.com/",
+  },
+  {
+    name: "India Mining",
+    file: "india-mining.png",
+    url: "#",
+  },
+  {
+    name: "Motor India",
+    file: "motor-india-dark.png",
+    url: "https://www.motorindiaonline.in/",
+  },
+  {
+    name: "Equipment Times",
+    file: "equipment_times.png",
+    url: "https://www.equipmenttimes.in/",
+  },
+  {
+    name: "Construction Times",
+    file: "construction-times.png",
+    url: "https://www.constructiontimes.co.in/",
+  },
 ] as const;
+
+/* ---------------- Reusable Logo Link ---------------- */
+
+function LogoLink({
+  href = "#",
+  children,
+  className = "",
+  tabIndex,
+}: {
+  href?: string;
+  children: ReactNode;
+  className?: string;
+  tabIndex?: number;
+}) {
+  const url = href.trim();
+
+  const hasLink = url !== "" && url !== "#";
+
+  return (
+    <a
+      href={hasLink ? url : "#"}
+      target={hasLink ? "_blank" : undefined}
+      rel={hasLink ? "noopener noreferrer" : undefined}
+      tabIndex={tabIndex}
+      onClick={(e) => {
+        if (!hasLink) {
+          e.preventDefault();
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </a>
+  );
+}
+
+/* ---------------- Main Component ---------------- */
 
 export function HomeShowcase() {
   return (
@@ -49,7 +127,9 @@ function Participants() {
             className="mt-4 max-w-3xl text-[clamp(1.9rem,3vw,3.2rem)] font-black leading-[1.04] tracking-[-.045em] text-zinc-950"
           >
             Leading brands that have been
-            <span className="text-brand"> part of the expo.</span>
+            <span className="text-brand">
+              {" "}part of the expo.
+            </span>
           </h2>
         </motion.div>
       </Container>
@@ -59,23 +139,26 @@ function Participants() {
   );
 }
 
+/* ---------------- Participants Logo Marquee ---------------- */
+
 function LogoMarquee() {
   const logos = [...participantLogos, ...participantLogos];
 
   return (
     <div className="group relative mt-10 overflow-hidden">
+      {/* Left Gradient */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[#f4f4f1] to-transparent sm:w-32"
       />
 
+      {/* Right Gradient */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[#f4f4f1] to-transparent sm:w-32"
       />
 
       <motion.div
-        aria-hidden="true"
         className="flex w-max"
         animate={{
           x: ["0%", "-50%"],
@@ -88,23 +171,37 @@ function LogoMarquee() {
           },
         }}
       >
-        {logos.map(([name, file], i) => (
-          <div
-            key={`${name}-${i}`}
-            className="relative h-24 w-40 shrink-0 border-y border-r border-zinc-200 bg-white sm:h-28 sm:w-48"
-          >
-            <Image
-              src={`/image/${file}`}
-              alt={name}
-              fill
-              sizes="192px"
-              className="object-contain p-5 grayscale opacity-70 transition duration-300 hover:grayscale-0 hover:opacity-100"
-            />
-          </div>
-        ))}
+        {logos.map(([name, file], i) => {
+          const isDuplicate = i >= participantLogos.length;
+
+          const websiteUrl =
+            participantLogoLinks[file] ?? "#";
+
+          return (
+            <div
+              key={`${name}-${i}`}
+              aria-hidden={isDuplicate}
+              className="relative h-24 w-40 shrink-0 border-y border-r border-zinc-200 bg-white sm:h-28 sm:w-48"
+            >
+              <LogoLink
+                href={websiteUrl}
+                tabIndex={isDuplicate ? -1 : 0}
+                className="relative block h-full w-full"
+              >
+                <Image
+                  src={`/image/${file}`}
+                  alt={isDuplicate ? "" : name}
+                  fill
+                  sizes="192px"
+                  className="object-contain p-5 grayscale opacity-70 transition duration-300 hover:grayscale-0 hover:opacity-100"
+                />
+              </LogoLink>
+            </div>
+          );
+        })}
       </motion.div>
 
-      {/* Accessible non-animated participant names */}
+      {/* Accessible Participant Names */}
       <div className="sr-only">
         <p>Past participating brands include:</p>
         <ul>
@@ -125,74 +222,123 @@ function Partners() {
       aria-label="Event partners and organiser"
       className="bg-white py-14"
     >
-      <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
-          className="border border-zinc-200"
+    
+
+<Container>
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, ease }}
+    className="border border-zinc-200"
+  >
+    {/* Row 1: Organiser + Lanyard Sponsor */}
+    <div className="grid md:grid-cols-2">
+
+      {/* Organiser */}
+      <Partner title="Organiser">
+        <LogoLink
+          href={organiserUrl}
+          className="relative block h-[110px] w-[220px] max-w-full"
         >
-          {/* Row 1: Organiser + LanYard Sponsor */}
-          <div className="grid md:grid-cols-2">
-            <Partner title="Organiser">
-              <Image
-                src="/image/futurex.jpg"
-                alt="Futurex Trade Fair & Events Pvt. Ltd."
-                width={210}
-                height={90}
-                className="max-h-20 w-auto object-contain"
-              />
-            </Partner>
+          <Image
+            src="/image/logo.png"
+            alt="Futurex Trade Fair & Events Pvt. Ltd."
+            fill
+            sizes="220px"
+            className="object-contain transition-opacity duration-300 hover:opacity-75"
+          />
+        </LogoLink>
+      </Partner>
 
-            <Partner title="LanYard Sponsor">
-              <Image
-                src="/image/crusher.png"
-                alt="Mr Crusher"
-                width={210}
-                height={90}
-                className="max-h-20 w-auto object-contain"
-              />
-            </Partner>
-          </div>
+      {/* Lanyard Sponsor */}
+      <Partner title="LanYard Sponsor">
+        <LogoLink
+          href={lanyardSponsorUrl}
+          className="relative mt-6 block h-[90px] w-[220px] max-w-full"
+        >
+          <Image
+            src="/image/crusher.png"
+            alt="Mr Crusher"
+            fill
+            sizes="220px"
+            className="object-contain transition-opacity duration-300 hover:opacity-75"
+          />
+        </LogoLink>
+      </Partner>
+    </div>
 
-          {/* Row 2: Media Partners (centered) */}
-          <div className="group relative border-t border-zinc-200 p-7 text-center">
-            <h3 className="mb-6 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
-              Media Partners
-            </h3>
+    {/* Media Partners */}
+    <div className="group relative border-t border-zinc-200 p-7 text-center">
+      <h3 className="mb-8 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
+        Media Partners
+      </h3>
 
-            <ul className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-              {mediaPartners.map(({ name, file }) => (
-                <li key={name}>
-                  <Image
-                    src={`/logo/${file}`}
-                    alt={name}
-                    width={220}
-                    height={100}
-                    className="max-h-22 w-auto object-contain"
-                  />
-                </li>
-              ))}
-            </ul>
+      <div className="flex flex-col items-center gap-6">
 
-            <span
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
-            />
-          </div>
-        </motion.div>
-      </Container>
+        {/* First Row: B2B, India Mining, Motor India */}
+        <ul className="flex w-full flex-wrap items-center justify-center gap-6">
+          {mediaPartners.slice(0, 3).map(({ name, file, url }) => (
+            <li key={name}>
+              <LogoLink
+                href={url}
+                className="relative block h-[110px] w-[250px] max-w-full"
+              >
+                <Image
+                  src={`/logo/${file}`}
+                  alt={name}
+                  fill
+                  sizes="250px"
+                  className="object-contain transition-opacity duration-300 hover:opacity-75"
+                />
+              </LogoLink>
+            </li>
+          ))}
+        </ul>
+
+        {/* Second Row: Equipment Times, Construction Times */}
+        <ul className="flex w-full flex-wrap items-center justify-center gap-6">
+          {mediaPartners.slice(3, 5).map(({ name, file, url }) => (
+            <li key={name}>
+              <LogoLink
+                href={url}
+                className="relative block h-[110px] w-[250px] max-w-full"
+              >
+                <Image
+                  src={`/logo/${file}`}
+                  alt={name}
+                  fill
+                  sizes="250px"
+                  className="object-contain transition-opacity duration-300 hover:opacity-75"
+                />
+              </LogoLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Bottom Hover Line */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
+      />
+    </div>
+  </motion.div>
+</Container>
+
+
     </section>
   );
 }
+
+/* ---------------- Partner Card ---------------- */
 
 function Partner({
   title,
   children,
 }: {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <article className="group relative flex min-h-40 flex-col justify-center border-b border-zinc-200 p-7 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0">
@@ -209,7 +355,8 @@ function Partner({
     </article>
   );
 }
-/* ---------------- CTA ---------------- */
+
+/* ---------------- Final CTA ---------------- */
 
 function FinalCTA() {
   return (
@@ -217,6 +364,7 @@ function FinalCTA() {
       aria-labelledby="final-cta-heading"
       className="relative overflow-hidden bg-brand"
     >
+      {/* Background Pattern */}
       <svg
         aria-hidden="true"
         focusable="false"
@@ -245,13 +393,14 @@ function FinalCTA() {
             id="final-cta-heading"
             className="mt-3 max-w-3xl text-[clamp(2rem,3.4vw,3.8rem)] font-black leading-[1.02] tracking-[-.05em] text-black"
           >
-            Unlock endless business possibilities at India&apos;s mining
-            revolution
+            Unlock endless business possibilities at India&apos;s
+            mining revolution
           </h2>
 
           <p className="mt-4 max-w-2xl text-sm leading-7 text-black/75">
-            India is the world&apos;s next mining powerhouse. Be where the
-            growth is — 07–10 January 2027, Bhubaneswar.
+            India is the world&apos;s next mining powerhouse.
+            Be where the growth is — 07–10 January 2027,
+            Bhubaneswar.
           </p>
         </motion.div>
 
@@ -293,10 +442,12 @@ function FinalCTA() {
   );
 }
 
+/* ---------------- Eyebrow ---------------- */
+
 function Eyebrow({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="flex items-center gap-3">
