@@ -1,4 +1,3 @@
-
 import type { NextConfig } from "next";
 
 const campaign = "odisha_mining_2027";
@@ -24,6 +23,7 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
   },
 
   async redirects() {

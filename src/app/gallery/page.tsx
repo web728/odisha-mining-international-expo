@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
@@ -6,6 +5,9 @@ import path from "path";
 import { Container } from "@/components/ui/Container";
 import { BottomCTA } from "@/components/shared/BottomCTA";
 import { GalleryGrid } from "./GalleryGrid";
+
+// Build time pe folder scan hota hai, page static rehta hai (fast)
+export const dynamic = "force-static";
 
 const SITE_URL = "https://odishaminingexpo.com";
 const PAGE_URL = `${SITE_URL}/gallery`;
@@ -18,6 +20,10 @@ const SEO_TITLE =
 
 const SEO_DESCRIPTION =
   "View photos and videos from previous Odisha Mining Expo editions, featuring mining machinery, equipment displays, exhibitors, live demonstrations and visitors.";
+
+// Is folder ki saari images gallery me aayengi
+const GALLERY_DIR = "public/gallery/optimize";
+const GALLERY_URL_PREFIX = "/gallery/optimize";
 
 export const metadata: Metadata = {
   title: SEO_TITLE,
@@ -84,25 +90,23 @@ export const metadata: Metadata = {
 const extensions = /\.(jpg|jpeg|png|webp|avif)$/i;
 
 function getGalleryImages() {
-  const dir = path.join(
-    process.cwd(),
-    "public/image/expo",
-  );
+  const dir = path.join(process.cwd(), GALLERY_DIR);
 
   if (!fs.existsSync(dir)) {
     return [];
   }
 
   return fs
-    .readdirSync(dir)
-    .filter((file) => extensions.test(file))
+    .readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && extensions.test(entry.name))
+    .map((entry) => entry.name)
     .sort((a, b) =>
       a.localeCompare(b, undefined, {
         numeric: true,
         sensitivity: "base",
       }),
     )
-    .map((file) => `/image/expo/${file}`);
+    .map((file) => `${GALLERY_URL_PREFIX}/${encodeURIComponent(file)}`);
 }
 
 const jsonLd = {
