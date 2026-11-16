@@ -187,7 +187,7 @@ export async function POST(req: Request) {
     // Country calling code and national number
     // must arrive separately from PhoneField.
     if (
-      !/^\\+[1-9]\d{0,3}$/.test(countryCode) ||
+      !/^\+[1-9]\d{0,3}$/.test(countryCode) ||
       !/^\d{5,15}$/.test(phone)
     ) {
       return NextResponse.json(

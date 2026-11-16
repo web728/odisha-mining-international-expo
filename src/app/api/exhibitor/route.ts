@@ -123,7 +123,7 @@ export async function POST(req: Request) {
       );
     }
     if (
-      !/^\\+[1-9]\d{0,3}$/.test(countryCode) ||
+      !/^\+[1-9]\d{0,3}$/.test(countryCode) ||
       !/^\d{5,15}$/.test(phone)
     ) {
       return NextResponse.json(
