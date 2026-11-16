@@ -123,7 +123,7 @@ export async function POST(req: Request) {
       );
     }
     if (
-      !/^\+[1-9]\d{0,3}$/.test(countryCode) ||
+      !/^\\+[1-9]\d{0,3}$/.test(countryCode) ||
       !/^\d{5,15}$/.test(phone)
     ) {
       return NextResponse.json(
@@ -261,7 +261,7 @@ export async function POST(req: Request) {
               Country: country,
               "Area of Interest": category,
               "Info. Get From":
-                "Odisha Mining Expo Website",
+                callerId === "sms_exhibitor" ? "SMS" : "Odisha Mining Expo Website",
               Message: [
                 `Stand Preference: ${standSize}`,
                 participationInterests.length
