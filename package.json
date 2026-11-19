@@ -1,3 +1,4 @@
+
 {
   "name": "odisha-mining-expo-nextjs",
   "version": "1.0.0",
@@ -7,15 +8,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-     "optimize:gallery": "node scripts/optimize-gallery.mjs"
+    "optimize:gallery": "node scripts/optimize-gallery.mjs",
+    "security:audit": "npm audit",
+    "security:production": "npm audit --omit=dev",
+    "security:check": "npm ls postcss glob minimatch rimraf && npm audit"
   },
   "dependencies": {
     "framer-motion": "^12.43.0",
     "googleapis": "^159.0.0",
     "lucide-react": "^0.468.0",
     "mongodb": "^6.19.0",
-    "next": "^15.5.27",
-    "nodemailer": "^10.0.13",
+    "next": "15.5.29",
+    "nodemailer": "^10.6.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-google-recaptcha": "^3.1.0",
@@ -29,8 +33,14 @@
     "@types/react-dom": "^19.1.5",
     "@types/react-google-recaptcha": "^2.1.9",
     "eslint": "^9.34.0",
-    "eslint-config-next": "^15.5.27",
+    "eslint-config-next": "15.5.29",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "postcss": "8.5.33",
+    "gaxios": {
+      "rimraf": "^6.1.4"
+    }
   }
 }
