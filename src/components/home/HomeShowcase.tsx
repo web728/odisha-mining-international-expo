@@ -54,6 +54,7 @@ const mediaPartners = [
     name: "Construction Times",
     file: "construction-times.png",
     url: "https://www.constructiontimes.co.in/",
+    imageClassName: "scale-110"
   },
 ] as const;
 
@@ -252,7 +253,7 @@ function Partners() {
       </Partner>
 
       {/* Lanyard Sponsor */}
-      <Partner title="LanYard Sponsor">
+      <Partner title="LanYard Partner">
         <LogoLink
           href={lanyardSponsorUrl}
           className="relative mt-6 block h-[90px] w-[220px] max-w-full"
@@ -278,7 +279,7 @@ function Partners() {
 
         {/* First Row: B2B, India Mining, Motor India */}
         <ul className="flex w-full flex-wrap items-center justify-center gap-6">
-          {mediaPartners.slice(0, 3).map(({ name, file, url }) => (
+       {mediaPartners.slice(0, 3).map(({ name, file, url }) => (
             <li key={name}>
               <LogoLink
                 href={url}
@@ -289,7 +290,9 @@ function Partners() {
                   alt={name}
                   fill
                   sizes="250px"
-                  className="object-contain transition-opacity duration-300 hover:opacity-75"
+              className={`object-contain transition-opacity duration-300 hover:opacity-75 ${
+  name === "Construction Times" ? "scale-110" : ""
+}`}
                 />
               </LogoLink>
             </li>
@@ -298,7 +301,7 @@ function Partners() {
 
         {/* Second Row: Equipment Times, Construction Times */}
         <ul className="flex w-full flex-wrap items-center justify-center gap-6">
-          {mediaPartners.slice(3, 5).map(({ name, file, url }) => (
+     {mediaPartners.slice(3, 5).map(({ name, file, url }) => (
             <li key={name}>
               <LogoLink
                 href={url}
@@ -309,7 +312,9 @@ function Partners() {
                   alt={name}
                   fill
                   sizes="250px"
-                  className="object-contain transition-opacity duration-300 hover:opacity-75"
+           className={`object-contain transition-opacity duration-300 hover:opacity-75 ${
+  name === "Construction Times" ? "scale-110" : ""
+}`}
                 />
               </LogoLink>
             </li>

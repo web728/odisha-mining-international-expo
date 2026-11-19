@@ -110,12 +110,7 @@ export function FocusAreas() {
                   />
                 </motion.span>
 
-                <span
-                  aria-hidden="true"
-                  className="text-[10px] font-extrabold tracking-[.16em] text-zinc-400 transition group-hover:text-brand/70"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+               
               </div>
 
               <h3 className="mt-7 max-w-xs text-xl font-extrabold leading-[1.15] tracking-[-.025em] text-zinc-950 transition-colors duration-300 group-hover:text-white">

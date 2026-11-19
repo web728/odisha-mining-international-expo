@@ -101,12 +101,7 @@ export function HomeStats() {
                   aria-label={`${value} ${label}`}
                   className="group relative min-h-[150px] overflow-hidden border-b border-r border-zinc-200 bg-white p-5 transition duration-500 hover:bg-brand-black sm:min-h-[160px] sm:p-6"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="absolute right-4 top-4 text-[10px] font-bold tracking-[.14em] text-zinc-400 transition group-hover:text-zinc-600"
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                
 
                   <div className="counter-number text-3xl font-black tracking-[-.055em] text-zinc-950 transition duration-300 group-hover:text-brand sm:text-[2.1rem]">
                     <AnimatedNumber value={value} />

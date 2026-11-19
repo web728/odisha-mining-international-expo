@@ -81,15 +81,9 @@ export function AboutIndustry() {
                 duration: 0.5,
               }}
               aria-labelledby={`industry-card-${i + 1}`}
-              className="group min-h-52 border-b border-r border-zinc-200 p-6 transition duration-500 hover:bg-brand-black"
+              className="group min-h-35 border-b border-r border-zinc-200 p-6 transition duration-500 hover:bg-brand-black"
             >
-              <span
-                aria-hidden="true"
-                className="text-xs font-black text-brand"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-
+              
               <h3
                 id={`industry-card-${i + 1}`}
                 className="mt-6 text-xl font-extrabold tracking-[-.025em] group-hover:text-white"

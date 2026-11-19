@@ -86,14 +86,9 @@ export function OdishaMinerals() {
               whileHover={{
                 y: -4,
               }}
-              className="group relative min-h-[145px] overflow-hidden border-b border-r border-white/10 bg-white/[.02] p-5 transition-colors duration-500 hover:bg-white/[.06]"
+              className="group relative min-h-[125px] overflow-hidden border-b border-r border-white/10 bg-white/[.02] p-5 transition-colors duration-500 hover:bg-white/[.06]"
             >
-              <span
-                aria-hidden="true"
-                className="absolute right-4 top-4 text-[9px] font-bold tracking-[.14em] text-white/20 group-hover:text-brand/70"
-              >
-                {String(index + 1).padStart(2, "0")}
-              </span>
+              
 
               <div className="counter-number text-3xl font-black tracking-[-.055em] text-brand">
                 <AnimatedNumber value={percent} />

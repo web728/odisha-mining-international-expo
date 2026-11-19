@@ -170,12 +170,7 @@ export function OdishaAdvantage() {
                   <AnimatedNumber value={percent} />
                 </div>
 
-                <span
-                  aria-hidden="true"
-                  className="pt-1 text-[9px] font-black tracking-[.16em] text-white/20 transition-colors duration-300 group-hover:text-brand/60"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+              
               </div>
 
               <p className="mt-4 max-w-[130px] text-[10px] font-extrabold uppercase leading-5 tracking-[.1em] text-white/50 transition-colors duration-300 group-hover:text-white/90">

@@ -41,7 +41,7 @@ export function AboutIntro() {
             </h2>
 
             <p className="mt-6 max-w-xl text-[15px] leading-7 text-zinc-700">
-              Odisha Mining &amp; Infrastructure International Expo has emerged
+              5th Odisha Mining &amp; Infrastructure International Expo has emerged
               as a leading B2B platform connecting mining leaders, technology
               providers, equipment manufacturers, policymakers, investors,
               infrastructure players and industrial stakeholders.
@@ -135,12 +135,7 @@ export function AboutIntro() {
                 aria-labelledby={`focus-area-${i + 1}`}
                 className="group relative min-h-24 border-b border-r border-zinc-200 bg-white p-5 transition duration-400 hover:bg-brand-black"
               >
-                <span
-                  aria-hidden="true"
-                  className="text-[9px] font-extrabold tracking-[.14em] text-zinc-400 group-hover:text-brand"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+             
 
                 <h3
                   id={`focus-area-${i + 1}`}

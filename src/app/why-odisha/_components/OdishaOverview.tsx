@@ -175,13 +175,7 @@ export function OdishaOverview() {
                     className="size-5 text-zinc-950 transition group-hover:text-brand"
                   />
                 </span>
-
-                <span
-                  aria-hidden="true"
-                  className="text-[10px] font-extrabold tracking-[.15em] text-zinc-400 group-hover:text-brand/70"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+ 
               </div>
 
               <h3

@@ -101,12 +101,7 @@ export function ExhibitContent() {
                 whileHover={{ y: -4 }}
                 className="group relative min-h-[220px] overflow-hidden border-b border-r border-zinc-200 bg-white p-6 transition-colors duration-500 hover:bg-brand-black"
               >
-                <span
-                  aria-hidden="true"
-                  className="text-[10px] font-extrabold tracking-[.15em] text-zinc-400 group-hover:text-brand"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+             
 
                 <h3
                   id={`exhibit-benefit-${i + 1}`}

@@ -560,18 +560,7 @@ export default function Venue() {
                     </h3>
 
 
-
-                    <span
-
-                      aria-hidden="true"
-
-                      className="absolute right-4 top-4 text-[9px] font-bold tracking-[.14em] text-zinc-300 group-hover:text-brand/60"
-
-                    >
-
-                      {String(i + 1).padStart(2, "0")}
-
-                    </span>
+ 
 
 
 
