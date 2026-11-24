@@ -56,6 +56,12 @@ const mediaPartners = [
     url: "https://www.constructiontimes.co.in/",
     imageClassName: "scale-110"
   },
+   {
+    name: "Sucess Trade Special",
+    file: "success-trade.png",
+    url: "https://successtradespecial.blogspot.com",
+    imageClassName: "scale-110"
+  },
 ] as const;
 
 /* ---------------- Reusable Logo Link ---------------- */
@@ -301,7 +307,7 @@ function Partners() {
 
         {/* Second Row: Equipment Times, Construction Times */}
         <ul className="flex w-full flex-wrap items-center justify-center gap-6">
-     {mediaPartners.slice(3, 5).map(({ name, file, url }) => (
+     {mediaPartners.slice(3, 7).map(({ name, file, url }) => (
             <li key={name}>
               <LogoLink
                 href={url}
