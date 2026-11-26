@@ -1,33 +1,24 @@
-
 "use client";
-
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { participantLogos } from "@/data/site";
 import { Gallery } from "./gallery-video";
-
 const ease = [0.16, 1, 0.3, 1] as const;
-
 /* ---------------- Logo Website Links ---------------- */
-
 // Past Participants: logo file name ke according URL lagao.
 // Jiska URL nahi hai, use "#" rehne do.
-
 const participantLogoLinks: Record<string, string> = {
   // Examples:
   // "tata.png": "https://www.tatasteel.com",
   // "jcb.png": "https://www.jcb.com",
   // "example.png": "#",
 };
-
 // Organiser and Sponsor Links
 const organiserUrl = "https://www.futurextrade.com/";
 const lanyardSponsorUrl = "https://mrcrushers.in/";
-
 // Media Partners Links
 const mediaPartners = [
   {
@@ -66,12 +57,11 @@ const mediaPartners = [
     url: "https://successtradespecial.blogspot.com",
     imageClassName: "scale-110",
   },
-
   // New Media Partners
   {
     name: "Media Partner 7",
     file: "ct-today.png",
-    url: "#",
+    url: "https://www.constructiontechnology.in/",
     imageClassName: "",
   },
   {
@@ -88,7 +78,6 @@ const mediaPartners = [
   // },
 ] as const;
 /* ---------------- Reusable Logo Link ---------------- */
-
 function LogoLink({
   href = "#",
   children,
@@ -101,9 +90,7 @@ function LogoLink({
   tabIndex?: number;
 }) {
   const url = href.trim();
-
   const hasLink = url !== "" && url !== "#";
-
   return (
     <a
       href={hasLink ? url : "#"}
@@ -121,9 +108,7 @@ function LogoLink({
     </a>
   );
 }
-
 /* ---------------- Main Component ---------------- */
-
 export function HomeShowcase() {
   return (
     <>
@@ -134,9 +119,7 @@ export function HomeShowcase() {
     </>
   );
 }
-
 /* ---------------- Participants ---------------- */
-
 function Participants() {
   return (
     <section
@@ -151,7 +134,6 @@ function Participants() {
           transition={{ duration: 0.6, ease }}
         >
           <Eyebrow>Past Participants</Eyebrow>
-
           <h2
             id="participants-heading"
             className="mt-4 max-w-3xl text-[clamp(1.9rem,3vw,3.2rem)] font-black leading-[1.04] tracking-[-.045em] text-zinc-950"
@@ -163,17 +145,13 @@ function Participants() {
           </h2>
         </motion.div>
       </Container>
-
       <LogoMarquee />
     </section>
   );
 }
-
 /* ---------------- Participants Logo Marquee ---------------- */
-
 function LogoMarquee() {
   const logos = [...participantLogos, ...participantLogos];
-
   return (
     <div className="group relative mt-10 overflow-hidden">
       {/* Left Gradient */}
@@ -181,13 +159,11 @@ function LogoMarquee() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[#f4f4f1] to-transparent sm:w-32"
       />
-
       {/* Right Gradient */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[#f4f4f1] to-transparent sm:w-32"
       />
-
       <motion.div
         className="flex w-max"
         animate={{
@@ -203,10 +179,8 @@ function LogoMarquee() {
       >
         {logos.map(([name, file], i) => {
           const isDuplicate = i >= participantLogos.length;
-
           const websiteUrl =
             participantLogoLinks[file] ?? "#";
-
           return (
             <div
               key={`${name}-${i}`}
@@ -230,7 +204,6 @@ function LogoMarquee() {
           );
         })}
       </motion.div>
-
       {/* Accessible Participant Names */}
       <div className="sr-only">
         <p>Past participating brands include:</p>
@@ -243,17 +216,13 @@ function LogoMarquee() {
     </div>
   );
 }
-
 /* ---------------- Partners ---------------- */
-
 function Partners() {
   return (
     <section
       aria-label="Event partners and organiser"
       className="bg-white py-14"
     >
-    
-
 <Container>
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -264,7 +233,6 @@ function Partners() {
   >
     {/* Row 1: Organiser + Lanyard Sponsor */}
     <div className="grid md:grid-cols-2">
-
       {/* Organiser */}
       <Partner title="Organiser">
         <LogoLink
@@ -280,7 +248,6 @@ function Partners() {
           />
         </LogoLink>
       </Partner>
-
       {/* Lanyard Sponsor */}
       <Partner title="LanYard Partner">
         <LogoLink
@@ -297,53 +264,45 @@ function Partners() {
         </LogoLink>
       </Partner>
     </div>
-
  {/* Media Partners */}
-<div className="group relative border-t border-zinc-200 p-7 text-center">
-  <h3 className="mb-8 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
-    Media Partners
-  </h3>
-
-  <ul className="mx-auto grid w-full max-w-[798px] grid-cols-1 items-center justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    {mediaPartners.map(
-      ({ name, file, url, imageClassName }) => (
-        <li
-          key={name}
-          className="flex w-full min-w-0 items-center justify-center"
-        >
-          <LogoLink
-            href={url}
-            className="relative block h-[110px] w-full max-w-[250px]"
-          >
-            <Image
-              src={`/logo/${file}`}
-              alt={name}
-              fill
-              sizes="(max-width: 640px) 90vw, 250px"
-              className={`object-contain transition-opacity duration-300 hover:opacity-75 ${imageClassName}`}
-            />
-          </LogoLink>
-        </li>
-      )
-    )}
-  </ul>
-
-  {/* Bottom Hover Line */}
-  <span
-    aria-hidden="true"
-    className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
-  />
-</div>
+    <div className="group relative border-t border-zinc-200 p-7 text-center">
+      <h3 className="mb-8 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
+        Media Partners
+      </h3>
+      <ul className="mx-auto grid w-full max-w-[798px] grid-cols-1 items-center justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {mediaPartners.map(({ name, file, url }) => (
+          <li key={name} className="flex w-full min-w-0 items-center justify-center">
+            <LogoLink
+              href={url}
+              className="relative flex h-[110px] w-full max-w-[250px] items-center justify-center"
+            >
+              <div className="relative h-[90px] w-full max-w-[220px]">
+                <Image
+                  src={`/logo/${file}`}
+                  alt={name}
+                  fill
+                  sizes="220px"
+                  className={`object-contain object-center transition-opacity duration-300 hover:opacity-75 ${
+                    file === "ct-today.png" || file === "nbm.png" ? "scale-[0.85]" : ""
+                  }`}
+                />
+              </div>
+            </LogoLink>
+          </li>
+        ))}
+      </ul>
+      {/* Bottom Hover Line */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
+      />
+    </div>
   </motion.div>
 </Container>
-
-
     </section>
   );
 }
-
 /* ---------------- Partner Card ---------------- */
-
 function Partner({
   title,
   children,
@@ -356,9 +315,7 @@ function Partner({
       <h3 className="mb-5 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
         {title}
       </h3>
-
       {children}
-
       <span
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
@@ -366,9 +323,7 @@ function Partner({
     </article>
   );
 }
-
 /* ---------------- Final CTA ---------------- */
-
 function FinalCTA() {
   return (
     <section
@@ -388,7 +343,6 @@ function FinalCTA() {
           stroke="#000"
         />
       </svg>
-
       <Container className="relative flex flex-col gap-8 py-14 lg:flex-row lg:items-end lg:justify-between lg:py-16">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -399,7 +353,6 @@ function FinalCTA() {
           <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-black">
             Exhibit · Engage · Grow
           </p>
-
           <h2
             id="final-cta-heading"
             className="mt-3 max-w-3xl text-[clamp(2rem,3.4vw,3.8rem)] font-black leading-[1.02] tracking-[-.05em] text-black"
@@ -407,14 +360,12 @@ function FinalCTA() {
             Unlock endless business possibilities at India&apos;s
             mining revolution
           </h2>
-
           <p className="mt-4 max-w-2xl text-sm leading-7 text-black/75">
             India is the world&apos;s next mining powerhouse.
             Be where the growth is — 07–10 January 2027,
             Bhubaneswar.
           </p>
         </motion.div>
-
         <div className="flex flex-wrap gap-3">
           <ButtonLink
             href="/exhibitor-registration"
@@ -431,7 +382,6 @@ function FinalCTA() {
           >
             Exhibit Now
           </ButtonLink>
-
           <ButtonLink
             href="/visitor-registration"
             variant="dark"
@@ -452,9 +402,7 @@ function FinalCTA() {
     </section>
   );
 }
-
 /* ---------------- Eyebrow ---------------- */
-
 function Eyebrow({
   children,
 }: {
@@ -466,7 +414,6 @@ function Eyebrow({
         aria-hidden="true"
         className="h-[2px] w-10 bg-brand"
       />
-
       <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
         {children}
       </p>
