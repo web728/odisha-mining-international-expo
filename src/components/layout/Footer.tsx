@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -61,21 +62,23 @@ export function Footer() {
     <footer className="relative overflow-hidden bg-[#050505] text-white">
       <FooterGraphic />
 
-      {/* Top statement */}
-      <div className="border-b border-white/10">
-        <Container className="grid gap-6 py-8 lg:grid-cols-[1fr_auto] lg:items-end lg:py-10">
-          <div>
+      {/* Top Statement */}
+      <div className="relative border-b border-white/10">
+        <Container className="grid items-center gap-4 py-6 lg:grid-cols-[1fr_auto] lg:py-7">
+          <div className="min-w-0">
             <div className="flex items-center gap-3">
-              <span className="h-[2px] w-10 bg-brand" />
+              <span className="h-[2px] w-10 shrink-0 bg-brand" />
 
               <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
                 Odisha Mining Expo 2027
               </p>
             </div>
 
-            <h2 className="mt-4 max-w-4xl text-[clamp(1.8rem,3vw,3.3rem)] font-black leading-[1.02] tracking-[-.045em]">
+            <h2 className="mt-3 max-w-4xl text-[clamp(1.8rem,3vw,3.3rem)] font-black leading-[1.05] tracking-[-.045em]">
               India&apos;s mining and infrastructure
-              <span className="text-brand"> industry meets in Odisha.</span>
+              <span className="text-brand">
+                {" "}industry meets in Odisha.
+              </span>
             </h2>
           </div>
 
@@ -84,36 +87,42 @@ export function Footer() {
               07–10 January 2027
             </p>
 
-            <p className="mt-2 text-sm font-semibold text-white/75">
+            <p className="mt-1.5 text-sm font-semibold text-white/75">
               Bhubaneswar · Odisha · India
             </p>
           </div>
         </Container>
       </div>
 
-      <Container className="relative grid gap-12 py-12 lg:grid-cols-[1.15fr_1.45fr_1fr] lg:gap-14 lg:py-14">
-        {/* Brand */}
-        <div>
+      {/* Main Footer */}
+      <Container className="relative grid grid-cols-1 items-start gap-8 py-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-8 lg:py-9">
+
+        {/* Brand Section */}
+        <div className="flex min-w-0 flex-col items-start">
+
+          {/* Expo Logo */}
           <Link
             href="/"
-            className="inline-block transition-opacity hover:opacity-85"
+            className="m-0 flex w-fit items-center justify-start p-0 leading-none transition-opacity hover:opacity-85"
           >
             <Image
               src="/image/5th-Odisha-Logo_White.png"
               alt="Odisha Mining & Infrastructure International Expo"
               width={250}
               height={105}
-              className="h-auto w-[205px] object-contain sm:w-[230px]"
+              className="m-0 block h-auto w-[205px] max-w-full object-contain object-left p-0 sm:w-[225px]"
             />
           </Link>
 
-          <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">
+          {/* Brand Description */}
+          <p className="mt-3 max-w-sm text-sm leading-6 text-white/55">
             A focused B2B platform bringing together mining,
             infrastructure, heavy equipment, mineral processing,
             logistics and industrial technology.
           </p>
 
-          <div className="mt-7 border-t border-white/10 pt-5">
+          {/* Event Details */}
+          <div className="mt-5 w-full border-t border-white/10 pt-4">
             <p className="text-[9px] font-extrabold uppercase tracking-[.17em] text-white/30">
               Event
             </p>
@@ -126,28 +135,28 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
+        {/* Navigation Section */}
+        <div className="grid min-w-0 grid-cols-2 items-start gap-x-5 gap-y-7 sm:grid-cols-3 lg:gap-x-5">
           {groups.map((group) => (
-            <div key={group.title}>
+            <div key={group.title} className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="size-1.5 bg-brand" />
+                <span className="size-1.5 shrink-0 bg-brand" />
 
                 <h3 className="text-[10px] font-extrabold uppercase tracking-[.16em] text-white">
                   {group.title}
                 </h3>
               </div>
 
-              <div className="mt-5 grid">
+              <div className="mt-3 grid">
                 {group.links.map(([label, href]) => (
                   <Link
                     key={href}
                     href={href}
-                    className="group flex min-h-10 items-center justify-between border-b border-white/[.07] text-sm text-white/52 transition-colors duration-200 hover:text-white"
+                    className="group flex min-h-10 items-center justify-between gap-1 border-b border-white/[.07] py-2 text-sm text-white/55 transition-colors duration-200 hover:text-white"
                   >
                     <span>{label}</span>
 
-                    <ArrowUpRight className="size-3.5 -translate-x-1 translate-y-1 text-brand opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
+                    <ArrowUpRight className="size-3.5 shrink-0 -translate-x-1 translate-y-1 text-brand opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
                   </Link>
                 ))}
               </div>
@@ -155,27 +164,36 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Organiser */}
-        <div className="lg:border-l lg:border-white/10 lg:pl-10">
+        {/* Organiser Section */}
+        <div className="min-w-0 border-t border-white/10 pt-6 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
           <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand">
             Organised By
           </p>
 
-          <div className="mt-4 border-b border-white/10 pb-5">
-            <Image
-              src="/image/futurex.jpg"
-              alt="Futurex Trade Fair & Events Pvt. Ltd."
-              width={190}
-              height={80}
-              className="max-h-14 w-auto object-contain"
-            />
+          {/* Futurex Logo */}
+          <div className="mt-2 flex flex-col items-start border-b border-white/10 pb-1">
+            <Link
+              href="https://futurextrade.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="m-0 flex w-fit items-center justify-start p-0 leading-none transition-opacity hover:opacity-85"
+            >
+              <Image
+                src="/logo/futurex-logo.png"
+                alt="Futurex Trade Fair & Events Pvt. Ltd."
+                width={190}
+                height={80}
+                className="m-0 block h-auto max-h-[62px] w-auto max-w-full object-contain object-left p-0"
+              />
+            </Link>
 
-            <h3 className="mt-4 max-w-xs text-[15px] font-extrabold leading-6 text-white">
+            <h3 className="max-w-xs text-[14px] font-extrabold leading-5 text-white">
               Futurex Trade Fair & Events Pvt. Ltd.
             </h3>
           </div>
 
-          <div className="mt-5 grid gap-4">
+          {/* Contact Details */}
+          <div className="mt-4 grid gap-3">
             <div className="flex items-start gap-3">
               <MapPin className="mt-1 size-4 shrink-0 text-brand" />
 
@@ -190,16 +208,19 @@ export function Footer() {
               href="tel:+919810855697"
               className="group flex w-fit items-center gap-3 text-sm font-semibold text-white/65 transition-colors hover:text-white"
             >
-              <Phone className="size-4 text-brand" />
+              <Phone className="size-4 shrink-0 text-brand" />
               +91 98108 55697
             </Link>
 
             <Link
               href="mailto:info@futurextrade.com"
-              className="group flex w-fit items-center gap-3 text-sm font-semibold text-white/65 transition-colors hover:text-white"
+              className="group flex min-w-0 items-center gap-3 text-sm font-semibold text-white/65 transition-colors hover:text-white"
             >
-              <Mail className="size-4 text-brand" />
-              info@futurextrade.com
+              <Mail className="size-4 shrink-0 text-brand" />
+
+              <span className="break-all">
+                info@futurextrade.com
+              </span>
             </Link>
 
             <Link
@@ -210,16 +231,17 @@ export function Footer() {
             >
               futurextrade.com
 
-              <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <ArrowUpRight className="size-3.5 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>
 
-          <div className="mt-7 border-t border-white/10 pt-5">
+          {/* Social Links */}
+          <div className="mt-5 border-t border-white/10 pt-4">
             <p className="text-[9px] font-extrabold uppercase tracking-[.17em] text-white/30">
               Follow the Expo
             </p>
 
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3">
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
               {socials.map(([label, href]) => (
                 <Link
                   key={label}
@@ -230,7 +252,7 @@ export function Footer() {
                 >
                   {label}
 
-                  <ArrowUpRight className="size-3 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  <ArrowUpRight className="size-3 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </Link>
               ))}
             </div>
@@ -238,24 +260,24 @@ export function Footer() {
         </div>
       </Container>
 
-      {/* Bottom strip */}
-      <div className="border-t border-white/10 bg-white/[.015]">
-        <Container className="flex flex-col gap-4 py-5 text-[10px] font-medium uppercase leading-5 tracking-[.08em] text-white/30 sm:flex-row sm:items-center sm:justify-between">
+      {/* Bottom Strip */}
+      <div className="relative border-t border-white/10 bg-white/[.015]">
+        <Container className="flex flex-col gap-3 py-3.5 text-[10px] font-medium uppercase leading-5 tracking-[.08em] text-white/30 lg:flex-row lg:items-center lg:justify-between">
           <span>
             © 2027 Odisha Mining & Infrastructure International Expo
           </span>
 
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
             <Link
               href="/privacy-policy"
-              className="transition hover:text-white"
+              className="transition-colors hover:text-white"
             >
               Privacy
             </Link>
 
             <Link
               href="/terms"
-              className="transition hover:text-white"
+              className="transition-colors hover:text-white"
             >
               Terms
             </Link>
@@ -270,6 +292,7 @@ export function Footer() {
   );
 }
 
+/* Background Graphics */
 function FooterGraphic() {
   return (
     <>
