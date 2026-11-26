@@ -34,36 +34,59 @@ const mediaPartners = [
     name: "B2B",
     file: "b2b.jpeg",
     url: "https://b2bpurchase.com/",
+    imageClassName: "",
   },
   {
     name: "India Mining",
     file: "india-mining.png",
     url: "#",
+    imageClassName: "",
   },
   {
     name: "Motor India",
     file: "motor-india-dark.png",
     url: "https://www.motorindiaonline.in/",
+    imageClassName: "",
   },
   {
     name: "Equipment Times",
     file: "equipment_times.png",
     url: "https://www.equipmenttimes.in/",
+    imageClassName: "",
   },
   {
     name: "Construction Times",
     file: "construction-times.png",
     url: "https://www.constructiontimes.co.in/",
-    imageClassName: "scale-110"
+    imageClassName: "scale-110",
   },
-   {
-    name: "Sucess Trade Special",
+  {
+    name: "Success Trade Special",
     file: "success-trade.png",
     url: "https://successtradespecial.blogspot.com",
-    imageClassName: "scale-110"
+    imageClassName: "scale-110",
   },
-] as const;
 
+  // New Media Partners
+  {
+    name: "Media Partner 7",
+    file: "ct-today.png",
+    url: "#",
+    imageClassName: "",
+  },
+  {
+    name: "Media Partner 8",
+    file: "nbm.png",
+    url: "https://www.nbmcw.com/",
+    imageClassName: "",
+  },
+  // {
+  //   name: "Media Partner 9",
+  //   file: "media-partner-9.png",
+  //   url: "#",
+  //   imageClassName: "",
+  // },
+] as const;
 /* ---------------- Reusable Logo Link ---------------- */
 
 function LogoLink({
@@ -275,65 +298,42 @@ function Partners() {
       </Partner>
     </div>
 
-    {/* Media Partners */}
-    <div className="group relative border-t border-zinc-200 p-7 text-center">
-      <h3 className="mb-8 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
-        Media Partners
-      </h3>
+ {/* Media Partners */}
+<div className="group relative border-t border-zinc-200 p-7 text-center">
+  <h3 className="mb-8 text-[13px] font-extrabold uppercase tracking-[.18em] text-zinc-950">
+    Media Partners
+  </h3>
 
-      <div className="flex flex-col items-center gap-6">
+  <ul className="mx-auto grid w-full max-w-[798px] grid-cols-1 items-center justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {mediaPartners.map(
+      ({ name, file, url, imageClassName }) => (
+        <li
+          key={name}
+          className="flex w-full min-w-0 items-center justify-center"
+        >
+          <LogoLink
+            href={url}
+            className="relative block h-[110px] w-full max-w-[250px]"
+          >
+            <Image
+              src={`/logo/${file}`}
+              alt={name}
+              fill
+              sizes="(max-width: 640px) 90vw, 250px"
+              className={`object-contain transition-opacity duration-300 hover:opacity-75 ${imageClassName}`}
+            />
+          </LogoLink>
+        </li>
+      )
+    )}
+  </ul>
 
-        {/* First Row: B2B, India Mining, Motor India */}
-        <ul className="flex w-full flex-wrap items-center justify-center gap-6">
-       {mediaPartners.slice(0, 3).map(({ name, file, url }) => (
-            <li key={name}>
-              <LogoLink
-                href={url}
-                className="relative block h-[110px] w-[250px] max-w-full"
-              >
-                <Image
-                  src={`/logo/${file}`}
-                  alt={name}
-                  fill
-                  sizes="250px"
-              className={`object-contain transition-opacity duration-300 hover:opacity-75 ${
-  name === "Construction Times" ? "scale-110" : ""
-}`}
-                />
-              </LogoLink>
-            </li>
-          ))}
-        </ul>
-
-        {/* Second Row: Equipment Times, Construction Times */}
-        <ul className="flex w-full flex-wrap items-center justify-center gap-6">
-     {mediaPartners.slice(3, 7).map(({ name, file, url }) => (
-            <li key={name}>
-              <LogoLink
-                href={url}
-                className="relative block h-[110px] w-[250px] max-w-full"
-              >
-                <Image
-                  src={`/logo/${file}`}
-                  alt={name}
-                  fill
-                  sizes="250px"
-           className={`object-contain transition-opacity duration-300 hover:opacity-75 ${
-  name === "Construction Times" ? "scale-110" : ""
-}`}
-                />
-              </LogoLink>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Bottom Hover Line */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
-      />
-    </div>
+  {/* Bottom Hover Line */}
+  <span
+    aria-hidden="true"
+    className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"
+  />
+</div>
   </motion.div>
 </Container>
 
