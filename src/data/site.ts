@@ -20,11 +20,36 @@ export const navItems = [
   { href: "/contact", label: "Contact" },
 ];
 
+/* ---------------- Present Exhibitors ---------------- */
+
+export const presentExhibitorLogos = Array.from(
+  { length: 24 },
+  (_, i) =>
+    [
+      `Exhibitor ${i + 1}`,
+      `artboard-${i + 1}.png`,
+    ] as const
+);
+
+/* ---------------- Past Participants ---------------- */
+
 export const participantLogos = [
-  ["SANY", "SANY.jpg"], ["Tata Hitachi", "tata-hitachi.jpg"], ["Schwing Stetter", "SCHWING.jpg"],
-  ["Ammann", "AMMANN.jpg"], ["Hyva", "HYVA.jpg"], ["Kirloskar", "KIRLOSKAR.jpg"],
-  ["MB Crusher", "MB.jpg"], ["Torsa", "TORSA.jpg"], ["ARB Bearings", "ARB.jpg"],
-  ["Equipage", "EQUIPAGE.jpg"], ["Neptune", "NEPTUNE.jpg"], ["Chicago Pneumatic", "CP.jpg"],
-  ["Everest", "EVEREST.jpg"], ["Techfab India", "TECHFAB.jpg"], ["MMD", "MMD.jpg"],
-  ["Aquatech", "AQUATECH.jpg"], ["Optigear", "OPTIGEAR.jpg"], ["Hectronic", "HECTRONIC.jpg"],
+  ["SANY", "SANY.jpg"],
+  ["Tata Hitachi", "tata-hitachi.jpg"],
+  ["Schwing Stetter", "SCHWING.jpg"],
+  ["Ammann", "AMMANN.jpg"],
+  ["Hyva", "HYVA.jpg"],
+  ["Kirloskar", "KIRLOSKAR.jpg"],
+  ["MB Crusher", "MB.jpg"],
+  ["Torsa", "TORSA.jpg"],
+  ["ARB Bearings", "ARB.jpg"],
+  ["Equipage", "EQUIPAGE.jpg"],
+  ["Neptune", "NEPTUNE.jpg"],
+  ["Chicago Pneumatic", "CP.jpg"],
+  ["Everest", "EVEREST.jpg"],
+  ["Techfab India", "TECHFAB.jpg"],
+  ["MMD", "MMD.jpg"],
+  ["Aquatech", "AQUATECH.jpg"],
+  ["Optigear", "OPTIGEAR.jpg"],
+  ["Hectronic", "HECTRONIC.jpg"],
 ] as const;
