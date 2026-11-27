@@ -33,12 +33,19 @@ const lanyardSponsorUrl = "https://mrcrushers.in/";
 /* ---------------- Media Partners Links ---------------- */
 
 const mediaPartners = [
-  {
-    name: "B2B",
-    file: "b2b.jpeg",
-    url: "https://b2bpurchase.com/",
+   {
+    name: "Motor India",
+    file: "motor-india-dark.png",
+    url: "https://www.motorindiaonline.in/",
     imageClassName: "",
   },
+   {
+    name: "Media Partner 8",
+    file: "nbm.png",
+    url: "https://www.nbmcw.com/",
+    imageClassName: "",
+  },
+ 
   {
     name: "India Mining",
     file: "india-mining.png",
@@ -46,40 +53,38 @@ const mediaPartners = [
     imageClassName: "",
   },
   {
-    name: "Motor India",
-    file: "motor-india-dark.png",
-    url: "https://www.motorindiaonline.in/",
+    name: "Media Partner 7",
+    file: "ct-today.png",
+    url: "https://www.constructiontechnology.in/",
     imageClassName: "",
   },
+   {
+    name: "B2B",
+    file: "b2b.jpeg",
+    url: "https://b2bpurchase.com/",
+    imageClassName: "",
+  },
+ 
   {
     name: "Equipment Times",
     file: "equipment_times.png",
     url: "https://www.equipmenttimes.in/",
     imageClassName: "",
   },
+  
   {
     name: "Construction Times",
     file: "construction-times.png",
     url: "https://www.constructiontimes.co.in/",
     imageClassName: "scale-110",
   },
-  {
+  
+  
+ {
     name: "Success Trade Special",
     file: "success-trade.png",
     url: "https://successtradespecial.blogspot.com",
     imageClassName: "scale-110",
-  },
-  {
-    name: "Media Partner 7",
-    file: "ct-today.png",
-    url: "https://www.constructiontechnology.in/",
-    imageClassName: "",
-  },
-  {
-    name: "Media Partner 8",
-    file: "nbm.png",
-    url: "https://www.nbmcw.com/",
-    imageClassName: "",
   },
   {
     name: "Cosmo World",
