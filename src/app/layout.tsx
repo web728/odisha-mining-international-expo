@@ -24,8 +24,13 @@ const ORGANIZER_NAME =
 
 const ORGANIZER_URL = "https://futurextrade.com/";
 
+// Original website logo
 const LOGO_URL =
   `${SITE_URL}/image/5th-Odisha-Logo_White.png`;
+
+// Black background image for social media link previews
+const OG_IMAGE_URL =
+  `${SITE_URL}/image/odisha_mining_dark.png`;
 
 const SEO_TITLE =
   "Mining Expo India 2027 | Odisha Mining & Infrastructure Expo";
@@ -102,8 +107,10 @@ export const metadata: Metadata = {
     telephone: false,
   },
 
+  // WhatsApp, Facebook, LinkedIn and other social previews
   openGraph: {
     type: "website",
+
     locale: "en_IN",
 
     url: `${SITE_URL}/`,
@@ -116,12 +123,15 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/image/5th-Odisha-Logo_White.png",
+        url: OG_IMAGE_URL,
+        secureUrl: OG_IMAGE_URL,
+        type: "image/png",
         alt: EVENT_NAME,
       },
     ],
   },
 
+  // X / Twitter link preview
   twitter: {
     card: "summary_large_image",
 
@@ -130,7 +140,10 @@ export const metadata: Metadata = {
     description: SEO_DESCRIPTION,
 
     images: [
-      "/image/5th-Odisha-Logo_White.png",
+      {
+        url: OG_IMAGE_URL,
+        alt: EVENT_NAME,
+      },
     ],
   },
 
@@ -277,7 +290,7 @@ const structuredData = {
 
       isAccessibleForFree: true,
 
-      image: [LOGO_URL],
+      image: [OG_IMAGE_URL],
 
       location: {
         "@type": "Place",
@@ -343,56 +356,56 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-  
-<html
-  lang="en-IN"
-  className={manrope.variable}
->
-  <body
-    suppressHydrationWarning
-    className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
-  >
-   
-<Script
-  src="https://www.googletagmanager.com/gtag/js?id=G-WMD824NX80"
-  strategy="afterInteractive"
-/>
-<Script id="google-analytics" strategy="afterInteractive">
-  {`
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){window.dataLayer.push(arguments);}
-    window.gtag = gtag;
-    gtag('js', new Date());
-    gtag('config', 'G-WMD824NX80');
-  `}
-</Script>
-
-
-    <InitialLoader />
-
-    <Navbar />
-
-    <main
-      id="main-content"
-      tabIndex={-1}
+    <html
+      lang="en-IN"
+      className={manrope.variable}
     >
-      {children}
-    </main>
+      <body
+        suppressHydrationWarning
+        className="min-h-screen overflow-x-clip bg-white text-zinc-900 antialiased"
+      >
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WMD824NX80"
+          strategy="afterInteractive"
+        />
 
-    <Footer />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+        >
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-WMD824NX80');
+          `}
+        </Script>
 
-    <CookieConsent />
+        <InitialLoader />
 
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(
-          structuredData
-        ).replace(/</g, "\\u003c"),
-      }}
-    />
-  </body>
-</html>
+        <Navbar />
 
+        <main
+          id="main-content"
+          tabIndex={-1}
+        >
+          {children}
+        </main>
+
+        <Footer />
+
+        <CookieConsent />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              structuredData
+            ).replace(/</g, "\\u003c"),
+          }}
+        />
+      </body>
+    </html>
   );
 }
