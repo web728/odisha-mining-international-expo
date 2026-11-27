@@ -30,7 +30,7 @@ const mediaPartners = [
   {
     name: "India Mining",
     file: "india-mining.png",
-    url: "#",
+    url: "https://www.indiaminingreview.com/",
     imageClassName: "",
   },
   {

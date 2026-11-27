@@ -180,7 +180,7 @@ export function AboutExpo() {
               className="absolute inset-0 h-full w-full"
             >
               <Image
-                src="/image/about-hero-2.png"
+                src="/image/expo-entrance-thank-you-arch.jpg"
                 alt="Visitors exploring machinery on the Odisha Mining Expo exhibition floor"
                 fill
                 sizes="(max-width: 1024px) 100vw, 55vw"
